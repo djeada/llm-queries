@@ -1,0 +1,366 @@
+# Simplify Vocabulary  
+Guide your LLM to replace or remove over-polished words and phrases so the text reads more naturally and human-like.
+
+## Base Cleanup Prompt  
+
+**Prompt:**  
+
+```text
+Edit the following text to remove all occurrences of overly formal or rare words and phrases listed below. Replace them with simpler, more conversational alternatives or remove them entirely. Do not change the meaning.  
+
+Words and phrases to remove: however, By following, crucial, critical, employ, ensure, ensures, of course, essential, pivotal, key, apologies, signifies, established, navigate, performs better, improving the, paramount, Ultimately, esteemed, myriad, tapestry, meticulous, intricate, facilitating, commendable, let’s embark on a journey, in the ever-evolving, in the fast-paced, it’s not just, robust, seamless, multi-faceted, complex, ample.  
+```
+
+**Before:**  
+
+```text
+However, by following a meticulous process, you can employ a multi-faceted approach that ensures robust results in the ever-evolving market.
+```
+
+**After (model with prompt):**  
+
+```text
+By using a simple process, you can take an approach that delivers solid results in today’s market.
+```
+
+## Complete List
+
+- However  
+- By Following  
+- Crucial  
+- Critical  
+- Employ  
+- Ensure / Ensures  
+- Of Course  
+- Essential  
+- Pivotal  
+- Key  
+- Appologies  
+- Signifies  
+- Established  
+- Navigate  
+- Performs Bette  
+- Improving The  
+- Paramount  
+- Ultimately  
+- Esteemed  
+- Myriad  
+- Tapestry  
+- Meticulous  
+- Intricate  
+- Facilitating  
+- Commendable  
+- Let’s Embark on a Journey  
+- In the Ever-Evolving  
+- In the Fast-Paced  
+- It’s Not Just  
+- Robust  
+- Seamless  
+- Multi-Faceted  
+- Complex  
+- Ample
+- Moreover  
+- Furthermore  
+- Subsequently  
+- Notwithstanding  
+- Consequently  
+- Conversely  
+- Ergo  
+- Thus  
+- Henceforth  
+- Thereupon  
+- Accordingly  
+- Albeit  
+- Behold  
+- Cognizant  
+- Diligent  
+- Exemplary  
+- Flourishing  
+- Harmonious  
+- Idiosyncratic  
+- Juxtapose  
+- Lucid  
+- Magnitude  
+- Nurture  
+- Obligate  
+- Pragmatic  
+- Quintessential  
+- Resilient  
+- Salient  
+- Tangible  
+- Ubiquitous  
+- Venerate  
+- Widespread  
+- Yielding  
+- Zenith  
+- Alacrity  
+- Benevolent  
+- Confluence  
+- Discerning  
+- Encompass  
+- Facet  
+- Galvanize  
+- Holistic  
+- Imperative  
+- Juxtaposition  
+- Keenly  
+- Lucidity  
+- Manifest  
+- Nomenclature  
+- Opulent  
+- Pervasive  
+- Quintessence  
+- Reverberate  
+- Synergize  
+- Transcend  
+- Unprecedented  
+- Veracity  
+- Whimsical  
+- Xenial  
+- Yearning  
+- Zealous  
+- Ameliorate  
+- Bedrock  
+- Conducive  
+- Disparate  
+- Esoteric  
+- Fortuitous  
+- Gravitate  
+- Hierarchy  
+- Inception  
+- Jubilant  
+- Kinetic  
+- Luminous  
+- Metamorphose  
+- Nexus  
+- Optimize  
+- Paradigm  
+- Refine  
+- Stimulus  
+- Taper  
+- Unveil  
+- Validate  
+- Warrant  
+- Accelerate  
+- Bolster  
+- Catalyze  
+- Disseminate  
+- Enumerate  
+- Facilitate  
+- Garner  
+- Harness  
+- Illuminate  
+- Integrate  
+- Leverage  
+- Mobilize  
+- Navigate  
+- Orchestrate  
+- Propagate  
+- Quantify  
+- Reinforce  
+- Spearhead  
+- Thrive  
+- Unify  
+- Vitalize  
+- Withstand  
+- Yield
+- In the interim  
+- To elucidate  
+- Foremost  
+- In retrospect  
+- For instance  
+- By and large  
+- At the forefront  
+- Within the paradigm  
+- To illustrate  
+- In conjunction with  
+- At the nexus  
+- In essence  
+- In the wake of  
+- On the contrary  
+- To that effect  
+- All-encompassing  
+- In the grand scheme  
+- As such  
+- To underscore  
+- In tandem  
+- Notably  
+- From inception  
+- To encapsulate  
+- In perpetuity  
+- With regard to  
+- In pursuit of  
+- Without reservation  
+- Akin to  
+- To date  
+- Ahead of the curve  
+- Cutting-edge  
+- Underpinning  
+- Paramountcy  
+- Impetus  
+- To mitigate  
+- In light of  
+- At your disposal  
+- Under the auspices  
+- Quintessentially  
+- To propel  
+- In symmetry with  
+- In parallel  
+- In high regard  
+- Under the umbrella  
+- At the vanguard  
+- With finesse  
+- To envisage  
+- Beyond the scope  
+- Amidst  
+- For the record  
+- To galvanize  
+- Bespoke  
+- In an effort to  
+- Without exception  
+- In no uncertain terms  
+- On the heels of  
+- Profoundly  
+- In due course  
+- To optimize  
+- At the intersection  
+- Upon reflection  
+- With precision  
+- In synergy  
+- Holistically  
+- To leverage  
+- Under scrutiny  
+- With unwavering  
+- In a nutshell  
+- To rejuvenate  
+- In affinity  
+- Dispassionately  
+- Without precedent  
+- With empathy  
+- Across the board  
+- In conjunction  
+- To synchronize  
+- With thoroughness  
+- In calibration  
+- To orchestrate  
+- Through the lens  
+- In resonance  
+- Under the microscope  
+- To crystallize  
+- By extension  
+- For the foreseeable  
+- At the core  
+- From a vantage  
+- To revolutionize  
+- In fortitude  
+- At scale  
+- With conviction  
+- In extenso  
+- Through meticulous  
+- In perpetuation  
+- To fortify  
+- Under the canopy  
+- By the same token  
+- At breakneck  
+- With alacrity  
+- As a testament  
+- Vis-à-vis  
+- Avant-garde  
+- Bona fide  
+- Carve out  
+- Deep dive  
+- Epitome  
+- Fallacy  
+- Garnering momentum  
+- High-octane  
+- Imbue  
+- Jargon  
+- Keystone  
+- Latterly  
+- Myriad facets  
+- No less than  
+- Offshoot  
+- Pinnacle  
+- Quid pro quo  
+- Recapitulate  
+- State-of-the-art  
+- Therein  
+- Usher in  
+- Vestige  
+- Wrought  
+- Yield to  
+- Zeitgeist  
+- Address  
+- Bridge  
+- Capitalize on  
+- Delve into  
+- Elicit  
+- Frame of reference  
+- Groundbreaking  
+- Hitherto  
+- Inter alia  
+- Juxtaposed with  
+- Kick-start  
+- Legitimise  
+- Milestone  
+- Navigate the complexities  
+- Outweigh  
+- Pragmatism  
+- Quench  
+- Robustness  
+- Stem from  
+- Transitory  
+- Unravel  
+- Vicarious  
+- With impunity  
+- Yield fruit  
+- Zephyr  
+- Ascertain  
+- Bolstered by  
+- Circumvent  
+- Dovetail  
+- Embolden  
+- Grapple with  
+- Herald  
+- In due diligence  
+- Jettison  
+- Kindle  
+- Latitude  
+- Mitigate risks  
+- Nullify  
+- Offset  
+- Propitious  
+- Resonate  
+- Spur on  
+- Tether  
+- Unveil the potential  
+- Validate  
+- Weigh in  
+- X-factor  
+- Zenith of  
+- Amplify  
+- Corroborate  
+- Dissect  
+- Emerge  
+- Feasible  
+- Harness the power  
+- Illuminate the path  
+- In the vanguard  
+- Kindle curiosity  
+- Leverage synergies  
+- Muster  
+- Traverse  
+- Unprecedented scale  
+- Vindicate  
+- Augment  
+- Bolster confidence  
+- Construe  
+- Disentangle  
+- Envision  
+- Foster cohesion  
+- Galvanizing force  
+- Hone  
+- Integrate seamlessly  
+- Juxtaposition of  
+- Kindle enthusiasm  
+- Optimize throughput
