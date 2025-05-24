@@ -9,4 +9,5 @@ Develop local agents to:
 7. **Translate code snippets** between languages (e.g. Python ↔ JavaScript, SQL ↔ ORM-style code)  
 8. **Package and release builds**—bundle modules, bump versions, create changelog entries, and prepare distribution artifacts  
 9. **Generate environment setups** (e.g. Dockerfiles, virtual-env scripts, or CI configuration templates)  
-10. **Extract and manage localization strings**—scan source for user-facing text and update translation resource files  
+10. **Extract and manage localization strings**—scan source for user-facing text and update translation resource files
+11. fine tuning open source model
