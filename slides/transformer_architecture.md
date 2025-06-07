@@ -131,7 +131,7 @@ Most language implementations train the model to predict the next token, minimiz
 
 $$
 \mathcal{L}
-= -\sum_{t=1}^{n} \log p_\theta\bigl(x_t \mid x_{\langle t\rangle}\bigr).
+= -\sum_{t=1}^{n} \log p_\theta\bigl(x_t \mid x_{<\, t}\bigr).
 $$
 
 Adam or AdamW optimizers with warm-up schedules are standard. The original paper warmed up the learning rate for 4 000 steps, then decayed it proportionally to $1/\sqrt{\text{step}}$. Label smoothing of $0.1$ improved calibration and generalization.
