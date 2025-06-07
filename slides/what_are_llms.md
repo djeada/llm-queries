@@ -8,14 +8,14 @@ Before we explore engineering details, it helps to ground the idea mathematicall
 
 $$
 p_\theta(x_{1:T}) =
-\prod_{t=1}^{T} p_\theta\!\bigl(x_t \mid x_{<\t}\bigr)
+\prod_{t=1}^{T} p_\theta\!\bigl(x_t \mid x_{<\,t}\bigr)
 $$
 
 Training maximizes the log-likelihood, which is equivalent to minimizing the cross-entropy loss:
 
 $$
 \mathcal{L} =
--\frac{1}{T}\sum_{t=1}^{T} \log p_\theta\!\bigl(x_t \mid x_{<\t}\bigr)
+-\frac{1}{T}\sum_{t=1}^{T} \log p_\theta\!\bigl(x_t \mid x_{<\,t}\bigr)
 $$
 
 Because the objective uses only the raw text itself, we call the procedure **self-supervised**: no human needs to label “cat” as the right answer; the context does that automatically.
