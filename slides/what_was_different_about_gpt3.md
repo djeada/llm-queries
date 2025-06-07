@@ -9,7 +9,7 @@ When OpenAI introduced GPT-3 in mid-2020, most observers focused on its eye-popp
 Empirical *scaling laws* suggested that loss falls predictably as model size $N$, dataset tokens $D$, and compute $C$ increase following power-law curves of the form
 
 $$
-\mathcal{L}(N,D) \approx a N^{-\alpha} + b D^{-\beta} + \varepsilon,
+\mathcal{L}(N, D) \approx a\,N^{-\alpha} + b\,D^{-\beta} + \varepsilon
 $$
 
 with exponents $\alpha,\beta \approx 0.07\!-\!0.095$. Engineers targeted a regime where returns were still significant and hardware could keep up. Doubling parameters without matching data would cause overfitting, so the Common Crawl corpus was aggressively filtered to roughly 500 billion tokens, complemented by books, Wikipedia, and code.
@@ -32,7 +32,8 @@ The sketch hints at how layers were split across devices while stale activations
 GPT-3 kept the autoregressive loss
 
 $$
-\mathcal{L} = -\sum_{t=1}^{T}\log p_\theta(x_t \mid x_{<t}),
+\mathcal{L}
+= -\sum_{t=1}^{T} \log p_\theta\!\bigl(x_t \mid x_{<\,t}\bigr)
 $$
 
 but two tweaks mattered. First, Byte-Pair Encoding was replaced with SentencePiece to harmonize Unicode handling across many languages. Second, *adaptive* tokenization let the model reserve extra capacity for rare long words without exploding the vocabulary to unwieldy size.
