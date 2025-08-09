@@ -39,8 +39,6 @@ Provide every command with example output and an interpretation of that output i
 When explaining command options or flags, present them clearly in a table.
 ```
 
-This guides the LLM to pair each snippet with concrete results and to use tabular layouts for clarity.
-
 ## Verification Checklist  
 
 After generating the notes, verify they meet your standards by checking for:  
