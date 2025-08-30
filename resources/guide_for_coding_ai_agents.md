@@ -1,50 +1,40 @@
-**Claude Code Best Practices**  
+# Claude Code Best Practices
 
-*Anthropic Engineering Guide*  
+Anthropic Engineering Guide
+Link: [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 
-**Link:** [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)  
+## Feedback-driven iteration
 
-### 1. Feedback-Driven Iteration  
-- Provide clear targets: unit tests, visual mocks, or expected outputs.  
-- Use iterative loops: implement, evaluate vs. target, refine 2–3 times for best results.  
-- Screenshot-driven cycles: supply tools or paste images so Claude can compare UI mocks directly.  
+Give Claude a concrete target—unit tests, a mock, or an expected output—and iterate. Build in short loops: implement, check against the target, refine. If you’re matching a UI, include screenshots or wireframes so Claude can compare directly.
 
-### 2. Testing & Code Iteration  
-- **Test‑First Approach:** Supply test cases to guide implementation and validation.  
-- **Screenshot Workflows:** Integrate Puppeteer or simulator MCP servers, or paste screenshots for visual matching.  
-- **Safe YOLO Mode:** Use `claude --dangerously-skip-permissions` inside isolated containers to run unchecked but guard via containers and no internet.  
+## Testing and code iteration
 
-### 3. Codebase Exploration & Q&A  
-- Onboard to new repositories by asking natural-language questions (e.g., logging flow, API design, edge cases).  
-- Claude agentically searches code to answer detailed queries without special prompts.  
+Lead with tests. Provide cases that define the behavior and use them to validate changes. For visual work, pair Claude with tools like Puppeteer or simulator MCP servers, or paste screenshots for pixel checks. When you need speed inside a sandbox, use “Safe YOLO mode” (`claude --dangerously-skip-permissions`) only in isolated containers with no network access.
 
-### 4. Git & GitHub Integration  
-- **Git Commands:** Search history, write commit messages, revert, resolve conflicts, graft patches.  
-- **GitHub Ops:** Create PRs, fix review comments, triage issues, categorize open tickets, and address CI/linter failures via natural prompts.  
+## Codebase exploration and Q\&A
 
-### 5. Jupyter Notebook Workflows  
-- Read/write `.ipynb` files side‑by‑side; Claude interprets outputs (including charts/images).  
-- Ask for aesthetic improvements or restructuring to make notebooks presentation‑ready.  
+Treat onboarding like a conversation. Ask about logging, API design, data flow, or edge cases in plain language. Claude can search the repo and answer without special prompting.
 
-### 6. Workflow Optimization  
-- **Be Specific:** Detailed prompts reduce iterations (e.g., specify edge cases, patterns to follow).  
-- **Include Images or URLs:** Paste mocks, diagrams, or resource links; allow URL fetching via allowlists.  
-- **Mention Files Explicitly:** Use tab‑completion for file paths to target precise resources.  
-- **Course Correction:** Interrupt streams, revise prompts, and leverage escape shortcuts to steer direction.  
-- **Context Management:** Use `/clear` to reset irrelevant history; maintain focus.  
-- **Checklists & Scratchpads:** Employ Markdown checklists or GitHub issues for multi‑step or exhaustive tasks.  
-- **Data Injection:** Pipe logs or CSVs into Claude, or use custom slash commands and bash tools to fetch data.  
+## Git and GitHub integration
 
-### 7. Headless Mode Automation  
-- Invoke `claude -p` for non-interactive CI hooks, build scripts, or automation pipelines.  
-- Stream JSON output (`--output-format stream-json`) for programmatic consumption.  
-- **Use Cases:** Issue triage on GitHub events, subjective linting and code reviews integrated into CI.  
+Use Claude to dig through history, craft commits, revert changes, resolve conflicts, and graft patches. On GitHub, have it open PRs, handle review feedback, triage and label issues, and fix CI or linter failures—all driven by natural prompts.
 
-### 8. Multi‑Claude Workflows  
-- **Writer/Reviewer Pair:** Run parallel Claude instances—one generates code/tests, another reviews or verifies.  
-- **Multiple Checkouts & Worktrees:** Open separate repository copies or worktrees in distinct terminals for concurrent tasks.  
-- **Custom Harnesses:** Script fan‑out or pipelined loops, calling Claude programmatically with allowed tools and handling JSON streams.  
+## Jupyter notebook workflows
 
-### 9. Acknowledgements & Resources  
-- Author: Boris Cherny; contributions from Anthropic engineering community.  
-- **Related Links:** Claude docs, API reference, GitHub repos, MCP server implementations, community forums.  
+Read and write `.ipynb` alongside outputs and images. Ask for cleanup, better visuals, or a narrative pass to make notebooks presentation-ready.
+
+## Workflow optimization
+
+Be specific about requirements, edge cases, and patterns to follow. Include images or URLs and allow fetching via an allowlist when needed. Mention exact file paths so Claude targets the right places. Interrupt and course-correct mid-stream. Reset context with `/clear` to stay focused. For multi-step tasks, use Markdown checklists, GitHub issues, or a scratchpad. Pipe logs or CSVs into Claude, or wire up custom slash commands and small bash tools to feed data.
+
+## Headless automation
+
+Run non-interactive tasks with `claude -p`. Stream results in JSON with `--output-format stream-json` for programmatic use. Good fits include issue triage on GitHub events, subjective linting, and CI-driven code reviews.
+
+## Multi-Claude workflows
+
+Pair roles: one instance writes code or tests, another reviews and verifies. Keep multiple checkouts or Git worktrees open in separate terminals for parallel efforts. Build small harnesses that fan out requests, invoke allowed tools, and process JSON streams.
+
+## Acknowledgements and resources
+
+Authored by Boris Cherny with contributions from the Anthropic engineering community. See the Claude docs, API references, GitHub repositories, MCP servers, and community forums for deeper dives.
