@@ -1,6 +1,12 @@
 # Sanitize LaTeX  
 Use these prompt templates to guide an LLM in cleaning up LaTeX by stripping out unnecessary spacing commands, redundant delimiters, and repeated punctuation.
 
+## Expected output
+
+- Clean LaTeX with minimal spacing macros
+- Standard operator spacing and no trailing punctuation inside math delimiters
+- Preserved equation structure and valid syntax
+
 ## Base Cleanup Prompt  
 
 **Prompt:**  

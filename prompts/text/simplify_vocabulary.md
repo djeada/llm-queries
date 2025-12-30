@@ -1,6 +1,12 @@
 # Simplify Vocabulary  
 Guide your LLM to replace or remove over-polished words and phrases so the text reads more naturally and human-like.
 
+## Expected output
+
+- Plain-language substitutions for flagged phrases
+- Meaning preserved without adding new claims
+- Output matches the original structure unless instructed otherwise
+
 ## Base Cleanup Prompt  
 
 **Prompt:**  

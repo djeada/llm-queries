@@ -1,3 +1,13 @@
+# Formatowanie list (PL)
+
+Szablon do generowania czytelnych, jednopoziomowych list w jezyku polskim.
+
+## Oczekiwany wynik
+
+- Jednopoziomowa lista punktowana
+- Pelne zdania bez specjalnego formatowania
+- Wyróżnione słowo pojawia sie w srodku zdania, nie na poczatku
+
 **Prompt:**
 
 ```

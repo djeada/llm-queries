@@ -2,6 +2,12 @@
 
 Use this workflow to iteratively improve your existing resume with an LLM, tailoring it to each job without fabricating information.
 
+## Expected output
+
+- A prioritized list of edits or rewrites, not a full fabricated resume
+- Bulleted recommendations mapped to the job description
+- Suggested wording that preserves factual accuracy
+
 ## Prepare Your Base Resume
 
 - **Do NOT** generate a full resume from scratch.  
@@ -126,4 +132,3 @@ A concise statement of your career goals and what you bring to the role.
 - **Proofread** for grammar and consistency.  
 - **Verify dates and facts** against original sources.  
 - **Ask the LLM**: "Scan for any typos or inconsistencies in this resume."  
-

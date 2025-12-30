@@ -2,6 +2,12 @@
 
 A collection of prompt templates to craft engaging Instagram captions, choose hashtags, and spark audience interaction.
 
+## Expected output
+
+- A short caption matching the requested tone
+- 2-5 hashtags when requested
+- One clear call-to-action when applicable
+
 ## Promotional Caption
 
 Prompt:
@@ -57,4 +63,3 @@ Prompt:
 ```
 "Write an intro caption for an Instagram carousel about [topic]. Summarize each slide’s key point in 1 sentence and use arrows or emojis to separate them."
 ```
-

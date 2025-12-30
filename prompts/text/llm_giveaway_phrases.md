@@ -1,6 +1,12 @@
 # LLM Giveaway Phrases
 Research shows that AI tools lean heavily on certain high‑frequency constructions—from corporate‑style buzzwords to overly formal transitions—making these phrases prime giveaways.
 
+## Expected output
+
+- A cleaned version of the input text with giveaway phrases removed
+- A list of flagged phrases when using the extraction prompt
+- No added commentary unless explicitly requested
+
 Before (AI footprint):
 
       “Based on my training data, it’s important to note that, in conclusion, elevating your marketing strategy requires a deep dive into customer analytics.”

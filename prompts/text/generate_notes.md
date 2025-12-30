@@ -1,6 +1,13 @@
-# Generating Ntes with LLMs
+# Generating Notes with LLMs
 
 Use this guide to write prompts that produce rich, well-organized notes from an LLM, complete with subsections, diagrams, and clear formatting.
+
+## Expected output
+
+- A markdown document with `##` and `###` headers
+- Introductory paragraph under each header
+- ASCII diagrams when helpful
+- No nested lists
 
 ## Base Prompt Structure  
 

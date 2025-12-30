@@ -2,6 +2,12 @@
 
 Use these refined prompt templates to guide a large language model in revising, expanding, and polishing an existing article. Each prompt targets a specific aspect—detail, tone, coherence, and final review—so your text reads smoothly and clearly, like advice from a friendly mentor.
 
+## Expected output
+
+- A rewritten version of the input text, expanded and clarified
+- One continuous response unless the prompt requests sections
+- Minimal formatting, with bold used sparingly
+
 ### General Revision
 
 **Prompt:**

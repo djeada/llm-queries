@@ -2,6 +2,12 @@
 
 This guide provides refined prompt templates and examples to help direct a language model (LLM) toward producing well-structured, easy-to-read bullet lists.
 
+## Expected output
+
+- A single-level bullet list
+- Full-sentence bullets with one italicized key term each
+- No conversational asides or filler
+
 ## Defining List Structure and Style
 
 **Prompt:**
@@ -111,4 +117,3 @@ Organize your response as a bullet list. Each bullet should be a full sentence t
 3. Demonstrate one before-and-after bullet, such as *consistent indentation*.
 4. Request different sentence openings, and include scenarios that explain the difference between applying and omitting the practice.
 5. Review the output, then adjust the prompt to address any gaps or missing details.
-

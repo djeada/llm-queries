@@ -2,6 +2,13 @@
 
 Use this structured workflow to transform a job description into a comprehensive set of interview questions and practice answers. Export your results in CSV format for easy tracking.
 
+## Expected output
+
+- A topic list derived from the job description
+- Question sets per topic
+- Practice answers in STAR (or specified) format
+- Optional CSV-ready output
+
 ## Extract Key Topics from Job Description
 
 1. **Paste** the full job description into your LLM prompt.  
