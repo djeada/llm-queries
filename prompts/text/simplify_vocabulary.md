@@ -41,11 +41,11 @@ By using a simple process, you can take an approach that delivers solid results 
 - Essential  
 - Pivotal  
 - Key  
-- Appologies  
+- Apologies  
 - Signifies  
 - Established  
 - Navigate  
-- Performs Bette  
+- Performs Better  
 - Improving The  
 - Paramount  
 - Ultimately  

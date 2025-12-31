@@ -4,9 +4,9 @@ Short notes and links to external courses. Many entries currently link directly 
 
 ## Index
 
-- `course_reviews/Anthropic Prompt Engineering.md` link to Anthropic prompt engineering course (summary pending)
-- `course_reviews/anthropic_api_fundamentals.md` link to Anthropic API fundamentals course (summary pending)
-- `course_reviews/Hugging Face llm intro.md` link to Hugging Face LLM course (summary pending)
-- `course_reviews/Hugging Face agents.md` link to Hugging Face agents course (summary pending)
-- `course_reviews/Hugging Face Audio.md` link to Hugging Face audio course (summary pending)
-- `course_reviews/microsoft-ai-agents-for-beginners.md` link to Microsoft AI agents for beginners (summary pending)
+- `course_reviews/anthropic-prompt-engineering.md` Anthropic prompt engineering course
+- `course_reviews/anthropic-api-fundamentals.md` Anthropic API fundamentals course
+- `course_reviews/hugging-face-llm-intro.md` Hugging Face LLM introduction course
+- `course_reviews/hugging-face-agents.md` Hugging Face agents course
+- `course_reviews/hugging-face-audio.md` Hugging Face audio course
+- `course_reviews/microsoft-ai-agents-for-beginners.md` Microsoft AI agents for beginners

@@ -34,12 +34,12 @@ A map of the repository with short descriptions and entry points.
 
 ## Course reviews
 
-- `course_reviews/Anthropic Prompt Engineering.md` course notes
-- `course_reviews/anthropic_api_fundamentals.md` course notes
-- `course_reviews/Hugging Face llm intro.md` course notes
-- `course_reviews/Hugging Face agents.md` course notes
-- `course_reviews/Hugging Face Audio.md` course notes
-- `course_reviews/microsoft-ai-agents-for-beginners.md` course notes
+- `course_reviews/anthropic-prompt-engineering.md` Anthropic prompt engineering course
+- `course_reviews/anthropic-api-fundamentals.md` Anthropic API fundamentals course
+- `course_reviews/hugging-face-llm-intro.md` Hugging Face LLM introduction course
+- `course_reviews/hugging-face-agents.md` Hugging Face agents course
+- `course_reviews/hugging-face-audio.md` Hugging Face audio course
+- `course_reviews/microsoft-ai-agents-for-beginners.md` Microsoft AI agents for beginners
 
 ## Slides
 

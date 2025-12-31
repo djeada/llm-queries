@@ -41,7 +41,7 @@ llm-queries/
 - **Prompt building**: start with `prompts/README.md` and try `prompts/text/improve_article.md`
 - **Job search prompts**: see `prompts/job_search/resume.md` and `prompts/job_search/interview_questions.md`
 - **Local LLM setup**: begin with `local_setup_guides/local_models_intro.md`
-- **Course overviews**: scan `course_reviews/Anthropic Prompt Engineering.md`
+- **Course overviews**: scan `course_reviews/anthropic-prompt-engineering.md`
 - **Framework comparisons**: check `slides/rag_with_vector_database.md`
 
 ## Example prompt in action
