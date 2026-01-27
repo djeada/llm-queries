@@ -25,15 +25,15 @@ sudo rm -rf /usr/share/ollama
 **Install & verify**
 
 ```bash
-ollama pull qwen2.5-coder
+ollama pull qwen3-coder
 ollama list
-ollama run qwen2.5-coder
+ollama run qwen3-coder
 ```
 
 **Remove**
 
 ```bash
-ollama rm qwen2.5-coder
+ollama rm qwen3-coder
 ```
 
 ## III. Claude Code (with Ollama backend)
@@ -47,7 +47,7 @@ which claude
 export ANTHROPIC_AUTH_TOKEN=ollama
 export ANTHROPIC_BASE_URL=http://localhost:11434
 
-claude --model qwen2.5-coder
+claude --model qwen3-coder
 ```
 
 **Remove**
@@ -71,5 +71,5 @@ export PATH="$HOME/.local/bin:$PATH"
 **Run**
 
 ```bash
-aider --model ollama/qwen2.5-coder
+aider --model ollama/qwen3-coder
 ```
