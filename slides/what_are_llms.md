@@ -31,17 +31,13 @@ $$
 The model estimates the probability of the full sequence by multiplying many conditional probabilities:
 
 $$
-p_\theta(x_{1: T}) =
-\prod_{t=1}^{T} p_\theta(x_t \mid x_{<t})
+p_\theta(x_{1: T}) = \prod_{t=1}^{T} p_\theta(x_t \mid x_{<t})
 $$
 
 This means:
 
 $$
-p(x_1, x_2, x_3)
-================
-
-p(x_1)
+p(x_1, x_2, x_3) = p(x_1)
 p(x_2 \mid x_1)
 p(x_3 \mid x_1, x_2)
 $$
@@ -73,10 +69,7 @@ $$
 Then the probability of the full sequence is:
 
 $$
-p(\text{I like cats})
-=====================
-
-0. 2 \times 0. 5 \times 0. 1
+p(\text{I like cats}) = 0. 2 \times 0. 5 \times 0. 1
 $$
 
 $$
@@ -98,10 +91,7 @@ During training, the model is rewarded for assigning high probability to the cor
 The loss is usually written as:
 
 $$
-\mathcal{L}
-===========
-
--\frac{1}{T}
+\mathcal{L} = -\frac{1}{T}
 \sum_{t=1}^{T}
 \log p_\theta(x_t \mid x_{<t})
 $$
@@ -141,10 +131,7 @@ $$
 The loss is:
 
 $$
-\mathcal{L}
-===========
-
--\frac{1}{3}
+\mathcal{L} = -\frac{1}{3}
 [
 \log(0. 2) + \log(0. 5) + \log(0. 1)
 $$
@@ -168,10 +155,7 @@ $$
 So:
 
 $$
-\mathcal{L}
-===========
-
--\frac{1}{3}
+\mathcal{L} = -\frac{1}{3}
 [
 -1. 609 - 0. 693 - 2. 303
 $$
@@ -206,10 +190,7 @@ $$
 Using the previous loss:
 
 $$
-\text{Perplexity}
-=================
-
-e^{1. 535}
+\text{Perplexity} = e^{1. 535}
 \approx 4. 64
 $$
 
@@ -427,10 +408,7 @@ $$
 Then the scores are passed through a softmax function to get attention weights:
 
 $$
-\text{softmax}(s_i)
-===================
-
-\frac{e^{s_i}}{\sum_j e^{s_j}}
+\text{softmax}(s_i) = \frac{e^{s_i}}{\sum_j e^{s_j}}
 $$
 
 Finally, the model uses the attention weights to take a weighted average of the value vectors.
@@ -519,10 +497,7 @@ The feed-forward layer then transforms each token representation independently.
 A simplified feed-forward layer looks like:
 
 $$
-\text{FFN}(x)
-=============
-
-W_2 \sigma(W_1x + b_1) + b_2
+\text{FFN}(x) = W_2 \sigma(W_1x + b_1) + b_2
 $$
 
 where:
@@ -993,10 +968,7 @@ So instead of training 1, 000, 000 parameters, we train only 20, 000.
 The percentage is:
 
 $$
-\frac{20{,}000}{1{,}000{,}000}
-==============================
-
-0. 02
+\frac{20{,}000}{1{,}000{,}000} = 0. 02
 $$
 
 $$
