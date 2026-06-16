@@ -31,7 +31,7 @@ $$
 The model estimates the probability of the full sequence by multiplying many conditional probabilities:
 
 $$
-p_\theta(x_{1: T}) = \prod_{t=1}^{T} p_\theta(x_t \mid x_{<t})
+p_\theta(x_{1:T}) = \prod_{t=1}^{T} p_\theta(x_t \mid x_{1:t-1})
 $$
 
 This means:
@@ -93,7 +93,7 @@ The loss is usually written as:
 $$
 \mathcal{L} = -\frac{1}{T}
 \sum_{t=1}^{T}
-\log p_\theta(x_t \mid x_{<t})
+\log p_\theta(x_t \mid x_{1:t-1})
 $$
 
 This is called cross-entropy loss.
@@ -134,9 +134,8 @@ $$
 \mathcal{L} = -\frac{1}{3}
 [
 \log(0. 2) + \log(0. 5) + \log(0. 1)
-$$
-
 ]
+$$
 
 Using approximate values:
 
@@ -152,26 +151,14 @@ $$
 \log(0. 1) \approx -2. 303
 $$
 
-So:
-
 $$
+\begin{aligned}
 \mathcal{L} = -\frac{1}{3}
-[
--1. 609 - 0. 693 - 2. 303
+\left[
+-1.609 - 0.693 - 2.303
+\right] = -\frac{1}{3}(-4.605) = 1.535
+\end{aligned}
 $$
-
-]
-
-# [
-
--\frac{1}{3}
-[-4. 605]
-]
-
-# [
-
-1. 535
-]
 
 So the average loss is approximately:
 
