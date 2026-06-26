@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Snake LLM Controller</title>
+    <meta content="Standalone Snake game with an optional local Ollama LLM controller." name="description" />
+    <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>Snake</h1>
+            <p>
+                Use the arrow keys, WASD, or swipe to play manually. Switch the controller to Local LLM
+                to let the local model suggest moves while the browser keeps a safe fallback.
+            </p>
+            <ul>
+                <li>Move: arrow keys, WASD, or swipe</li>
+                <li>Pause: space bar or double tap</li>
+                <li>Restart after game over: click or tap the board</li>
+            </ul>
+        </header>
+
+        <div class="outer">
+            <canvas height="800" id="canvas" width="800"></canvas>
+        </div>
+
+        <div class="snake-controls" aria-label="Snake control mode">
+            <label for="controller-mode">Controller</label>
+            <select id="controller-mode">
+                <option value="human">Human</option>
+                <option value="llm">Local LLM</option>
+            </select>
+            <span id="llm-status" aria-live="polite">Manual play</span>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
