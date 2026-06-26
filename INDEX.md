@@ -19,16 +19,6 @@ Practical prompt templates organized by use case. Each file includes the prompt 
 | [`prompts/job_search/resume.md`](prompts/job_search/resume.md) | Tailor resumes to specific job descriptions | Beginner |
 | [`prompts/job_search/interview_questions.md`](prompts/job_search/interview_questions.md) | Generate interview questions and STAR-format answers | Beginner |
 
-### Skills & Learning
-
-| File | Description | Skill Level |
-|------|-------------|-------------|
-| [`prompts/skills/README.md`](prompts/skills/README.md) | Skills prompt overview and recommended workflow | Beginner |
-| [`prompts/skills/skill_gap_analysis.md`](prompts/skills/skill_gap_analysis.md) | Compare current skills against a target role, project, or goal | Beginner |
-| [`prompts/skills/learning_plan.md`](prompts/skills/learning_plan.md) | Create a structured roadmap for learning a skill | Beginner |
-| [`prompts/skills/deliberate_practice.md`](prompts/skills/deliberate_practice.md) | Generate focused drills, exercises, and feedback rubrics | Intermediate |
-| [`prompts/skills/portfolio_evidence.md`](prompts/skills/portfolio_evidence.md) | Turn completed work into resume, portfolio, or review evidence | Intermediate |
-
 ### Text Processing
 
 | File | Description | Skill Level |
@@ -51,6 +41,22 @@ Practical prompt templates organized by use case. Each file includes the prompt 
 | File | Description | Skill Level |
 |------|-------------|-------------|
 | [`prompts/social_media/instagram.md`](prompts/social_media/instagram.md) | Create engaging Instagram captions | Beginner |
+
+---
+
+## 🎯 Skills
+
+Practical prompt workflows for building, debugging, and evaluating LLM systems.
+
+| File | Description | Skill Level |
+|------|-------------|-------------|
+| [`skills/README.md`](skills/README.md) | Skills prompt overview, selection criteria, and workflow | Intermediate |
+| [`skills/prompt_debugging.md`](skills/prompt_debugging.md) | Diagnose and rewrite prompts that produce weak or unreliable outputs | Intermediate |
+| [`skills/context_engineering.md`](skills/context_engineering.md) | Decide what context to include, structure, compress, retrieve, or omit | Intermediate |
+| [`skills/llm_evaluation.md`](skills/llm_evaluation.md) | Build rubrics, test cases, thresholds, and regression checks for LLM workflows | Intermediate |
+| [`skills/rag_quality_audit.md`](skills/rag_quality_audit.md) | Audit retrieval quality, grounding, citations, and RAG answer support | Advanced |
+| [`skills/agent_tool_design.md`](skills/agent_tool_design.md) | Design tool schemas, guardrails, approvals, logging, and failure handling for agents | Advanced |
+| [`skills/local_model_selection.md`](skills/local_model_selection.md) | Choose local, API, or hybrid model deployments under real constraints | Intermediate |
 
 ---
 

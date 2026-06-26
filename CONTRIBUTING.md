@@ -74,6 +74,7 @@ llm-queries/
 │   ├── text/                # Writing and formatting prompts
 │   ├── math/                # Mathematical notation prompts
 │   └── social_media/        # Social content prompts
+├── skills/                  # Practical LLM workflow skill prompts
 ├── local_setup_guides/      # Self-hosted LLM tutorials
 ├── resources/               # External reference summaries
 ├── course_reviews/          # Course notes and reviews

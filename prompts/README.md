@@ -7,7 +7,6 @@ A practical library of reusable prompt templates for writing, editing, job searc
 | Category | Prompts | Description |
 |----------|---------|-------------|
 | [Job Search](job_search/) | 2 | Resume optimization, interview prep |
-| [Skills](skills/) | 4 | Skill assessment, learning plans, practice |
 | [Text Processing](text/) | 6 | Writing, formatting, editing |
 | [Math](math/) | 1 | LaTeX cleanup |
 | [Social Media](social_media/) | 1 | Captions and posts |
@@ -35,10 +34,12 @@ A practical library of reusable prompt templates for writing, editing, job searc
 
 | Prompt | What It Does | Best For |
 |--------|--------------|----------|
-| [skill_gap_analysis.md](skills/skill_gap_analysis.md) | Compare current skills with a target goal | Career planning, upskilling |
-| [learning_plan.md](skills/learning_plan.md) | Build a realistic skill roadmap | Self-study, training |
-| [deliberate_practice.md](skills/deliberate_practice.md) | Create drills and feedback rubrics | Focused practice |
-| [portfolio_evidence.md](skills/portfolio_evidence.md) | Turn completed work into proof of skill | Portfolios, reviews |
+| [prompt_debugging.md](../skills/prompt_debugging.md) | Diagnose and rewrite failing prompts | Prompt iteration |
+| [context_engineering.md](../skills/context_engineering.md) | Structure, compress, retrieve, or omit context | Long-context tasks |
+| [llm_evaluation.md](../skills/llm_evaluation.md) | Build rubrics, test cases, and regression checks | Prompt and model evaluation |
+| [rag_quality_audit.md](../skills/rag_quality_audit.md) | Audit retrieval, grounding, and citations | RAG systems |
+| [agent_tool_design.md](../skills/agent_tool_design.md) | Design tool schemas, guardrails, and failure handling | Agent workflows |
+| [local_model_selection.md](../skills/local_model_selection.md) | Choose local, API, or hybrid model setups | Deployment decisions |
 
 ### 📐 Technical & Math
 
@@ -137,12 +138,6 @@ prompts/
 ├── job_search/         
 │   ├── resume.md       # Resume optimization
 │   └── interview_questions.md  # Interview prep
-├── skills/
-│   ├── README.md       # Skills prompt overview
-│   ├── skill_gap_analysis.md # Skill gap assessment
-│   ├── learning_plan.md # Learning roadmap
-│   ├── deliberate_practice.md # Practice drills
-│   └── portfolio_evidence.md # Skill proof and portfolio evidence
 ├── text/
 │   ├── improve_article.md    # Content expansion
 │   ├── format_lists.md       # List formatting

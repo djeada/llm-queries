@@ -36,6 +36,7 @@ Choose your path based on what you want to accomplish:
 |------|------------|-------------|
 | ✍️ Improve your writing | [`prompts/text/improve_article.md`](prompts/text/improve_article.md) | Beginner |
 | 📝 Optimize your resume | [`prompts/job_search/resume.md`](prompts/job_search/resume.md) | Beginner |
+| 🎯 Debug LLM workflows | [`skills/README.md`](skills/README.md) | Intermediate |
 | 🖥️ Run models locally | [`local_setup_guides/local_models_intro.md`](local_setup_guides/local_models_intro.md) | Intermediate |
 | 🔍 Learn about RAG | [`slides/rag_with_vector_database.md`](slides/rag_with_vector_database.md) | Intermediate |
 | 🤖 Build AI agents | [`resources/practical_guide_to_building_agents.md`](resources/practical_guide_to_building_agents.md) | Advanced |
@@ -49,6 +50,13 @@ llm-queries/
 │   ├── text/                 #    Writing, formatting, editing
 │   ├── math/                 #    LaTeX cleanup, equations
 │   └── social_media/         #    Captions, engagement posts
+├── skills/                   # 🎯 Practical LLM workflow skills
+│   ├── prompt_debugging.md
+│   ├── context_engineering.md
+│   ├── llm_evaluation.md
+│   ├── rag_quality_audit.md
+│   ├── agent_tool_design.md
+│   └── local_model_selection.md
 ├── local_setup_guides/       # 🖥️ Run LLMs on your machine
 │   ├── local_models_intro.md #    Getting started with Ollama
 │   └── deepseek_r1.md        #    DeepSeek R1 setup
@@ -77,6 +85,7 @@ llm-queries/
 |----------|-------------|-----------|
 | **Text Processing** | Improve, format, and simplify written content | `improve_article.md`, `format_lists.md`, `simplify_vocabulary.md` |
 | **Job Search** | Resume optimization and interview preparation | `resume.md`, `interview_questions.md` |
+| **Skills** | Debug prompts, design context, evaluate outputs, audit RAG, and design agent tools | `prompt_debugging.md`, `context_engineering.md`, `llm_evaluation.md` |
 | **Math/LaTeX** | Clean up mathematical notation | `sanitize_latex.md` |
 | **Social Media** | Engaging captions and posts | `instagram.md` |
 
