@@ -58,16 +58,16 @@ The game loop remains owned by `app.js`. The LLM never moves the snake directly;
 
 ```mermaid
 sequenceDiagram
-    participant Loop as Game loop
+    participant GameLoop as Game loop
     participant LLM as LlmController
-    participant Safe as Local safety layer
+    participant Safety as Local safety layer
     participant Snake as Snake
     participant Proxy as LLM proxy
     participant Ollama as Ollama model
 
-    Loop->>LLM: update game
-    LLM->>Safe: get safe move
-    Safe-->>LLM: safe fallback move
+    GameLoop->>LLM: update game
+    LLM->>Safety: get safe move
+    Safety-->>LLM: safe fallback move
     LLM->>Snake: set fallback direction
 
     alt no request pending
@@ -75,17 +75,17 @@ sequenceDiagram
         Proxy->>Ollama: ask for move JSON
         Ollama-->>Proxy: JSON response
         Proxy-->>LLM: move is right
-        LLM->>Safe: validate move
-        Safe-->>LLM: accepted or rejected
+        LLM->>Safety: validate move
+        Safety-->>LLM: accepted or rejected
         opt accepted
             LLM->>Snake: set LLM direction
         end
     else request already pending
-        LLM-->>Loop: skip network and keep fallback
+        LLM-->>GameLoop: skip network and keep fallback
     end
 
-    Loop->>Snake: move
-    Loop->>Loop: collision, eat, render
+    GameLoop->>Snake: move
+    GameLoop->>GameLoop: collision, eat, render
 ```
 
 ## Why There Is A Local Fallback
