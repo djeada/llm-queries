@@ -97,7 +97,7 @@ The fallback is therefore part of the control system:
 ```mermaid
 flowchart TD
     Tick["Every game tick"] --> Legal["Compute legal moves"]
-    Legal --> Safe["Pick safe greedy move\nshortest distance to food"]
+    Legal --> Safe["Pick safe greedy move<br/>shortest distance to food"]
     Safe --> Apply["Apply fallback immediately"]
     Apply --> Pending{"LLM request pending?"}
     Pending -->|yes| Move["Move snake now"]
