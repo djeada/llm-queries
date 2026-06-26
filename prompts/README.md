@@ -1,12 +1,13 @@
 # Prompts Library
 
-A curated collection of ready-to-use prompt templates organized by category. Each prompt includes examples, expected outputs, and tips for customization.
+A practical library of reusable prompt templates for writing, editing, job search, technical cleanup, and social media work. The prompts are designed to be copied, customized, and iterated with most modern LLMs.
 
 ## Quick Reference
 
 | Category | Prompts | Description |
 |----------|---------|-------------|
 | [Job Search](job_search/) | 2 | Resume optimization, interview prep |
+| [Skills](skills/) | 4 | Skill assessment, learning plans, practice |
 | [Text Processing](text/) | 6 | Writing, formatting, editing |
 | [Math](math/) | 1 | LaTeX cleanup |
 | [Social Media](social_media/) | 1 | Captions and posts |
@@ -30,6 +31,15 @@ A curated collection of ready-to-use prompt templates organized by category. Eac
 | [resume.md](job_search/resume.md) | Tailor resume to job descriptions | Job applications |
 | [interview_questions.md](job_search/interview_questions.md) | Generate Q&A for interview prep | Interview preparation |
 
+### 🎯 Skills & Learning
+
+| Prompt | What It Does | Best For |
+|--------|--------------|----------|
+| [skill_gap_analysis.md](skills/skill_gap_analysis.md) | Compare current skills with a target goal | Career planning, upskilling |
+| [learning_plan.md](skills/learning_plan.md) | Build a realistic skill roadmap | Self-study, training |
+| [deliberate_practice.md](skills/deliberate_practice.md) | Create drills and feedback rubrics | Focused practice |
+| [portfolio_evidence.md](skills/portfolio_evidence.md) | Turn completed work into proof of skill | Portfolios, reviews |
+
 ### 📐 Technical & Math
 
 | Prompt | What It Does | Best For |
@@ -46,15 +56,17 @@ A curated collection of ready-to-use prompt templates organized by category. Eac
 
 ### Step 1: Choose a Prompt
 
-Find the prompt that matches your task. Each file includes:
-- Description of what it does
-- Expected output format
-- The actual prompt text
-- Before/after examples
+Find the prompt that matches your task. Each prompt file should explain:
+
+- When to use the prompt
+- What input to provide
+- What output to expect
+- The copy/paste prompt text
+- Examples, review checks, or follow-up prompts
 
 ### Step 2: Customize
 
-Replace placeholders with your content:
+Replace bracketed placeholders with your content:
 
 ```text
 # Original prompt
@@ -65,7 +77,18 @@ Replace placeholders with your content:
 Senior Software Engineer at Acme Corp..."
 ```
 
-### Step 3: Iterate
+### Step 3: Add Context
+
+Better context usually produces better output. When relevant, include:
+
+- Audience, channel, or reader skill level
+- Tone and style requirements
+- Length limits
+- Examples of acceptable and unacceptable output
+- Source material the model must preserve
+- Constraints such as "do not invent facts" or "return only the revised text"
+
+### Step 4: Iterate
 
 Most tasks benefit from iteration:
 
@@ -78,11 +101,13 @@ Most tasks benefit from iteration:
 
 Every prompt in this library should:
 
-- ✅ Have clear, specific instructions
-- ✅ Include expected output format
-- ✅ Provide before/after examples
-- ✅ Work across multiple LLMs (GPT-4, Claude, etc.)
-- ✅ Avoid unnecessary jargon
+- State the role or task clearly
+- Define the input the user must provide
+- Specify output format, length, and tone
+- Preserve factual accuracy and avoid unsupported claims
+- Include examples, checks, or follow-up prompts where useful
+- Work across multiple LLMs without relying on vendor-specific features
+- Avoid unnecessary jargon and vague style instructions
 
 ## Model Compatibility
 
@@ -90,18 +115,19 @@ These prompts are designed to work with:
 
 | Model | Tested | Notes |
 |-------|--------|-------|
-| GPT-4 / GPT-4o | ✅ | Primary testing platform |
-| Claude 3 | ✅ | Works well with XML-structured prompts |
-| Llama 3 | ✅ | May need slightly more explicit instructions |
-| Gemini Pro | ✅ | Compatible with most prompts |
+| GPT-4 / GPT-4o / GPT-4.1 | Compatible | Strong general performance |
+| Claude 3 / Claude 3.5 | Compatible | Works well with structured prompts |
+| Llama 3 / Llama 3.1 | Compatible | May need more explicit examples |
+| Gemini | Compatible | Works best with clear output constraints |
 
 ## Tips for Better Results
 
-1. **Be specific** — Vague prompts get vague outputs
-2. **Show examples** — Add your own before/after examples
-3. **Constrain output** — Specify format, length, and style
-4. **Chain prompts** — Use one output as input to another
-5. **Iterate** — First drafts are rarely final
+1. **Be specific** - vague prompts produce vague outputs.
+2. **Show examples** - add before/after samples when style matters.
+3. **Constrain output** - specify format, length, tone, and exclusions.
+4. **Protect facts** - tell the model to flag uncertainty instead of guessing.
+5. **Chain prompts** - use one output as input to a review or refinement prompt.
+6. **Iterate** - first drafts usually need at least one focused pass.
 
 ## Directory Structure
 
@@ -111,6 +137,12 @@ prompts/
 ├── job_search/         
 │   ├── resume.md       # Resume optimization
 │   └── interview_questions.md  # Interview prep
+├── skills/
+│   ├── README.md       # Skills prompt overview
+│   ├── skill_gap_analysis.md # Skill gap assessment
+│   ├── learning_plan.md # Learning roadmap
+│   ├── deliberate_practice.md # Practice drills
+│   └── portfolio_evidence.md # Skill proof and portfolio evidence
 ├── text/
 │   ├── improve_article.md    # Content expansion
 │   ├── format_lists.md       # List formatting
@@ -138,13 +170,24 @@ We welcome contributions! When adding a prompt:
 ```markdown
 # Prompt Name
 
-Brief description of what this prompt does.
+Brief description of what this prompt does and when to use it.
+
+## Best for
+
+- Use case 1
+- Use case 2
+
+## Required input
+
+- Source text, topic, job description, or other required material
+- Optional style, audience, length, or formatting constraints
 
 ## Expected Output
 
 - Output format specifications
 - Length expectations
 - Style notes
+- Accuracy and citation requirements, if relevant
 
 ## Prompt
 
@@ -165,6 +208,7 @@ Your prompt text here...
 - Model compatibility
 - Variations
 - Tips for customization
+- Follow-up prompts or review checklist
 ```
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.

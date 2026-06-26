@@ -1,38 +1,82 @@
 # Generating Notes with LLMs
 
-Use this guide to write prompts that produce rich, well-organized notes from an LLM, complete with subsections, diagrams, and clear formatting.
+Use these prompts to turn source material into structured notes that are detailed enough to study from, but organized enough to scan quickly.
+
+## Best for
+
+- Lecture notes, study guides, book chapters, papers, tutorials, and documentation
+- Converting transcripts or long articles into reusable notes
+- Building outlines before writing an article or presentation
 
 ## Expected output
 
-- A markdown document with `##` and `###` headers
-- Introductory paragraph under each header
-- ASCII diagrams when helpful
-- No nested lists
+- A markdown document with clear `##` and `###` sections
+- Short introductory paragraph under each main section
+- Definitions, examples, and key takeaways
+- Tables or ASCII diagrams where they improve understanding
+- No unsupported facts beyond the provided source unless explicitly requested
 
-## Base Prompt Structure  
+## Required input
 
-Begin with a clear instruction that sets expectations for layout, tone, and detail.  
+- Topic or source text
+- Audience level
+- Desired depth
+- Whether the model may add external knowledge
+- Any formatting constraints
+
+## Source-Based Notes Prompt
+
+Use this when you want notes grounded only in the material you provide.
 
 ```text
-Create extensive notes on the following topic [INSERT TOPIC HERE].
+Create detailed study notes from the source material below.
 
-Maintain divisions into sections and subsections for coherence.  
-Use markdown headers (## for sections, ### for subsections) and proper LaTeX formatting for any mathematical expressions.  
-Include ASCII graphics to illustrate key concepts.  
-Avoid starting sentences with bold terms followed by a colon; instead weave ideas into natural sentences.  
-Emphasize important points through phrasing rather than heavy formatting.  
-Use only single-level lists and do not nest or embed lists.  
-Write in a friendly, conversational tone and vary sentence length for flow.  
-Embed examples or analogies within paragraphs instead of isolating them in bullets.  
-If a section begins with a header, start with an introductory paragraph before diving into details.
+Audience level: [BEGINNER / INTERMEDIATE / ADVANCED]
+Depth: [QUICK SUMMARY / STANDARD NOTES / DEEP STUDY GUIDE]
+
+Rules:
+1. Use only the supplied source material. Do not add outside facts.
+2. Use markdown with `##` for main sections and `###` for subsections.
+3. Begin each main section with a short explanatory paragraph.
+4. Include definitions for important terms.
+5. Use concise bullet lists for details, but avoid nested lists.
+6. Add tables or ASCII diagrams only when they clarify relationships.
+7. Mark unclear or missing source details as [unclear from source].
+8. End with "Key Takeaways" and "Questions to Review".
+
+Source material:
+"""
+[PASTE SOURCE MATERIAL]
+"""
 ```
 
-## Enhancements for Scientific Topics  
+## Topic-Based Notes Prompt
+
+Use this when you want the model to create notes from general knowledge. For current, legal, medical, or financial topics, provide sources or verify the result separately.
+
+```text
+Create professional study notes on this topic:
+[TOPIC]
+
+Audience level: [BEGINNER / INTERMEDIATE / ADVANCED]
+Purpose: [EXAM PREP / PRESENTATION / PROJECT REFERENCE / GENERAL LEARNING]
+
+Requirements:
+- Organize the notes with `##` and `###` headings.
+- Explain concepts in plain language before adding technical detail.
+- Include examples after important concepts.
+- Use tables for comparisons.
+- Use LaTeX for formulas when needed.
+- Include common mistakes or misconceptions.
+- End with a compact review checklist.
+```
+
+## Enhancements for Scientific Topics
 
 When your notes cover scientific or mathematical material, append the following to your base prompt:  
 
 ```text
-Formulas and mathematical rigor are essential.
+Include formulas, assumptions, units, and step-by-step derivations where relevant. Define every variable the first time it appears. Do not skip algebraic steps that a student would need to understand the result.
 ```
 
 This ensures the model includes step-by-step derivations and correctly formatted equations.
@@ -42,16 +86,16 @@ This ensures the model includes step-by-step derivations and correctly formatted
 For code-focused notes, extend the base prompt with these lines:  
 
 ```text
-Provide every command with example output and an interpretation of that output in a list.  
-When explaining command options or flags, present them clearly in a table.
+For programming topics, include runnable examples, expected output, and a short explanation of what each example demonstrates. Present command flags, configuration options, or API parameters in tables.
 ```
 
 ## Verification Checklist  
 
 After generating the notes, verify they meet your standards by checking for:  
 
-- Grammatically perfect but overly complex sentences that obscure meaning.  
-- Uniform sentence structures or repeated phrasing that feel robotic.  
-- Invented statistics or unsupported facts that lack proper citation.  
-- Missing introductory paragraphs under new headers.  
-- Nested lists or unexpected list-within-list formatting.  
+- The notes distinguish source-backed information from added context.
+- Important terms are defined before they are used heavily.
+- Sections have a readable progression from basics to details.
+- Examples actually illustrate the concept being discussed.
+- Tables and diagrams clarify rather than decorate.
+- No invented statistics, citations, or unsupported claims appear.

@@ -1,50 +1,113 @@
 # Interview Questions Study Guide
 
-Use this structured workflow to transform a job description into a comprehensive set of interview questions and practice answers. Export your results in CSV format for easy tracking.
+Use this workflow to turn a job description into a structured interview preparation plan with likely questions, answer outlines, and practice drills.
+
+## Best for
+
+- Preparing for behavioral, technical, product, leadership, or case interviews
+- Building a question bank from a specific job description
+- Drafting STAR, CAR, or SOAR answer outlines from real experience
+- Exporting practice material to a spreadsheet or flashcard tool
 
 ## Expected output
 
 - A topic list derived from the job description
-- Question sets per topic
-- Practice answers in STAR (or specified) format
+- Question sets grouped by interview type and skill area
+- Practice answer outlines in STAR, CAR, or another specified format
 - Optional CSV-ready output
+- Follow-up questions and weak-answer warnings
+
+## Required input
+
+- Target job description
+- Candidate background or resume
+- Interview stage, if known
+- Preferred answer framework
+- Target company or industry context, if relevant
 
 ## Extract Key Topics from Job Description
 
-1. **Paste** the full job description into your LLM prompt.  
-2. **Prompt**:
-
 ```text
-"Analyze the following job description and list 8–10 distinct topic categories a candidate should prepare for."
-```
+Analyze the job description below and identify the interview preparation topics a candidate should expect.
 
-3. **Output**: A numbered list of topics (e.g., "Product Strategy", "Data Analysis", "Team Leadership").
+Return:
+1. 8-12 topic categories.
+2. Why each topic matters for this role.
+3. Likely interview type: recruiter screen, hiring manager, technical, behavioral, case, portfolio, or executive.
+4. Evidence from the job description that supports each topic.
+
+Job description:
+"""
+[PASTE JOB DESCRIPTION]
+"""
+```
 
 ## Generate Common Interview Questions
 
-For each topic category identified:
-
-1. **Prompt**:
-   
 ```text
-"Based on the job description and the topic '[TOPIC]', generate the 20 most common interview questions employers ask."  
-```
+Based on the target role and topic below, generate interview questions that are realistic for this role.
 
-2. **Tip**: Use batch prompts to cover multiple categories at once or iterate one by one to stay focused.
+Role: [ROLE TITLE]
+Topic: [TOPIC]
+Interview stage: [STAGE OR "UNKNOWN"]
+
+Return:
+- 10 common questions
+- 5 difficult follow-up questions
+- 3 questions that test practical judgment
+- What a strong answer should demonstrate
+- Red flags or weak-answer patterns to avoid
+
+Job description:
+"""
+[PASTE JOB DESCRIPTION]
+"""
+```
 
 ## Create a Practice Answer Study Guide
 
-1. **Select** the top 5–10 questions you want to practice first.  
-2. **Prompt for STAR Answers**:  
-
 ```text
-"For each of the following questions, write a concise answer using the STAR format (Situation, Task, Action, Result):
+Help me create interview answer outlines from my real experience.
+
+Framework: [STAR / CAR / SOAR]
+Target role: [ROLE TITLE]
+
+Rules:
+1. Use only the experience I provide.
+2. Do not invent employers, projects, metrics, tools, or outcomes.
+3. If an answer needs a stronger example, mark it as [needs better example].
+4. Keep answers concise enough to speak in 60-90 seconds.
+5. Include one likely follow-up question for each answer.
+
+Questions:
 1. [Question 1]
 2. [Question 2]
-...
+3. [Question 3]
+
+My background/resume:
+"""
+[PASTE RESUME OR EXPERIENCE NOTES]
+"""
 ```
 
-3. **Alternate Formats**: You can ask for other structures (e.g., CAR: Context, Action, Result) by updating the prompt.
+## Mock Interview Prompt
+
+```text
+Run a mock interview for the role below.
+
+Instructions:
+- Ask one question at a time.
+- Wait for my answer before giving feedback.
+- After each answer, score it from 1-5 for relevance, specificity, structure, and credibility.
+- Give one concrete improvement and one sharper follow-up question.
+- Keep the interview realistic and role-specific.
+
+Role: [ROLE TITLE]
+Job description:
+"""
+[PASTE JOB DESCRIPTION]
+"""
+```
 
 ## Format and Export to CSV
 
@@ -65,3 +128,12 @@ Data Analysis,1,"What KPIs do you track to measure success?","STAR","Situation: 
 - `Question Text`: Full text of the interview question.
 - `Answer Format`: e.g., STAR, CAR.
 - `Answer Text`: Your crafted answer.
+
+## Final Prep Checklist
+
+- You have at least one strong story for each major job requirement.
+- Each story includes context, action, and outcome.
+- Metrics are accurate and easy to explain.
+- Technical answers include tradeoffs, not just definitions.
+- Behavioral answers focus on your actions, not only team activity.
+- You can answer "why this role" and "why this company" directly.
