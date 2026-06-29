@@ -1,340 +1,451 @@
-# ParaView MCP CFD Workflow Test: Ahmed Body from Geometry-Only Dataset
+# Replacement Notes: Smaller ParaView MCP CFD Workflow Tests
 
-For this test, the input dataset contains **only Ahmed body geometry**, for example an STL, OBJ, VTP, or STEP-converted surface. There are **no CFD solution fields** in the original dataset.
+## Why replace the original test
 
-The goal is to test whether ParaView MCP can build a complete CFD-style post-processing scene by:
+The original Ahmed-body workflow is too large for a reliable model/tool evaluation because it asks one run to do many things at once:
 
-* loading the Ahmed body geometry,
-* creating a surrounding flow domain,
-* generating synthetic velocity, pressure, wake, and vortex fields,
-* visualizing those fields with slices, streamlines, contours, and probes,
-* producing a professional CFD-style final layout.
+- load and normalize geometry
+- create a synthetic wind-tunnel domain
+- generate velocity, pressure, wake, recirculation, and vortex fields
+- make slices, streamlines, contours, probes, animation, and final report layouts
+- export screenshots, CSV data, and ParaView state files
 
-Assume a standard Ahmed body:
+That makes failures hard to diagnose. A model can fail because it misunderstands CFD, because ParaView automation fails, because the visualization is too cluttered, or because the final layout/export step is too complex.
 
-* Length: `L = 1.044 m`
-* Width: `W = 0.389 m`
-* Height: `H = 0.288 m`
-* Ground clearance: `G = 0.05 m`
-* Rear slant angle: `25 degrees`
-* Flow direction: positive `X`
-* Lateral direction: `Y`
-* Vertical direction: `Z`
-* Freestream speed: `U_inf = 40 m/s`
-* Air density: `rho = 1.225 kg/m^3`
+The replacement should use small, exact, inspectable tasks. Each task should test one concept or one ParaView operation.
 
-## 1. Load and Normalize Ahmed Body Geometry
+---
+
+# Replacement Test Set: Velocity Field First
+
+## Test 1 — Geometry-only dataset sanity check
+
+### Goal
+Confirm that the input contains only Ahmed body geometry and no CFD solution fields.
+
+### Prompt
 
 ```text
-Load the Ahmed body geometry file:
-- Open the geometry-only Ahmed body dataset
-- Treat the geometry as a solid surface with no existing CFD fields
-- Align the body so flow travels in the positive X direction
-- Ensure the body length is approximately 1.044 m
-- Ensure the body width is approximately 0.389 m
-- Ensure the body height is approximately 0.288 m
-- Place the lowest body surface approximately 0.05 m above the ground plane
-- Set the body centerline at Y = 0
-- Set the ground plane at Z = 0
-- Display the body as a smooth gray surface
-- Reset the camera to show the entire body
+Load the Ahmed body dataset.
+
+Inspect the dataset and report:
+1. Does the dataset contain geometry?
+2. Does the dataset contain any existing CFD velocity field?
+3. Does the dataset contain pressure, Cp, wake, or vortex fields?
+4. Is this a geometry-only dataset?
+
+Do not create any new fields yet.
+Do not create streamlines.
+Do not create pressure.
+Do not create a final report layout.
 ```
 
-## 2. Create CFD Wind Tunnel Domain
+### Expected output
 
 ```text
-Create a synthetic wind tunnel domain around the Ahmed body:
-- Domain length: from X = -2.0 m upstream to X = 5.0 m downstream
-- Domain width: from Y = -1.2 m to Y = 1.2 m
-- Domain height: from Z = 0.0 m to Z = 1.2 m
-- Create a structured image/grid volume covering this domain
-- Use resolution approximately 220 x 90 x 80 cells
-- Name the volume "Synthetic_Ahmed_CFD_Domain"
-- Show the outer domain as a transparent box
-- Keep the Ahmed body visible inside the domain
+Geometry present: yes
+Existing velocity field: no
+Existing pressure/Cp fields: no
+Existing wake/vortex fields: no
+Dataset type: geometry-only
+Result: pass/fail
 ```
 
-## 3. Generate Synthetic Velocity Field
+### Pass criteria
+
+Pass if the model correctly identifies that the original dataset is geometry-only and does not pretend that CFD fields already exist.
+
+---
+
+## Test 2 — Explain what a velocity field is
+
+### Goal
+Test conceptual understanding before asking the model to create or visualize anything.
+
+### Prompt
 
 ```text
-Create a synthetic velocity vector field named "U" on the CFD domain.
+Explain what a velocity field is in ParaView/CFD terms.
 
-Use positive X as the freestream direction.
+Use this Ahmed body setup:
+- flow direction is +X
+- freestream velocity is 40 m/s
+- the dataset is geometry-only and has no CFD fields initially
 
-Generate a plausible Ahmed-body external aerodynamics field:
-- Freestream velocity: Ux = 40 m/s far from the body
-- Reduce velocity near the front stagnation region
-- Increase velocity over the roof and side shoulders
-- Create a wake deficit behind the rear base and slant
-- Create a low-speed recirculation bubble behind the body
-- Add weak downward flow behind the rear slant
-- Add lateral velocity components that curve around the body sides
-- Add counter-rotating wake swirl behind the body
-
-The field does not need to be a real CFD solution, but it should be physically plausible and useful for visualization.
-
-Create these point arrays:
-- U: vector velocity field
-- U_mag: velocity magnitude
-- wake_deficit: scalar from 0 to 1 showing wake strength
-- recirculation: scalar mask for reversed or very-low-speed wake flow
+Answer these exactly:
+1. Is a velocity field the same thing as streamlines?
+2. What does the vector field U contain?
+3. What does U_mag mean?
+4. Where can U be stored: on points, cells, or the geometry surface?
+5. What is needed before ParaView can draw streamlines?
 ```
 
-## 4. Generate Synthetic Pressure and Cp Fields
+### Expected answer
 
 ```text
-Create synthetic pressure fields on the CFD domain:
-- Use rho = 1.225 kg/m^3
-- Use U_inf = 40 m/s
-- Create static pressure field "p"
-- Create pressure coefficient field "Cp"
+A velocity field is not the same thing as streamlines.
 
-The pressure field should show:
-- High pressure at the front stagnation region
-- Lower pressure over the roof
-- Lower pressure on the rear slant
-- Low base pressure behind the Ahmed body
-- Gradual pressure recovery downstream in the wake
+A velocity field is a vector field defined over a domain. At each point or cell, it stores a vector:
 
-Create these scalar arrays:
-- p
-- Cp
-- pressure_recovery
+U = (Ux, Uy, Uz)
+
+For this Ahmed body setup:
+- Ux is the velocity component in the flow direction
+- Uy is the side-to-side component
+- Uz is the vertical component
+- far from the body, U should be approximately (40, 0, 0) m/s
+
+U_mag is the velocity magnitude:
+
+U_mag = sqrt(Ux^2 + Uy^2 + Uz^2)
+
+Streamlines are derived from U. ParaView draws streamlines by seeding points and integrating paths through the vector field.
 ```
 
-## 5. Create Surface Proxy Fields on the Ahmed Body
+### Pass criteria
+
+Pass if the model clearly distinguishes the velocity field from streamlines.
+
+Fail if the model says streamlines are the velocity field.
+
+---
+
+## Test 3 — Create only a simple synthetic velocity field
+
+### Goal
+Create one synthetic vector field without adding pressure, Cp, vortices, animation, or a final layout.
+
+### Prompt
 
 ```text
-Create synthetic surface fields on the Ahmed body geometry:
-- Map or calculate approximate pressure coefficient on the body surface
-- Name the surface pressure field "Cp_surface"
-- Create higher Cp near the front face
-- Create lower Cp on the roof and rear slant
-- Create strongly negative Cp on the rear base
-- Create a synthetic wall shear proxy named "wall_shear_proxy"
-- Make wall_shear_proxy higher on the roof and side edges
-- Make wall_shear_proxy lower in separated rear regions
+The loaded Ahmed body dataset contains geometry only and no CFD solution fields.
 
-Display the Ahmed body colored by Cp_surface using a diverging color map.
-Add a scalar legend.
+Create one synthetic velocity vector field named U on a surrounding volume domain.
+
+Use:
+- flow direction: +X
+- freestream speed: 40 m/s
+- far-field velocity: U = (40, 0, 0) m/s
+
+The field should contain only these simple effects:
+1. slower velocity in front of the body
+2. faster velocity over the roof
+3. slower velocity behind the rear wake
+4. weak side velocity around the body
+
+Also create U_mag from U.
+
+Do not create pressure.
+Do not create Cp.
+Do not create vortices.
+Do not create recirculation.
+Do not create animation.
+Do not create final report layout.
 ```
 
-## 6. Verify Created Fields
+### Expected created arrays
 
 ```text
-Inspect the generated dataset and report the available arrays:
-- Confirm the domain contains U, U_mag, p, Cp, wake_deficit, recirculation
-- Confirm the Ahmed body surface contains Cp_surface and wall_shear_proxy
-- Confirm that U is a vector field
-- Confirm that U_mag, Cp, and wake_deficit are scalar fields
-- Confirm the geometry itself originally had no CFD fields
-- Report any missing arrays before continuing
+U      vector, 3 components, units m/s
+U_mag  scalar, velocity magnitude, units m/s
 ```
 
-## 7. Ahmed Body Overview Scene
+### Pass criteria
+
+Pass if:
+
+- array U exists
+- U has 3 components
+- array U_mag exists
+- U_mag is scalar
+- far upstream U_mag is close to 40 m/s
+- wake region behind the body has lower U_mag than freestream
+- no pressure, Cp, vortex, or animation fields are created
+
+---
+
+## Test 4 — Verify U and U_mag only
+
+### Goal
+Make field verification narrow and objective.
+
+### Prompt
 
 ```text
-Create a clean geometry overview:
-- Show the Ahmed body as an opaque gray surface
-- Show the ground plane as a light neutral surface
-- Show the wind tunnel domain as a transparent outline
-- Add an inlet arrow labeled "U_inf = 40 m/s"
-- Add coordinate axes
-- Use a three-quarter front view
-- Keep the scene uncluttered
+Inspect the dataset after creating the synthetic velocity field.
+
+Report exactly:
+1. Does array U exist?
+2. Is U a vector field?
+3. How many components does U have?
+4. Does U_mag exist?
+5. Is U_mag scalar?
+6. What are the approximate min and max values of U_mag?
+7. Is the field clearly labeled as synthetic?
+
+Do not create new fields.
+Do not create visualizations.
 ```
 
-## 8. Centerline Velocity Slice
+### Expected output format
 
 ```text
-Create a centerline slice at Y = 0:
-- Slice the synthetic CFD domain through the Ahmed body centerline
-- Color the slice by U_mag
-- Use a consistent range from 0 to 60 m/s
-- Show the Ahmed body as a solid black or dark gray silhouette
-- Make the front stagnation region visible
-- Make roof acceleration visible
-- Make the rear wake velocity deficit visible
-- Add a scalar legend labeled "Velocity Magnitude [m/s]"
+U exists: yes/no
+U components: 3 / not 3
+U_mag exists: yes/no
+U_mag range: min to max m/s
+Synthetic label present: yes/no
+Result: pass/fail
 ```
 
-## 9. Horizontal Wake Slice
+### Pass criteria
+
+Pass if the response gives array existence, component count, scalar/vector type, and approximate velocity magnitude range.
+
+---
+
+## Test 5 — Make one centerline velocity slice
+
+### Goal
+Test one simple visualization derived from U_mag.
+
+### Prompt
 
 ```text
-Create a horizontal wake slice:
-- Place the slice at Z = 0.18 m
-- Color by U_mag
-- Use the same 0 to 60 m/s color range
-- Show the Ahmed body outline
-- Reveal the wake width behind the vehicle
-- Make the side shear layers visible
-- Add a clear camera view from above
+Create one centerline slice through the synthetic velocity domain.
+
+Use:
+- slice plane: Y = 0
+- color by U_mag
+- color range: 0 to 60 m/s
+- show the Ahmed body as a dark solid silhouette
+- add a scalar legend labeled "Velocity Magnitude [m/s]"
+
+The slice should show:
+1. slower velocity near the front stagnation region
+2. faster velocity over the roof
+3. slower velocity in the rear wake
+
+Do not create streamlines.
+Do not create pressure.
+Do not create Cp.
+Do not create vortices.
+Do not create animation.
+Do not create final report layout.
 ```
 
-## 10. Cross-Flow Wake Slices
+### Pass criteria
+
+Pass if there is one centerline slice at Y = 0 colored by U_mag with a 0–60 m/s range.
+
+Fail if the model creates many extra views or unrelated fields.
+
+---
+
+## Test 6 — Explain streamlines before creating them
+
+### Goal
+Check whether the model understands that streamlines are computed from a velocity field.
+
+### Prompt
 
 ```text
-Create four downstream wake slices normal to the X direction:
-- Slice 1 at X = 1.2 m
-- Slice 2 at X = 1.8 m
-- Slice 3 at X = 2.6 m
-- Slice 4 at X = 3.6 m
-- Color all slices by wake_deficit
-- Use the same scalar range from 0 to 1
-- Arrange them so the wake growth and recovery are easy to compare
-- Keep the Ahmed body visible for reference
+Before creating streamlines, answer:
+
+1. Are streamlines input data or a visualization derived from U?
+2. What does ParaView need in order to compute streamlines?
+3. Why would streamlines be impossible on the original geometry-only dataset before U was created?
+
+Do not create anything in this step.
 ```
 
-## 11. Pressure Coefficient on Body
+### Expected answer
 
 ```text
-Visualize pressure coefficient on the Ahmed body surface:
-- Color the body by Cp_surface
-- Use a diverging color map centered around Cp = 0
-- Use a range approximately from -1.5 to 1.0
-- Show high pressure on the front face
-- Show suction over the roof and rear slant
-- Show low pressure on the rear base
-- Add a scalar legend labeled "Cp"
+Streamlines are derived visualizations, not original input data.
+
+ParaView needs a vector velocity field such as U and seed points or a seed source.
+
+On the original geometry-only dataset, streamlines are impossible because there is no vector field to integrate through.
 ```
 
-## 12. Streamlines Around the Ahmed Body
+### Pass criteria
+
+Pass if the model says streamlines require a vector velocity field and cannot be computed directly from geometry alone.
+
+---
+
+## Test 7 — Create streamlines from U
+
+### Goal
+Create one streamline visualization from the previously generated velocity field.
+
+### Prompt
 
 ```text
-Generate streamlines using the synthetic velocity field U:
-- Seed streamlines from an upstream plane at X = -1.5 m
-- Use seed points spanning Y = -0.5 m to 0.5 m and Z = 0.08 m to 0.55 m
-- Integrate streamlines in the positive X direction
-- Color streamlines by U_mag
-- Use tube rendering for visibility
-- Use moderate density, not too cluttered
-- Show streamlines accelerating over the roof
-- Show streamlines bending around the sides
-- Show disturbed streamlines in the wake
+Create streamlines using the existing synthetic velocity field U.
+
+Use:
+- seed plane at X = -1.5 m
+- seed region from Y = -0.5 m to 0.5 m
+- seed region from Z = 0.08 m to 0.55 m
+- integrate in the positive X direction
+- color streamlines by U_mag
+- use tube rendering for visibility
+- use moderate density, not too cluttered
+
+The streamlines should show:
+1. flow over the roof
+2. flow bending around the sides
+3. disturbed flow in the wake
+
+Do not create pressure.
+Do not create Cp.
+Do not create vortices.
+Do not create animation.
+Do not create final report layout.
 ```
 
-## 13. Wake Recirculation Region
+### Pass criteria
+
+Pass if streamlines are seeded upstream and integrated through U.
+
+Fail if streamlines are treated as an original dataset field instead of a visualization derived from U.
+
+---
+
+## Test 8 — State what the visualization does and does not prove
+
+### Goal
+Prevent misleading CFD claims.
+
+### Prompt
 
 ```text
-Visualize the synthetic recirculation bubble:
-- Threshold or contour the recirculation scalar
-- Show regions where recirculation is high
-- Place the recirculation region behind the rear base and slant
-- Render it as a semi-transparent volume or isosurface
-- Use a distinct material so it reads as the separated wake
-- Keep the Ahmed body visible
-- Add a label "Synthetic recirculation region"
+Review the current visualization and write a short note explaining what it does and does not prove.
+
+The note must say:
+- the original dataset was geometry-only
+- the velocity field U is synthetic
+- U_mag is derived from U
+- streamlines are derived from U
+- the result is useful for workflow testing and visualization testing
+- the result is not a validated CFD solver result
 ```
 
-## 14. Vortex Structure Visualization
+### Expected note
 
 ```text
-Create synthetic vortex structures behind the Ahmed body:
-- Use the generated swirl or vortex metric field
-- If no vortex metric exists, create one named "vortex_core_proxy"
-- Place two main counter-rotating longitudinal vortices behind the rear slant
-- Add weaker side-edge vortices behind the body shoulders
-- Create isosurfaces of vortex_core_proxy
-- Color vortex structures by U_mag or Cp
-- Use semi-transparent rendering
-- Make the wake topology visually clear
+This visualization uses an original geometry-only Ahmed body dataset. The velocity field U was generated synthetically for workflow testing. U_mag was computed from U, and the streamlines were integrated through U.
+
+The result is useful for testing ParaView automation, visualization layout, color mapping, slicing, and streamline generation. It should not be interpreted as a validated CFD solver result or as physically validated aerodynamic data.
 ```
 
-## 15. Wake Profile Probe
+### Pass criteria
+
+Pass if the note clearly labels the fields as synthetic and avoids implying solver validation.
+
+---
+
+# Recommended Test Order
+
+Run the tests in this order:
 
 ```text
-Create quantitative wake probes:
-- Add a line probe across the wake at X = 2.0 m
-- Probe from Y = -0.8 m to Y = 0.8 m at Z = 0.18 m
-- Plot U_mag versus Y
-- Add another line probe along the wake centerline
-- Probe from X = 1.05 m to X = 5.0 m at Y = 0 and Z = 0.18 m
-- Plot U_mag versus X
-- Label plots clearly
-- Use the plots to show wake deficit and downstream recovery
+1. Geometry-only dataset sanity check
+2. Explain what a velocity field is
+3. Create only U and U_mag
+4. Verify U and U_mag
+5. Make one centerline velocity slice
+6. Explain streamlines
+7. Create streamlines from U
+8. State what the visualization does and does not prove
 ```
 
-## 16. Synthetic Time-Dependent Wake
+This order keeps each step small and debuggable.
 
-```text
-Create a simple synthetic time-dependent wake animation:
-- Add 40 time steps
-- Keep the body and freestream fixed
-- Oscillate the wake deficit slightly from side to side
-- Add alternating vortex shedding behind the Ahmed body
-- Keep the motion subtle and physically plausible
-- Use a fixed camera
-- Use a fixed U_mag color range from 0 to 60 m/s
-- Add a time annotation
-```
+---
 
-## 17. Final CFD Report Layout
+# What to remove from the first replacement version
 
-```text
-Create a final report-style ParaView layout:
-- Main 3D view: Ahmed body, streamlines, recirculation bubble, and vortex structures
-- Top-right view: centerline velocity slice
-- Bottom-right view: Cp_surface on the Ahmed body
-- Bottom-left view: wake profile plot at X = 2.0 m
-- Use consistent color maps and scalar ranges
-- Add legends with readable labels
-- Add annotations explaining that the fields are synthetic
-- Make the final result look like a professional CFD visualization, not a raw geometry render
-```
+Do not include these in the first simplified test suite:
 
-## 18. Export Outputs
-
-```text
-Export the results:
-- Save a high-resolution screenshot of the final layout
-- Save a screenshot of the centerline velocity slice
-- Save a screenshot of Cp on the Ahmed body
-- Save a screenshot of streamlines and wake structures
-- Export wake profile plot data as CSV
-- Save the ParaView state file
-- Use filenames beginning with "ahmed_synthetic_cfd_"
-```
-
-## One-shot CFD Field Generator Prompt
-
-Use this after the Ahmed body geometry has been loaded:
-
-```text
-The loaded dataset contains only Ahmed body geometry and no CFD fields. Create a synthetic CFD post-processing dataset around it.
-
-Use a standard Ahmed body scale: L = 1.044 m, W = 0.389 m, H = 0.288 m, ground clearance = 0.05 m, flow in +X, U_inf = 40 m/s, rho = 1.225 kg/m^3.
-
-Create a structured volume domain from X = -2.0 to 5.0 m, Y = -1.2 to 1.2 m, Z = 0.0 to 1.2 m. Generate physically plausible synthetic fields:
-- U vector velocity
-- U_mag
-- p
-- Cp
-- wake_deficit
-- recirculation
+- synthetic pressure field p
+- pressure coefficient Cp
+- Cp_surface
+- wall_shear_proxy
+- wake_deficit scalar
+- recirculation scalar
 - vortex_core_proxy
+- cross-flow wake slices
+- wake probes and plots
+- time-dependent animation
+- final multi-view report layout
+- screenshot and CSV export requirements
 
-The fields should show front stagnation, roof acceleration, side acceleration, low base pressure, separated wake, counter-rotating rear vortices, and downstream wake recovery. These fields are synthetic and should be clearly labeled as synthetic, not solver results.
-```
+These can be added later as separate test modules after the velocity-field tasks are reliable.
 
-## One-shot CFD Visualization Director Prompt
+---
 
-After the synthetic fields and views exist:
+# Optional later modules
+
+After the velocity-field tests pass consistently, add later modules one at a time:
+
+## Later Module A — Pressure only
+
+Create p and Cp from the synthetic velocity field. Do not create streamlines or vortices.
+
+## Later Module B — Wake scalar only
+
+Create wake_deficit as a scalar field. Visualize one wake slice. Do not create pressure or vortices.
+
+## Later Module C — Recirculation only
+
+Create a simple recirculation mask behind the body. Show one transparent isosurface.
+
+## Later Module D — Vortex proxy only
+
+Create vortex_core_proxy and show two counter-rotating rear structures. Keep it clearly labeled as synthetic.
+
+## Later Module E — Final layout only
+
+Only after the individual components work, assemble a final report layout.
+
+---
+
+# Minimal one-shot replacement prompt
+
+Use this if only one compact prompt is needed:
 
 ```text
-Review the entire Ahmed body synthetic CFD visualization as a CFD post-processing expert. Improve field ranges, camera views, slice positions, streamline seeding, vortex thresholds, legends, annotations, plot readability, and final layout. Make it clear that the original dataset was geometry-only and that the CFD fields were generated synthetically for visualization workflow testing.
-```
+The Ahmed body dataset is geometry-only and contains no CFD solution fields.
 
-## Audit Prompt
+Create a simple synthetic velocity field only.
 
-```text
-Audit this ParaView workflow for correctness:
-- Confirm the original Ahmed body file was geometry-only
-- Confirm all CFD fields were generated inside ParaView
-- Confirm U is a vector field and U_mag is derived correctly
-- Confirm Cp uses U_inf = 40 m/s and rho = 1.225 kg/m^3
-- Confirm slices are placed through meaningful wake regions
-- Confirm streamline seeds are upstream of the Ahmed body
-- Confirm wake and vortex structures are labeled as synthetic
-- Confirm plots and screenshots do not imply these are validated CFD solver results
-- Identify misleading visuals, bad color ranges, excessive clutter, or incorrect scaling
+Use:
+- flow direction: +X
+- freestream velocity: U = (40, 0, 0) m/s
+- create U as a 3-component vector field
+- create U_mag as sqrt(Ux^2 + Uy^2 + Uz^2)
+
+The field should show only:
+1. reduced speed in front of the body
+2. increased speed over the roof
+3. reduced speed in the rear wake
+4. weak side flow around the body
+
+Then verify:
+- U exists and has 3 components
+- U_mag exists and is scalar
+- far upstream U_mag is about 40 m/s
+- wake U_mag is lower than freestream
+
+Finally create one visualization:
+- centerline slice at Y = 0
+- color by U_mag
+- color range 0 to 60 m/s
+- body shown as dark silhouette
+
+Do not create pressure, Cp, recirculation, vortices, probes, animation, exports, or a final report layout.
+Label the field as synthetic and not a validated CFD solver result.
 ```
