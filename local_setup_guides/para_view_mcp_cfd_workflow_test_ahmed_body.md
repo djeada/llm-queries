@@ -8,7 +8,7 @@ The Ahmed body dataset should be treated as geometry-only at the start of the wo
 
 The main objective is to verify the dataset, create one simple synthetic velocity field, validate that field, and then generate basic visualizations derived from it.
 
----
+
 
 # Test Set: Velocity Field Workflow
 
@@ -50,7 +50,7 @@ Result: pass/fail
 
 Pass if the model correctly identifies the original dataset as geometry-only and does not claim that CFD fields already exist.
 
----
+
 
 ## Test 2 — Explain what a velocity field is
 
@@ -104,7 +104,7 @@ Pass if the model clearly distinguishes a velocity field from streamlines.
 
 Fail if the model says streamlines are the velocity field.
 
----
+
 
 ## Test 3 — Create a simple synthetic velocity field
 
@@ -159,7 +159,7 @@ Pass if:
 * the wake region behind the body has lower `U_mag` than freestream
 * no pressure, Cp, vortex, or animation fields are created
 
----
+
 
 ## Test 4 — Verify U and U_mag
 
@@ -200,7 +200,7 @@ Result: pass/fail
 
 Pass if the response reports array existence, component count, scalar/vector type, and the approximate velocity magnitude range.
 
----
+
 
 ## Test 5 — Create one centerline velocity slice
 
@@ -239,7 +239,7 @@ Pass if there is exactly one centerline slice at `Y = 0`, colored by `U_mag`, wi
 
 Fail if the model creates extra views, unrelated fields, or unnecessary outputs.
 
----
+
 
 ## Test 6 — Explain streamlines before creating them
 
@@ -273,7 +273,7 @@ On the original geometry-only dataset, streamlines are impossible because there 
 
 Pass if the model states that streamlines require a vector velocity field and cannot be computed directly from geometry alone.
 
----
+
 
 ## Test 7 — Create streamlines from U
 
@@ -313,7 +313,7 @@ Pass if streamlines are seeded upstream and integrated through `U`.
 
 Fail if streamlines are treated as an original dataset field rather than a visualization derived from `U`.
 
----
+
 
 ## Test 8 — State what the visualization does and does not prove
 
@@ -347,7 +347,7 @@ The result is useful for testing ParaView automation, visualization layout, colo
 
 Pass if the note clearly labels the fields as synthetic and avoids implying solver validation.
 
----
+
 
 # Recommended Test Order
 
@@ -366,7 +366,7 @@ Run the tests in this order:
 
 This order keeps the workflow small, controlled, and easy to debug.
 
----
+
 
 # Out of Scope for This Test Suite
 
@@ -387,7 +387,7 @@ The following items are intentionally excluded from this velocity-field baseline
 
 These features should be tested separately after the velocity-field workflow is reliable.
 
----
+
 
 # Future Test Modules
 
@@ -413,7 +413,7 @@ Create `vortex_core_proxy` and show two counter-rotating rear structures. Clearl
 
 After the individual components work reliably, assemble a final report layout.
 
----
+
 
 # Compact Workflow Prompt
 
