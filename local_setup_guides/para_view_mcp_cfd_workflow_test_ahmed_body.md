@@ -1,14 +1,16 @@
-# ParaView MCP CFD Workflow Test Suite
+# ParaView MCP CFD Workflow Test Suite: Velocity-Field Baseline
 
 ## Purpose
 
-This replacement test suite simplifies the ParaView MCP Ahmed body workflow so it can be tested in small, reliable steps.
+This test suite validates a ParaView MCP workflow for an Ahmed body dataset using a controlled, step-by-step CFD visualization process.
 
-The original Ahmed body dataset should be treated as **geometry-only**. It should not be assumed to contain velocity, pressure, wake, vortex, or other CFD solution fields. The first objective is to verify the dataset, then create and validate one simple synthetic velocity field before adding any derived visualizations.
+The Ahmed body dataset should be treated as geometry-only at the start of the workflow. It should not be assumed to contain velocity, pressure, wake, vortex, or other CFD solution fields unless those fields are explicitly created during the test.
+
+The main objective is to verify the dataset, create one simple synthetic velocity field, validate that field, and then generate basic visualizations derived from it.
 
 ---
 
-# Replacement Test Set: Velocity Field First
+# Test Set: Velocity Field Workflow
 
 ## Test 1 — Geometry-only dataset sanity check
 
@@ -46,7 +48,7 @@ Result: pass/fail
 
 ### Pass criteria
 
-Pass if the model correctly identifies the original dataset as geometry-only and does not claim that CFD fields already exist. 
+Pass if the model correctly identifies the original dataset as geometry-only and does not claim that CFD fields already exist.
 
 ---
 
@@ -99,11 +101,12 @@ Streamlines are derived from U. ParaView draws streamlines by seeding points and
 ### Pass criteria
 
 Pass if the model clearly distinguishes a velocity field from streamlines.
+
 Fail if the model says streamlines are the velocity field.
 
 ---
 
-## Test 3 — Create only a simple synthetic velocity field
+## Test 3 — Create a simple synthetic velocity field
 
 ### Goal
 
@@ -158,7 +161,7 @@ Pass if:
 
 ---
 
-## Test 4 — Verify U and U_mag only
+## Test 4 — Verify U and U_mag
 
 ### Goal
 
@@ -199,7 +202,7 @@ Pass if the response reports array existence, component count, scalar/vector typ
 
 ---
 
-## Test 5 — Make one centerline velocity slice
+## Test 5 — Create one centerline velocity slice
 
 ### Goal
 
@@ -233,6 +236,7 @@ Do not create a final report layout.
 ### Pass criteria
 
 Pass if there is exactly one centerline slice at `Y = 0`, colored by `U_mag`, with a 0–60 m/s color range.
+
 Fail if the model creates extra views, unrelated fields, or unnecessary outputs.
 
 ---
@@ -306,6 +310,7 @@ Do not create a final report layout.
 ### Pass criteria
 
 Pass if streamlines are seeded upstream and integrated through `U`.
+
 Fail if streamlines are treated as an original dataset field rather than a visualization derived from `U`.
 
 ---
@@ -340,7 +345,7 @@ The result is useful for testing ParaView automation, visualization layout, colo
 
 ### Pass criteria
 
-Pass if the note clearly labels the fields as synthetic and avoids implying solver validation. 
+Pass if the note clearly labels the fields as synthetic and avoids implying solver validation.
 
 ---
 
@@ -351,21 +356,21 @@ Run the tests in this order:
 ```text
 1. Geometry-only dataset sanity check
 2. Explain what a velocity field is
-3. Create only U and U_mag
+3. Create U and U_mag
 4. Verify U and U_mag
-5. Make one centerline velocity slice
+5. Create one centerline velocity slice
 6. Explain streamlines
 7. Create streamlines from U
 8. State what the visualization does and does not prove
 ```
 
-This order keeps the workflow small, controlled, and easy to debug. 
+This order keeps the workflow small, controlled, and easy to debug.
 
 ---
 
-# Exclusions from the first simplified test suite
+# Out of Scope for This Test Suite
 
-Do not include the following in the first simplified velocity-field test suite:
+The following items are intentionally excluded from this velocity-field baseline:
 
 * synthetic pressure field `p`
 * pressure coefficient `Cp`
@@ -380,39 +385,39 @@ Do not include the following in the first simplified velocity-field test suite:
 * final multi-view report layout
 * screenshot or CSV export requirements
 
-These features can be added later as separate modules after the velocity-field workflow is reliable. 
+These features should be tested separately after the velocity-field workflow is reliable.
 
 ---
 
-# Optional later modules
+# Future Test Modules
 
-After the velocity-field tests pass consistently, add later modules one at a time:
+Additional CFD-style visualization modules can be added one at a time after the velocity-field workflow passes consistently.
 
-## Later Module A — Pressure only
+## Module A — Pressure only
 
 Create `p` and `Cp` from the synthetic velocity field. Do not create streamlines or vortices.
 
-## Later Module B — Wake scalar only
+## Module B — Wake scalar only
 
 Create `wake_deficit` as a scalar field and visualize one wake slice. Do not create pressure or vortices.
 
-## Later Module C — Recirculation only
+## Module C — Recirculation only
 
 Create a simple recirculation mask behind the body and show one transparent isosurface.
 
-## Later Module D — Vortex proxy only
+## Module D — Vortex proxy only
 
 Create `vortex_core_proxy` and show two counter-rotating rear structures. Clearly label the result as synthetic.
 
-## Later Module E — Final layout only
+## Module E — Final layout only
 
-Only after the individual components work reliably, assemble a final report layout.
+After the individual components work reliably, assemble a final report layout.
 
 ---
 
-# Minimal one-shot replacement prompt
+# Compact Workflow Prompt
 
-Use this compact prompt when only one simplified test prompt is needed:
+Use this prompt when a single compact test is needed:
 
 ```text
 The Ahmed body dataset is geometry-only and contains no CFD solution fields.
