@@ -1,18 +1,10 @@
-# Replacement Notes: Smaller ParaView MCP CFD Workflow Tests
+# ParaView MCP CFD Workflow Test Suite
 
-## Why replace the original test
+## Purpose
 
-The original Ahmed-body workflow is too large for a reliable model/tool evaluation because it asks one run to do many things at once:
+This replacement test suite simplifies the ParaView MCP Ahmed body workflow so it can be tested in small, reliable steps.
 
-- load and normalize geometry
-- create a synthetic wind-tunnel domain
-- generate velocity, pressure, wake, recirculation, and vortex fields
-- make slices, streamlines, contours, probes, animation, and final report layouts
-- export screenshots, CSV data, and ParaView state files
-
-That makes failures hard to diagnose. A model can fail because it misunderstands CFD, because ParaView automation fails, because the visualization is too cluttered, or because the final layout/export step is too complex.
-
-The replacement should use small, exact, inspectable tasks. Each task should test one concept or one ParaView operation.
+The original Ahmed body dataset should be treated as **geometry-only**. It should not be assumed to contain velocity, pressure, wake, vortex, or other CFD solution fields. The first objective is to verify the dataset, then create and validate one simple synthetic velocity field before adding any derived visualizations.
 
 ---
 
@@ -21,7 +13,8 @@ The replacement should use small, exact, inspectable tasks. Each task should tes
 ## Test 1 — Geometry-only dataset sanity check
 
 ### Goal
-Confirm that the input contains only Ahmed body geometry and no CFD solution fields.
+
+Confirm that the loaded Ahmed body dataset contains geometry only and does not already include CFD solution fields.
 
 ### Prompt
 
@@ -30,11 +23,11 @@ Load the Ahmed body dataset.
 
 Inspect the dataset and report:
 1. Does the dataset contain geometry?
-2. Does the dataset contain any existing CFD velocity field?
+2. Does the dataset contain an existing CFD velocity field?
 3. Does the dataset contain pressure, Cp, wake, or vortex fields?
 4. Is this a geometry-only dataset?
 
-Do not create any new fields yet.
+Do not create any new fields.
 Do not create streamlines.
 Do not create pressure.
 Do not create a final report layout.
@@ -53,14 +46,15 @@ Result: pass/fail
 
 ### Pass criteria
 
-Pass if the model correctly identifies that the original dataset is geometry-only and does not pretend that CFD fields already exist.
+Pass if the model correctly identifies the original dataset as geometry-only and does not claim that CFD fields already exist. 
 
 ---
 
 ## Test 2 — Explain what a velocity field is
 
 ### Goal
-Test conceptual understanding before asking the model to create or visualize anything.
+
+Check conceptual understanding before asking the model to create or visualize any CFD-like fields.
 
 ### Prompt
 
@@ -104,8 +98,7 @@ Streamlines are derived from U. ParaView draws streamlines by seeding points and
 
 ### Pass criteria
 
-Pass if the model clearly distinguishes the velocity field from streamlines.
-
+Pass if the model clearly distinguishes a velocity field from streamlines.
 Fail if the model says streamlines are the velocity field.
 
 ---
@@ -113,7 +106,8 @@ Fail if the model says streamlines are the velocity field.
 ## Test 3 — Create only a simple synthetic velocity field
 
 ### Goal
-Create one synthetic vector field without adding pressure, Cp, vortices, animation, or a final layout.
+
+Create a single synthetic velocity vector field without adding pressure, Cp, vortices, animation, or a final layout.
 
 ### Prompt
 
@@ -127,7 +121,7 @@ Use:
 - freestream speed: 40 m/s
 - far-field velocity: U = (40, 0, 0) m/s
 
-The field should contain only these simple effects:
+The field should include only these simple effects:
 1. slower velocity in front of the body
 2. faster velocity over the roof
 3. slower velocity behind the rear wake
@@ -140,7 +134,7 @@ Do not create Cp.
 Do not create vortices.
 Do not create recirculation.
 Do not create animation.
-Do not create final report layout.
+Do not create a final report layout.
 ```
 
 ### Expected created arrays
@@ -154,20 +148,21 @@ U_mag  scalar, velocity magnitude, units m/s
 
 Pass if:
 
-- array U exists
-- U has 3 components
-- array U_mag exists
-- U_mag is scalar
-- far upstream U_mag is close to 40 m/s
-- wake region behind the body has lower U_mag than freestream
-- no pressure, Cp, vortex, or animation fields are created
+* `U` exists
+* `U` has 3 components
+* `U_mag` exists
+* `U_mag` is scalar
+* far upstream `U_mag` is close to 40 m/s
+* the wake region behind the body has lower `U_mag` than freestream
+* no pressure, Cp, vortex, or animation fields are created
 
 ---
 
 ## Test 4 — Verify U and U_mag only
 
 ### Goal
-Make field verification narrow and objective.
+
+Keep field verification narrow, objective, and limited to the velocity arrays.
 
 ### Prompt
 
@@ -200,14 +195,15 @@ Result: pass/fail
 
 ### Pass criteria
 
-Pass if the response gives array existence, component count, scalar/vector type, and approximate velocity magnitude range.
+Pass if the response reports array existence, component count, scalar/vector type, and the approximate velocity magnitude range.
 
 ---
 
 ## Test 5 — Make one centerline velocity slice
 
 ### Goal
-Test one simple visualization derived from U_mag.
+
+Create one simple visualization derived from `U_mag`.
 
 ### Prompt
 
@@ -231,21 +227,21 @@ Do not create pressure.
 Do not create Cp.
 Do not create vortices.
 Do not create animation.
-Do not create final report layout.
+Do not create a final report layout.
 ```
 
 ### Pass criteria
 
-Pass if there is one centerline slice at Y = 0 colored by U_mag with a 0–60 m/s range.
-
-Fail if the model creates many extra views or unrelated fields.
+Pass if there is exactly one centerline slice at `Y = 0`, colored by `U_mag`, with a 0–60 m/s color range.
+Fail if the model creates extra views, unrelated fields, or unnecessary outputs.
 
 ---
 
 ## Test 6 — Explain streamlines before creating them
 
 ### Goal
-Check whether the model understands that streamlines are computed from a velocity field.
+
+Check that the model understands streamlines are computed from a velocity field and are not original input data.
 
 ### Prompt
 
@@ -271,14 +267,15 @@ On the original geometry-only dataset, streamlines are impossible because there 
 
 ### Pass criteria
 
-Pass if the model says streamlines require a vector velocity field and cannot be computed directly from geometry alone.
+Pass if the model states that streamlines require a vector velocity field and cannot be computed directly from geometry alone.
 
 ---
 
 ## Test 7 — Create streamlines from U
 
 ### Goal
-Create one streamline visualization from the previously generated velocity field.
+
+Create one streamline visualization from the existing synthetic velocity field.
 
 ### Prompt
 
@@ -303,20 +300,20 @@ Do not create pressure.
 Do not create Cp.
 Do not create vortices.
 Do not create animation.
-Do not create final report layout.
+Do not create a final report layout.
 ```
 
 ### Pass criteria
 
-Pass if streamlines are seeded upstream and integrated through U.
-
-Fail if streamlines are treated as an original dataset field instead of a visualization derived from U.
+Pass if streamlines are seeded upstream and integrated through `U`.
+Fail if streamlines are treated as an original dataset field rather than a visualization derived from `U`.
 
 ---
 
 ## Test 8 — State what the visualization does and does not prove
 
 ### Goal
+
 Prevent misleading CFD claims.
 
 ### Prompt
@@ -343,7 +340,7 @@ The result is useful for testing ParaView automation, visualization layout, colo
 
 ### Pass criteria
 
-Pass if the note clearly labels the fields as synthetic and avoids implying solver validation.
+Pass if the note clearly labels the fields as synthetic and avoids implying solver validation. 
 
 ---
 
@@ -362,28 +359,28 @@ Run the tests in this order:
 8. State what the visualization does and does not prove
 ```
 
-This order keeps each step small and debuggable.
+This order keeps the workflow small, controlled, and easy to debug. 
 
 ---
 
-# What to remove from the first replacement version
+# Exclusions from the first simplified test suite
 
-Do not include these in the first simplified test suite:
+Do not include the following in the first simplified velocity-field test suite:
 
-- synthetic pressure field p
-- pressure coefficient Cp
-- Cp_surface
-- wall_shear_proxy
-- wake_deficit scalar
-- recirculation scalar
-- vortex_core_proxy
-- cross-flow wake slices
-- wake probes and plots
-- time-dependent animation
-- final multi-view report layout
-- screenshot and CSV export requirements
+* synthetic pressure field `p`
+* pressure coefficient `Cp`
+* `Cp_surface`
+* `wall_shear_proxy`
+* `wake_deficit` scalar
+* recirculation scalar
+* `vortex_core_proxy`
+* cross-flow wake slices
+* wake probes and plots
+* time-dependent animation
+* final multi-view report layout
+* screenshot or CSV export requirements
 
-These can be added later as separate test modules after the velocity-field tasks are reliable.
+These features can be added later as separate modules after the velocity-field workflow is reliable. 
 
 ---
 
@@ -393,29 +390,29 @@ After the velocity-field tests pass consistently, add later modules one at a tim
 
 ## Later Module A — Pressure only
 
-Create p and Cp from the synthetic velocity field. Do not create streamlines or vortices.
+Create `p` and `Cp` from the synthetic velocity field. Do not create streamlines or vortices.
 
 ## Later Module B — Wake scalar only
 
-Create wake_deficit as a scalar field. Visualize one wake slice. Do not create pressure or vortices.
+Create `wake_deficit` as a scalar field and visualize one wake slice. Do not create pressure or vortices.
 
 ## Later Module C — Recirculation only
 
-Create a simple recirculation mask behind the body. Show one transparent isosurface.
+Create a simple recirculation mask behind the body and show one transparent isosurface.
 
 ## Later Module D — Vortex proxy only
 
-Create vortex_core_proxy and show two counter-rotating rear structures. Keep it clearly labeled as synthetic.
+Create `vortex_core_proxy` and show two counter-rotating rear structures. Clearly label the result as synthetic.
 
 ## Later Module E — Final layout only
 
-Only after the individual components work, assemble a final report layout.
+Only after the individual components work reliably, assemble a final report layout.
 
 ---
 
 # Minimal one-shot replacement prompt
 
-Use this if only one compact prompt is needed:
+Use this compact prompt when only one simplified test prompt is needed:
 
 ```text
 The Ahmed body dataset is geometry-only and contains no CFD solution fields.
@@ -440,11 +437,11 @@ Then verify:
 - far upstream U_mag is about 40 m/s
 - wake U_mag is lower than freestream
 
-Finally create one visualization:
+Finally, create one visualization:
 - centerline slice at Y = 0
 - color by U_mag
 - color range 0 to 60 m/s
-- body shown as dark silhouette
+- body shown as a dark silhouette
 
 Do not create pressure, Cp, recirculation, vortices, probes, animation, exports, or a final report layout.
 Label the field as synthetic and not a validated CFD solver result.
