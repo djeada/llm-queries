@@ -1,14 +1,10 @@
 # ParaView MCP CFD Workflow Test Suite: Velocity-Field Baseline
 
-## Purpose
-
 This test suite validates a ParaView MCP workflow for an Ahmed body dataset using a controlled, step-by-step CFD visualization process.
 
 The Ahmed body dataset should be treated as geometry-only at the start of the workflow. It should not be assumed to contain velocity, pressure, wake, vortex, or other CFD solution fields unless those fields are explicitly created during the test.
 
 The main objective is to verify the dataset, create one simple synthetic velocity field, validate that field, and then generate basic visualizations derived from it.
-
-
 
 # Test Set: Velocity Field Workflow
 
