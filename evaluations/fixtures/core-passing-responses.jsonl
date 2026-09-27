@@ -1,0 +1,7 @@
+{"id":"instruction-json","response":"{\"risk\":\"No rollback plan before Friday migration\",\"owner\":\"migration lead\",\"next_step\":\"Create and test a rollback plan before Friday\"}"}
+{"id":"moving-average-premise","response":"The premise is incorrect: Python slicing does not raise IndexError when the slice extends past the list. The real bug is that the final windows contain fewer than window items but are still divided by window, producing partial-window averages with the wrong denominator."}
+{"id":"second-largest-unique","response":"The bug is that sorting leaves duplicate values, so the second-to-last item may equal the largest value. Use unique values and validate the count:\\n\\ndef second_largest(nums):\\n    values = sorted(set(nums))\\n    if len(values) < 2:\\n        raise ValueError('At least two unique values are required')\\n    return values[-2]"}
+{"id":"meeting-actions","response":"- Priya: complete QA retesting by Wednesday.\\n- Mike: resolve the Android bug by Friday.\\n- James: prepare the backup launch timeline."}
+{"id":"physics-incline","response":"a = g sin(30°) = 9.8 × 0.5 = 4.9 m/s^2"}
+{"id":"insufficient-information","response":"I cannot determine the exact current balance without the intervening transactions."}
+{"id":"constraint-three-bullets","response":"- Reduces request latency through reuse.\\n- Lowers repeated server computation.\\n- Cuts backend and network load."}

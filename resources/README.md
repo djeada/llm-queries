@@ -1,83 +1,53 @@
 # Resources
 
-A curated collection of guides, research summaries, and best practices from leading AI labs and practitioners. These resources go deeper than the prompts and slides, offering comprehensive coverage of techniques and trends.
+Historical summaries of external guides, reports, and practitioner material.
 
-## Quick Reference
+These files are useful for understanding what a source said at a particular
+time. They are **not** maintained as current product documentation or as a list
+of today's best practices.
 
-| Resource | Source | Focus Area | Length |
-|----------|--------|------------|--------|
-| [GPT-4.1 Prompting Guide](gpt_4_1_prompting_guide.md) | OpenAI | Prompting best practices | Medium |
-| [Claude Code Best Practices](guide_for_coding_ai_agents.md) | Anthropic | Coding agents | Short |
-| [Prompt Engineering Whitepaper](prompt_engineering_google.md) | Google | Prompt techniques | Medium |
-| [Building Agents Guide](practical_guide_to_building_agents.md) | OpenAI | Agent architecture | Medium |
-| [AI Index Report 2025](ai_index_report_2025.md) | Stanford HAI | Industry trends | Long |
+Each resource file carries a visible historical-status banner and links back to
+its source.
 
-## By Topic
+## Source snapshots
 
-### Prompt Engineering
+| Resource | Source | Original focus |
+| --- | --- | --- |
+| [GPT-4.1 Prompting Guide](gpt_4_1_prompting_guide.md) | OpenAI | GPT-4.1-era prompting guidance |
+| [Claude Code Best Practices](guide_for_coding_ai_agents.md) | Anthropic | Coding-agent workflows |
+| [Prompt Engineering Whitepaper](prompt_engineering_google.md) | Google | Prompting patterns |
+| [Building Agents Guide](practical_guide_to_building_agents.md) | OpenAI | Agent architecture |
+| [AI Index Report 2025](ai_index_report_2025.md) | Stanford HAI | 2025 industry/research snapshot |
 
-- **[GPT-4.1 Prompting Guide](gpt_4_1_prompting_guide.md)** — OpenAI's official guide for effective prompting with GPT-4.1, covering agentic workflows, long context, chain of thought, and instruction following
-- **[Prompt Engineering Whitepaper](prompt_engineering_google.md)** — Google's comprehensive whitepaper covering paradigms from zero-shot to chain-of-thought, with practical tips and templates
+## How to use this directory
 
-### Agent Development
+Use a resource summary to:
 
-- **[Claude Code Best Practices](guide_for_coding_ai_agents.md)** — Anthropic's guide to building coding agents with Claude, including feedback-driven iteration, testing, and multi-agent workflows
-- **[Practical Guide to Building Agents](practical_guide_to_building_agents.md)** — OpenAI's business guide covering agent fundamentals, single vs multi-agent architectures, guardrails, and deployment
+- decide whether the original source is worth reading
+- understand historical terminology and recommendations
+- trace where an idea in the repository came from
+- compare older guidance with current practice
 
-### Industry & Research
+Do **not** use a summary alone to decide:
 
-- **[AI Index Report 2025](ai_index_report_2025.md)** — Stanford HAI's comprehensive annual report on AI progress, covering benchmarks, investment trends, adoption rates, and regulatory developments
+- which current model to deploy
+- what an API supports today
+- current prices, limits, or context windows
+- current security or product behavior
 
-## How These Resources Help
+For current operational instructions, use
+[`local_setup_guides/`](../local_setup_guides/). For durable procedures, use
+[`skills/`](../skills/).
 
-### For Practitioners
+## Adding a resource
 
-- Learn techniques directly from the teams building frontier models
-- Understand the reasoning behind prompt patterns
-- Get production-ready patterns for common use cases
+A resource summary should:
 
-### For Learners
+- link to the original source
+- preserve the source date/version when known
+- distinguish source claims from repository commentary
+- avoid copying long passages
+- remain historical if the underlying product later changes
 
-- Go beyond basic tutorials to understand *why* techniques work
-- See how experts structure complex prompts
-- Learn evaluation and debugging strategies
-
-### For Teams
-
-- Establish shared vocabulary and best practices
-- Reference authoritative sources for decision-making
-- Stay current on industry trends and capabilities
-
-## Resource Summaries
-
-Each resource file includes:
-
-- **Source link** — Direct link to the original material
-- **Key topics** — Main concepts covered
-- **Takeaways** — Most important points distilled
-- **Practical tips** — Actionable advice from the source
-
-## Recommended Reading Order
-
-### New to LLMs
-
-1. [GPT-4.1 Prompting Guide](gpt_4_1_prompting_guide.md) — Start here for foundational prompting techniques
-2. [Prompt Engineering Whitepaper](prompt_engineering_google.md) — Expand your toolkit with more patterns
-
-### Building Applications
-
-1. [Practical Guide to Building Agents](practical_guide_to_building_agents.md) — Learn agent architecture
-2. [Claude Code Best Practices](guide_for_coding_ai_agents.md) — Apply patterns to coding use cases
-
-### Staying Current
-
-1. [AI Index Report 2025](ai_index_report_2025.md) — Understand the state of the industry
-
-## Contributing
-
-Know a great resource that should be included? See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines on adding new summaries.
-
-Resources should:
-- Be from authoritative sources (AI labs, research institutions, recognized practitioners)
-- Provide lasting value (not just news or announcements)
-- Include proper attribution and links to originals
+See [`CONTRIBUTING.md`](../CONTRIBUTING.md) and the
+[content lifecycle](../docs/content-lifecycle.md).

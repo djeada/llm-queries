@@ -1,67 +1,49 @@
 # Course Reviews
 
-Curated notes and summaries from online courses about LLMs, prompt engineering, and AI agents. Each review includes key takeaways, code examples, and recommendations for who should take the course.
+Historical notes from courses about language models, prompting, agents, APIs,
+and related tooling.
 
-## Quick Reference
+Course platforms and code examples change. These notes preserve what was
+reviewed at the time; they are not maintained as current API tutorials.
 
-| Course | Provider | Focus Area | Level | Time |
-|--------|----------|------------|-------|------|
-| [Prompt Engineering](anthropic-prompt-engineering.md) | Anthropic | Prompting techniques | Beginner | 2-4h |
-| [API Fundamentals](anthropic-api-fundamentals.md) | Anthropic | Claude API usage | Beginner | 3-5h |
-| [LLM Introduction](hugging-face-llm-intro.md) | Hugging Face | LLM fundamentals | Beginner | 8-12h |
-| [Agents Course](hugging-face-agents.md) | Hugging Face | Building AI agents | Intermediate | 6-10h |
-| [Audio Course](hugging-face-audio.md) | Hugging Face | Audio/speech ML | Intermediate | 10-15h |
-| [AI Agents for Beginners](microsoft-ai-agents-for-beginners.md) | Microsoft | Agent development | Beginner | 8-12h |
+## Reviews
 
-## By Skill Level
+| Course | Provider | Focus |
+| --- | --- | --- |
+| [Prompt Engineering](anthropic-prompt-engineering.md) | Anthropic | Prompting techniques |
+| [API Fundamentals](anthropic-api-fundamentals.md) | Anthropic | Claude API concepts |
+| [LLM Introduction](hugging-face-llm-intro.md) | Hugging Face | LLM fundamentals |
+| [Agents Course](hugging-face-agents.md) | Hugging Face | Agent workflows |
+| [Audio Course](hugging-face-audio.md) | Hugging Face | Audio / speech ML |
+| [AI Agents for Beginners](microsoft-ai-agents-for-beginners.md) | Microsoft | Agent development |
 
-### Beginner
+## Reading old course notes safely
 
-Start here if you're new to LLMs and prompt engineering:
+Treat durable concepts separately from version-specific examples.
 
-1. **[Hugging Face LLM Introduction](hugging-face-llm-intro.md)** — Comprehensive introduction to LLMs and the Hugging Face ecosystem
-2. **[Anthropic Prompt Engineering](anthropic-prompt-engineering.md)** — Learn effective prompting techniques
-3. **[Anthropic API Fundamentals](anthropic-api-fundamentals.md)** — Hands-on API integration
+Likely to remain useful:
 
-### Intermediate
+- conceptual explanations
+- design patterns
+- evaluation ideas
+- high-level workflows
 
-For those ready to build more complex applications:
+Likely to age quickly:
 
-1. **[Hugging Face Agents Course](hugging-face-agents.md)** — Build agents that use tools and take actions
-2. **[Microsoft AI Agents for Beginners](microsoft-ai-agents-for-beginners.md)** — Agent patterns with Azure/Semantic Kernel
-3. **[Hugging Face Audio Course](hugging-face-audio.md)** — Speech recognition, TTS, and audio ML
+- model identifiers
+- package imports
+- API parameters
+- screenshots
+- prices and quotas
+- CLI commands
 
-## By Topic
+When a review contains old code, follow its source link and verify current
+documentation before using the example in a project.
 
-### Prompt Engineering
+## Adding a review
 
-- [Anthropic Prompt Engineering](anthropic-prompt-engineering.md)
+Record the course/source link and preserve the context of the version you
+reviewed. If the course changes substantially, add a new dated review rather
+than silently making the old review look current.
 
-### API & Integration
-
-- [Anthropic API Fundamentals](anthropic-api-fundamentals.md)
-
-### Agent Development
-
-- [Hugging Face Agents Course](hugging-face-agents.md)
-- [Microsoft AI Agents for Beginners](microsoft-ai-agents-for-beginners.md)
-
-### Specialized Domains
-
-- [Hugging Face Audio Course](hugging-face-audio.md)
-
-## What Each Review Includes
-
-Each course review provides:
-
-- **Course overview** — What the course covers
-- **Key topics** — Major sections and concepts
-- **Key takeaways** — Most important lessons
-- **Code examples** — Representative code from the course
-- **Who should take it** — Target audience
-- **Time investment** — Expected hours to complete
-- **Related resources** — Additional learning materials
-
-## Contributing
-
-Know a great course that should be included? See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines on adding new reviews.
+See [`CONTRIBUTING.md`](../CONTRIBUTING.md).

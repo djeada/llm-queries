@@ -1,0 +1,49 @@
+name: Content quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 7 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  repository-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Validate repository structure
+        run: make check-content
+
+      - name: Validate executable evaluation layer
+        run: make check-evals
+
+      - name: Enforce freshness deadlines
+        if: github.event_name == 'schedule'
+        run: make freshness
+
+      - name: Check external source links
+        if: github.event_name == 'schedule'
+        run: make check-links
+
+  snake-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Run Snake project checks
+        working-directory: projects/snake-llm
+        run: make check

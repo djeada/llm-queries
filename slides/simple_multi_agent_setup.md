@@ -1,301 +1,409 @@
-# Simple Multi-Agent Setup
+# Multi-Agent Systems: When and How to Use Them
 
-Multi-agent systems use multiple specialized LLM-powered agents that collaborate to solve complex tasks. This architecture enables more sophisticated workflows than single-agent approaches by dividing responsibilities and leveraging specialization.
+A multi-agent system coordinates more than one model-powered component or agent.
 
-## Why Multi-Agent?
+That can be useful, but it is not automatically more capable, reliable, or
+easier to debug than a single agent. Every additional agent adds another model
+call, state boundary, permission surface, latency cost, and possible failure.
 
-Single agents face limitations as task complexity grows:
+Start with the simplest architecture that can satisfy the task.
 
-| Single Agent | Multi-Agent |
-|--------------|-------------|
-| One massive prompt | Focused, smaller prompts |
-| All skills in one context | Specialized expertise per agent |
-| Difficult to debug | Clear responsibility boundaries |
-| Context window limits | Distributed context |
-| One failure mode | Graceful degradation |
+## First Question: Do You Need Multiple Agents?
 
-## Core Patterns
+Before creating roles, compare these options:
 
-### Manager-Worker Pattern
-
-A coordinator agent decomposes tasks and delegates to specialists:
-
-```
-                    ┌──────────────────┐
-                    │   User Request   │
-                    └────────┬─────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │  Manager Agent   │
-                    │  (Orchestrator)  │
-                    └────────┬─────────┘
-                             │
-           ┌─────────────────┼─────────────────┐
-           │                 │                 │
-           ▼                 ▼                 ▼
-    ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-    │  Research   │   │    Code     │   │   Review    │
-    │   Agent     │   │   Agent     │   │   Agent     │
-    └──────┬──────┘   └──────┬──────┘   └──────┬──────┘
-           │                 │                 │
-           └─────────────────┼─────────────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │  Manager Agent   │
-                    │  (Synthesizes)   │
-                    └────────┬─────────┘
-                             │
-                             ▼
-                    ┌──────────────────┐
-                    │  Final Response  │
-                    └──────────────────┘
-```
-
-**When to use**: Complex tasks requiring different expertise areas
-
-### Pipeline Pattern
-
-Agents process sequentially, each refining the previous output:
-
-```
-Input ──► Agent 1 ──► Agent 2 ──► Agent 3 ──► Output
-          (Draft)     (Review)    (Polish)
-```
-
-**Example: Content Creation Pipeline**
-
-```
-Topic ──► Research ──► Draft ──► Edit ──► Format ──► Final
-           Agent       Agent     Agent    Agent     Output
-```
-
-**When to use**: Workflows with clear sequential stages
-
-### Peer-to-Peer Pattern
-
-Agents hand off directly based on task requirements:
-
-```
-┌───────────┐     ┌───────────┐     ┌───────────┐
-│  Agent A  │◄───►│  Agent B  │◄───►│  Agent C  │
-│ (General) │     │(Technical)│     │ (Creative)│
-└───────────┘     └───────────┘     └───────────┘
-```
-
-**When to use**: Flexible workflows where routing depends on content
-
-### Debate Pattern
-
-Multiple agents argue positions, then synthesize:
-
-```
-       ┌──────────────┐
-       │   Question   │
-       └──────┬───────┘
-              │
-    ┌─────────┼─────────┐
-    ▼         ▼         ▼
-┌───────┐ ┌───────┐ ┌───────┐
-│Pro    │ │Con    │ │Neutral│
-│Agent  │ │Agent  │ │Agent  │
-└───┬───┘ └───┬───┘ └───┬───┘
-    │         │         │
-    └─────────┼─────────┘
-              ▼
-       ┌──────────────┐
-       │   Synthesis  │
-       │    Agent     │
-       └──────────────┘
-```
-
-**When to use**: Complex decisions requiring multiple perspectives
-
-## Implementation Components
-
-### Agent Definition
-
-Each agent needs:
-
-```python
-class Agent:
-    name: str              # Identifier
-    system_prompt: str     # Role and instructions
-    tools: list[Tool]      # Available capabilities
-    model: str             # Which LLM to use
-```
-
-### Communication Protocol
-
-Agents need a standard message format:
-
-```python
-@dataclass
-class AgentMessage:
-    sender: str           # Which agent
-    recipient: str        # Target agent or "all"
-    content: str          # The message
-    message_type: str     # "task", "result", "question", "error"
-    metadata: dict        # Additional context
-```
-
-### State Management
-
-Track progress across agents:
-
-```python
-@dataclass
-class WorkflowState:
-    task_id: str
-    current_agent: str
-    history: list[AgentMessage]
-    artifacts: dict       # Intermediate results
-    status: str           # "in_progress", "complete", "failed"
-```
-
-## Example: Code Review System
-
-### Agents
-
-1. **Analyzer Agent**: Reads code, identifies areas of concern
-2. **Security Agent**: Checks for security vulnerabilities
-3. **Style Agent**: Reviews code style and best practices
-4. **Summary Agent**: Synthesizes findings into actionable feedback
-
-### Flow
-
-```
-Code Submission
+```text
+deterministic code
       │
-      ▼
-┌──────────────┐
-│   Analyzer   │──────────┐
-│    Agent     │          │
-└──────────────┘          │
-      │                   │
-      ├───────────────────┤
-      │                   │
-      ▼                   ▼
-┌──────────────┐   ┌──────────────┐
-│   Security   │   │    Style     │
-│    Agent     │   │    Agent     │
-└──────────────┘   └──────────────┘
-      │                   │
-      └─────────┬─────────┘
-                │
-                ▼
-         ┌──────────────┐
-         │   Summary    │
-         │    Agent     │
-         └──────────────┘
-                │
-                ▼
-         Review Report
+single model call
+      │
+single agent + tools
+      │
+explicit workflow / state machine
+      │
+multiple agents
 ```
 
-### Implementation Sketch
+Move downward only when the simpler design has a measured limitation.
 
-```python
-async def review_code(code: str) -> str:
-    # Parallel analysis
-    security_task = security_agent.analyze(code)
-    style_task = style_agent.analyze(code)
-    
-    security_findings, style_findings = await asyncio.gather(
-        security_task, style_task
-    )
-    
-    # Synthesize
-    summary = await summary_agent.synthesize(
-        code=code,
-        security=security_findings,
-        style=style_findings
-    )
-    
-    return summary
+Multiple agents can be justified when work has genuinely separable contexts,
+permissions, ownership, or execution environments.
+
+Examples:
+
+- one component has access to sensitive data another must not see
+- independent subtasks can execute in parallel
+- one agent is responsible for a durable workflow stage with a clear contract
+- specialized tools or sandboxes need different permission boundaries
+- independent review is useful and measured to catch failures
+
+"Different expertise personas" alone is weak justification if every role uses
+the same model, context, and tools.
+
+## Define Contracts, Not Personas
+
+A useful agent boundary specifies:
+
+```text
+responsibility:
+inputs:
+outputs:
+allowed tools:
+side effects:
+state it owns:
+timeout:
+retry policy:
+approval rules:
+failure behavior:
 ```
 
-## Key Considerations
+Compare:
 
-### Agent Boundaries
+**Weak**
 
-Define clear responsibilities:
-
-| ✅ Good Boundaries | ❌ Poor Boundaries |
-|-------------------|-------------------|
-| "You analyze security vulnerabilities" | "You help with code" |
-| "You format output as markdown" | "You make things better" |
-| "You can only call the search tool" | "Use any tool needed" |
-
-### Error Handling
-
-Agents can fail—plan for it:
-
-```python
-async def run_with_fallback(primary_agent, fallback_agent, task):
-    try:
-        result = await primary_agent.run(task, timeout=30)
-        return result
-    except (TimeoutError, AgentError) as e:
-        log_error(e)
-        return await fallback_agent.run(task)
+```text
+You are the smart research agent.
 ```
 
-### Token Budget Management
+**Better**
 
-Track and limit token usage:
-
-```python
-class TokenBudget:
-    def __init__(self, max_tokens: int):
-        self.max_tokens = max_tokens
-        self.used_tokens = 0
-    
-    def can_proceed(self, estimated_tokens: int) -> bool:
-        return self.used_tokens + estimated_tokens <= self.max_tokens
-    
-    def record_usage(self, tokens: int):
-        self.used_tokens += tokens
+```text
+Input: research question + approved source domains.
+Output: JSON array of claims with source URLs and quoted evidence locations.
+Tools: web search and page retrieval only.
+Side effects: none.
+Stop when: five supported claims are found or evidence is insufficient.
 ```
 
-### Observability
+The second component is testable.
 
-Log everything for debugging:
+## Pattern 1: Manager and Workers
 
-```python
-def log_agent_call(agent_name, input_msg, output_msg, tokens, latency):
-    logger.info({
-        "agent": agent_name,
-        "input": input_msg[:100],  # Truncate
-        "output": output_msg[:100],
-        "tokens": tokens,
-        "latency_ms": latency
-    })
+A manager decomposes work and assigns bounded subtasks.
+
+```text
+request
+   │
+manager
+   ├────► worker A ───┐
+   ├────► worker B ───┼──► manager synthesis
+   └────► worker C ───┘
 ```
 
-## Common Pitfalls
+Use this when decomposition is dynamic and the manager has enough information to
+decide which work is needed.
 
-1. **Overengineering**: Start with single agent, add complexity only when needed
-2. **Unclear handoffs**: Define exactly when and how agents transfer work
-3. **Infinite loops**: Add maximum iteration limits
-4. **Token explosion**: Each agent call adds overhead; monitor total usage
-5. **Inconsistent context**: Ensure agents have the context they need
+Risks:
 
-## When NOT to Use Multi-Agent
+- manager creates redundant or underspecified tasks
+- workers receive inconsistent context
+- synthesis drops important evidence
+- token and latency cost grows quickly
+- manager becomes a single point of failure
 
-- Simple tasks that one agent handles well
-- Latency-critical applications (each agent adds delay)
-- When single-agent with tools suffices
-- Limited budget for token usage
+Evaluate decomposition quality separately from worker quality.
 
-## Getting Started Checklist
+## Pattern 2: Explicit Pipeline
 
-- [ ] Identify if multi-agent is actually needed
-- [ ] Define agent roles with clear boundaries
-- [ ] Choose orchestration pattern (manager, pipeline, peer)
-- [ ] Implement communication protocol
-- [ ] Add comprehensive logging
-- [ ] Set up error handling and fallbacks
-- [ ] Monitor token usage and latency
-- [ ] Test with adversarial inputs
+Stages execute in a known sequence.
+
+```text
+input -> extract -> verify -> transform -> publish
+```
+
+If routing is deterministic, these stages may not need to be autonomous agents
+at all. Plain code plus model calls is often easier to operate.
+
+Use agents only where a stage genuinely needs model-driven decisions or tools.
+
+## Pattern 3: Handoff
+
+One agent transfers ownership to another component under explicit conditions.
+
+```text
+triage
+  ├─ billing -> billing workflow
+  ├─ technical -> support workflow
+  └─ risky action -> human approval
+```
+
+A handoff contract should state:
+
+- trigger
+- data transferred
+- data withheld
+- new permissions
+- who owns the next response/action
+- what happens if the target rejects the handoff
+
+## Pattern 4: Independent Review
+
+A second component reviews a concrete artifact.
+
+```text
+producer -> artifact -> reviewer -> pass / defects
+```
+
+This can help when the reviewer has an independent rubric, evidence source, or
+tool.
+
+It is less useful when both calls simply repeat the same vague judgment. Correlated
+model errors can survive "multiple opinions."
+
+Review should target observable criteria such as tests, citations, schema,
+policy, or source evidence.
+
+## State Architecture
+
+Multi-agent failures often come from unclear state ownership.
+
+Separate:
+
+### Task state
+
+```text
+task_id
+current_stage
+status
+deadline
+requested_output
+```
+
+### Evidence / artifacts
+
+```text
+source documents
+retrieved evidence
+code patches
+test results
+generated files
+```
+
+### Execution history
+
+```text
+agent/tool
+input reference
+output reference
+start/end time
+error
+retry count
+approval
+```
+
+Do not rely on every agent receiving the entire chat transcript as the state
+model.
+
+## Tool and Permission Boundaries
+
+Permissions should follow least privilege.
+
+A research component may only need read access. A deployment component may need
+write access but should require approval. An email component should not
+automatically inherit shell or database permissions.
+
+For every tool, document:
+
+- read-only vs state-changing
+- external side effects
+- sensitive inputs/outputs
+- idempotency
+- rollback or compensation
+- approval requirement
+
+Multi-agent architecture does not reduce risk if all agents share unrestricted
+tools.
+
+## Concurrency
+
+Parallelism is useful only when tasks are independent enough to run
+concurrently.
+
+```text
+        ┌─ task A ─┐
+input ──┼─ task B ─┼─► join
+        └─ task C ─┘
+```
+
+At the join, define what happens when:
+
+- one task fails
+- one task times out
+- results conflict
+- a result arrives after the workflow moved on
+- the same side effect is attempted twice
+
+Concurrency without join semantics creates race conditions, not intelligence.
+
+## Failure and Retry Semantics
+
+A robust workflow distinguishes:
+
+- model failure
+- tool failure
+- validation failure
+- timeout
+- permission denial
+- insufficient information
+- user cancellation
+
+Retries need limits and idempotency rules.
+
+```text
+attempt
+  │
+  ├─ transient failure -> bounded retry
+  ├─ invalid output -> repair once / fail
+  ├─ risky side effect -> do not repeat blindly
+  └─ repeated failure -> escalate / stop
+```
+
+Infinite "agent debate" is not a recovery strategy.
+
+## Human Approval
+
+Approval gates belong before actions whose consequences warrant human control.
+
+Examples:
+
+- sending a message externally
+- deleting or overwriting data
+- spending money
+- publishing or deploying
+- changing access controls
+- taking action under material uncertainty
+
+The approval view should show the proposed action and relevant evidence, not
+merely "agent wants permission."
+
+## Observability
+
+Log enough to reconstruct execution without depending on hidden model reasoning.
+
+Useful fields:
+
+```text
+run_id
+task_id
+component
+model/runtime
+prompt/template version
+tool name
+validated arguments
+artifact/evidence references
+latency
+token/usage metrics
+result status
+error category
+approval event
+```
+
+Be careful not to log secrets or unnecessary personal data.
+
+## Evaluation
+
+Compare the multi-agent design against a simpler baseline.
+
+Measure:
+
+- task success rate
+- failure categories
+- latency
+- model/tool calls
+- cost or token use
+- approval frequency
+- recovery rate
+- unsafe/invalid actions
+- human correction effort
+
+A multi-agent design earns its complexity only if it improves the metrics that
+matter enough to justify its operating cost.
+
+### Component tests
+
+Test contracts independently:
+
+- router chooses correct destination
+- worker output satisfies schema
+- reviewer catches seeded defects
+- tool calls respect permissions
+- retries stop at the limit
+
+### End-to-end tests
+
+Include:
+
+- normal task
+- ambiguous task
+- unavailable tool
+- conflicting worker results
+- timeout
+- partial completion
+- rejected approval
+- malformed tool output
+
+## Example: Code Change Workflow
+
+A defensible workflow might be:
+
+```text
+issue
+  │
+planner (read-only)
+  │ plan
+  ▼
+implementation agent (repo write + tests)
+  │ patch + test results
+  ▼
+reviewer (read-only diff + tests)
+  │ defects / pass
+  ▼
+human approval
+  │
+  ▼
+PR creation
+```
+
+Important properties:
+
+- the planner cannot modify code
+- the implementation output is a patch plus observable test results
+- the reviewer inspects an artifact, not the implementer's hidden reasoning
+- external publication occurs after an approval boundary
+
+The same design may also be implemented as one agent with staged permissions.
+Measure both before deciding.
+
+## Common Failure Modes
+
+- splitting one task into agents with no real contract boundary
+- copying the entire context into every agent
+- letting agents share unrestricted tools
+- trusting one model to "review" another without a rubric
+- using more agents instead of improving retrieval or deterministic code
+- losing provenance when outputs are summarized between stages
+- retry loops that duplicate side effects
+- no global budget or termination condition
+
+## Decision Checklist
+
+Before adopting multi-agent orchestration:
+
+- [ ] A simpler single-agent or deterministic design was tested.
+- [ ] Each agent boundary has explicit inputs and outputs.
+- [ ] State ownership is defined.
+- [ ] Tool permissions differ for a reason and follow least privilege.
+- [ ] Timeouts, retries, and join behavior are specified.
+- [ ] Side effects are idempotent or protected.
+- [ ] Approval gates exist where needed.
+- [ ] Logs can reconstruct the workflow.
+- [ ] Component and end-to-end evals exist.
+- [ ] The multi-agent design beats the simpler baseline on measured goals.
+
+## Key Takeaway
+
+Multi-agent systems are an orchestration technique, not a capability multiplier
+by default.
+
+Use them when explicit boundaries or parallel work provide measurable value,
+and make those boundaries testable.

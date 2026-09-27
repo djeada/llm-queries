@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const http = require('http');
 
 const PORT = Number(process.env.SNAKE_LLM_PORT || 8787);
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/api/chat';
-const MODEL = process.env.SNAKE_LLM_MODEL || 'qwen2.5:1.5b';
+const MODEL = process.env.SNAKE_LLM_MODEL || 'qwen3:0.6b';
 const REQUEST_TIMEOUT_MS = Number(process.env.SNAKE_LLM_TIMEOUT_MS || 8000);
 
 const responseSchema = {
@@ -48,7 +50,13 @@ function normalizeMove(move, legalMoves) {
     if (typeof move !== 'string') return null;
     const normalized = move.toLowerCase().trim();
     if (!['up', 'down', 'left', 'right'].includes(normalized)) return null;
-    if (Array.isArray(legalMoves) && legalMoves.length > 0 && !legalMoves.includes(normalized)) return null;
+    if (
+        Array.isArray(legalMoves) &&
+        legalMoves.length > 0 &&
+        !legalMoves.includes(normalized)
+    ) {
+        return null;
+    }
     return normalized;
 }
 
@@ -61,22 +69,10 @@ function fallbackMove(state) {
 
 function directionVector(move) {
     const directions = {
-        up: {
-            x: 0,
-            y: -1
-        },
-        down: {
-            x: 0,
-            y: 1
-        },
-        left: {
-            x: -1,
-            y: 0
-        },
-        right: {
-            x: 1,
-            y: 0
-        }
+        up: {x: 0, y: -1},
+        down: {x: 0, y: 1},
+        left: {x: -1, y: 0},
+        right: {x: 1, y: 0}
     };
     return directions[move] || directions.right;
 }
@@ -92,7 +88,9 @@ function buildDecisionState(state) {
         return {
             move,
             nextHead,
-            distanceToFood: Math.abs(nextHead.x - state.food.x) + Math.abs(nextHead.y - state.food.y),
+            distanceToFood:
+                Math.abs(nextHead.x - state.food.x) +
+                Math.abs(nextHead.y - state.food.y),
             keepsDirection: move === state.direction
         };
     });
@@ -121,9 +119,7 @@ async function askOllama(state) {
 
         const response = await fetch(OLLAMA_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 model: MODEL,
                 stream: false,
@@ -132,10 +128,7 @@ async function askOllama(state) {
                     temperature: 0,
                     num_predict: 24
                 },
-                messages: [{
-                    role: 'user',
-                    content: prompt
-                }]
+                messages: [{role: 'user', content: prompt}]
             }),
             signal: controller.signal
         });
@@ -145,7 +138,8 @@ async function askOllama(state) {
         }
 
         const data = await response.json();
-        const content = data.message && data.message.content ? data.message.content : '{}';
+        const content =
+            data.message && data.message.content ? data.message.content : '{}';
         const parsed = JSON.parse(content);
         return normalizeMove(parsed.move, state.legalMoves);
     } finally {
@@ -153,39 +147,56 @@ async function askOllama(state) {
     }
 }
 
-const server = http.createServer(async (req, res) => {
-    if (req.method === 'OPTIONS') {
-        sendJson(res, 204, {});
-        return;
-    }
+function createServer(decide = askOllama) {
+    return http.createServer(async (req, res) => {
+        if (req.method === 'OPTIONS') {
+            sendJson(res, 204, {});
+            return;
+        }
 
-    if (req.method !== 'POST' || req.url !== '/snake/decide') {
-        sendJson(res, 404, {
-            error: 'Not found'
-        });
-        return;
-    }
+        if (req.method !== 'POST' || req.url !== '/snake/decide') {
+            sendJson(res, 404, {error: 'Not found'});
+            return;
+        }
 
-    let state = null;
+        let state = null;
+        try {
+            const body = await readBody(req);
+            state = JSON.parse(body);
+            const move = await decide(state);
+            sendJson(res, 200, {
+                move: normalizeMove(move, state.legalMoves) || fallbackMove(state)
+            });
+        } catch (error) {
+            sendJson(res, 200, {
+                move: state ? fallbackMove(state) : 'right',
+                fallback: true,
+                error: error.message
+            });
+        }
+    });
+}
 
-    try {
-        const body = await readBody(req);
-        state = JSON.parse(body);
-        const move = await askOllama(state);
+function startServer() {
+    const server = createServer();
+    server.listen(PORT, () => {
+        console.log(
+            `Snake LLM proxy listening on http://localhost:${PORT}/snake/decide`
+        );
+        console.log(`Using Ollama model: ${MODEL}`);
+    });
+    return server;
+}
 
-        sendJson(res, 200, {
-            move: move || fallbackMove(state)
-        });
-    } catch (error) {
-        sendJson(res, 200, {
-            move: state ? fallbackMove(state) : 'right',
-            fallback: true,
-            error: error.message
-        });
-    }
-});
+if (require.main === module) {
+    startServer();
+}
 
-server.listen(PORT, () => {
-    console.log(`Snake LLM proxy listening on http://localhost:${PORT}/snake/decide`);
-    console.log(`Using Ollama model: ${MODEL}`);
-});
+module.exports = {
+    normalizeMove,
+    fallbackMove,
+    directionVector,
+    buildDecisionState,
+    createServer,
+    startServer
+};

@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "entries": {
+    "course_reviews/anthropic-api-fundamentals.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "course_reviews/anthropic-prompt-engineering.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "course_reviews/hugging-face-agents.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "course_reviews/hugging-face-audio.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "course_reviews/hugging-face-llm-intro.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "course_reviews/microsoft-ai-agents-for-beginners.md": {
+      "kind": "course-review",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "docs/architecture.md": {
+      "kind": "documentation",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "docs/content-lifecycle.md": {
+      "kind": "documentation",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "docs/glossary.md": {
+      "kind": "glossary",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "evaluations/everyday/everyday-tasks.md": {
+      "kind": "evaluation",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "evaluations/mcp/blender-fantasy-scene.md": {
+      "kind": "evaluation",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "evaluations/mcp/paraview-cfd-velocity-field.md": {
+      "kind": "evaluation",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "evaluations/tool-use/tool-calling.md": {
+      "kind": "evaluation",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "local_setup_guides/local_models_intro.md": {
+      "kind": "guide",
+      "freshness": "version-sensitive",
+      "status": "active",
+      "review_days": 120,
+      "last_verified": "2026-09-27"
+    },
+    "local_setup_guides/local-coding-agents.md": {
+      "kind": "guide",
+      "freshness": "version-sensitive",
+      "status": "active",
+      "review_days": 120,
+      "last_verified": "2026-09-27"
+    },
+    "news/anthropic_c_compiler.md": {
+      "kind": "news",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "projects/snake-llm/ARCHITECTURE.md": {
+      "kind": "project-doc",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "projects/snake-llm/README.md": {
+      "kind": "project-doc",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
+    "prompts/blender/fluid_physics.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/job_search/interview_questions.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/job_search/resume.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/math/sanitize_latex.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/social_media/instagram.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/format_lists_pl.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/format_lists.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/generate_notes.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/improve_article.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/llm_giveaway_phrases.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/text/simplify_vocabulary.md": {
+      "kind": "prompt",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "resources/ai_index_report_2025.md": {
+      "kind": "reference",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "resources/gpt_4_1_prompting_guide.md": {
+      "kind": "reference",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "resources/guide_for_coding_ai_agents.md": {
+      "kind": "reference",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "resources/practical_guide_to_building_agents.md": {
+      "kind": "reference",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "resources/prompt_engineering_google.md": {
+      "kind": "reference",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "skills/agent_tool_design.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "skills/context_engineering.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "skills/llm_evaluation.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "skills/local_model_selection.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "skills/prompt_debugging.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "skills/rag_quality_audit.md": {
+      "kind": "skill",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/intro_to_prompts.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/rag_with_vector_database.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/simple_multi_agent_setup.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/transformer_architecture.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/what_are_llms.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/what_are_token_embeddings.md": {
+      "kind": "slide",
+      "freshness": "evergreen",
+      "status": "active",
+      "review_days": 365,
+      "last_verified": null
+    },
+    "slides/what_was_different_about_gpt3.md": {
+      "kind": "slide",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": null
+    },
+    "snapshots/local-models/deepseek-r1-2025.md": {
+      "kind": "snapshot",
+      "freshness": "dated",
+      "status": "historical",
+      "review_days": null,
+      "last_verified": "2026-09-27"
+    }
+  }
+}

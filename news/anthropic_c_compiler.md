@@ -1,3 +1,6 @@
+
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
 Source: [https://www.anthropic.com/engineering/building-c-compiler](https://www.anthropic.com/engineering/building-c-compiler)
 
 ## Notes on the “no human input” claim

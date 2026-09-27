@@ -1,5 +1,8 @@
 # Claude Code Best Practices
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 Anthropic Engineering Guide
 Link: [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 

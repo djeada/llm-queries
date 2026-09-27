@@ -1,5 +1,8 @@
 # Anthropic Prompt Engineering Course
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A comprehensive course on crafting effective prompts for Claude and other LLMs, covering fundamentals through advanced techniques.
 
 ## Course Link
