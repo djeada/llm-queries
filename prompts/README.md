@@ -9,7 +9,7 @@ A practical library of reusable prompt templates for writing, editing, job searc
 | [Job Search](job_search/) | 2 | Resume optimization, interview prep |
 | [Text Processing](text/) | 6 | Writing, formatting, editing |
 | [Math](math/) | 1 | LaTeX cleanup |
-| [Social Media](social_media/) | 1 | Captions and posts |
+| [Social Media](social_media/) | 1 | Captions and posts |\n| [Blender](blender/) | 1 | Realistic fluid physics scene tests |
 
 ## Browse by Use Case
 
@@ -52,6 +52,12 @@ A practical library of reusable prompt templates for writing, editing, job searc
 | Prompt | What It Does | Best For |
 |--------|--------------|----------|
 | [instagram.md](social_media/instagram.md) | Create engaging captions | Instagram posts |
+
+### 🎬 Blender & Simulation
+
+| Prompt | What It Does | Best For |
+|--------|--------------|----------|
+| [fluid_physics.md](blender/fluid_physics.md) | Three realistic liquid simulation tests | Blender fluid physics evaluation |
 
 ## How to Use These Prompts
 
@@ -147,8 +153,10 @@ prompts/
 │   └── llm_giveaway_phrases.md # AI phrase detection
 ├── math/
 │   └── sanitize_latex.md     # LaTeX cleanup
-└── social_media/
-    └── instagram.md          # Instagram captions
+├── social_media/
+│   └── instagram.md          # Instagram captions
+└── blender/
+    └── fluid_physics.md      # Realistic fluid physics tests
 ```
 
 ## Contributing New Prompts
