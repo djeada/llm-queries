@@ -9,7 +9,7 @@ A practical library of reusable prompt templates for writing, editing, job searc
 | [Job Search](job_search/) | 2 | Resume optimization, interview prep |
 | [Text Processing](text/) | 6 | Writing, formatting, editing |
 | [Math](math/) | 1 | LaTeX cleanup |
-| [Social Media](social_media/) | 1 | Captions and posts |
+| [Social Media](social_media/) | 1 | Captions and posts |\n| [Blender](blender/) | 1 | Realistic fluid physics scene tests |
 
 ## Browse by Use Case
 
