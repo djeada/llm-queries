@@ -53,6 +53,12 @@ A practical library of reusable prompt templates for writing, editing, job searc
 |--------|--------------|----------|
 | [instagram.md](social_media/instagram.md) | Create engaging captions | Instagram posts |
 
+### 🎬 Blender & Simulation
+
+| Prompt | What It Does | Best For |
+|--------|--------------|----------|
+| [fluid_physics.md](blender/fluid_physics.md) | Three realistic liquid simulation tests | Blender fluid physics evaluation |
+
 ## How to Use These Prompts
 
 ### Step 1: Choose a Prompt
@@ -147,8 +153,10 @@ prompts/
 │   └── llm_giveaway_phrases.md # AI phrase detection
 ├── math/
 │   └── sanitize_latex.md     # LaTeX cleanup
-└── social_media/
-    └── instagram.md          # Instagram captions
+├── social_media/
+│   └── instagram.md          # Instagram captions
+└── blender/
+    └── fluid_physics.md      # Realistic fluid physics tests
 ```
 
 ## Contributing New Prompts
