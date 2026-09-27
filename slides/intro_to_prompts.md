@@ -1,99 +1,298 @@
 # Intro to Prompt Engineering
 
-Large language models behave a bit like improv actors: given a short cue, they spin an entire story. *Prompt engineering* is the craft of writing those cues so that the model’s continuation lands exactly where we need it. At first glance a prompt looks like plain text, yet in practice it is a carefully tuned control signal that shapes probabilities inside the neural network. 
-## In-Context Learning Fundamentals
+Prompt engineering is the practice of designing the information and
+instructions given to a model so that its output is useful, checkable, and
+appropriate for the task.
 
-When the model reads a prompt $x_{1{:}t}$ it internally computes
+A good prompt is not magic wording. It is an interface specification.
 
-$$
-p_\theta(x_{t+1}\mid x_{1{:}t}),
-$$
+## What a Prompt Can Control
 
-then samples or selects the next token and appends it to the context. No gradient ever flows during this inference pass, so all “learning” happens purely in activations. Because the weights stay frozen, we call the phenomenon *in-context learning* rather than fine-tuning.
+A prompt can tell the model:
 
-### What “K-Shot” Really Means
+- what task to perform
+- what context to use
+- what constraints to respect
+- what output format to produce
+- what examples define the desired behavior
+- what to do when information is missing
 
-If the prompt embeds $K$ solved examples followed by an unsolved one, the conditional becomes
+It cannot guarantee correctness. Reliability comes from prompts **plus**
+appropriate context, tools, validation, and evaluation.
 
-$$
-p_\theta(y\mid x, D_{1{:}K}) \quad\text{with}\quad D_i=(x_i,y_i).
-$$
+## In-Context Learning
 
-Here the demonstrations $D_{1{:}K}$ act like a mini-training set that exists only inside the model’s temporary memory. When $K=0$ we speak of *zero-shot*, with $K=1$ we have *one-shot*, and any larger $K$ yields *few-shot* prompting.
+During ordinary inference, the model's weights stay fixed. The model conditions
+its next-token predictions on the tokens already present in the context.
 
-```
-┌────────────── Sliding Window ──────────────┐
-|  D₁  |  D₂  | … |  D_K  |  Query x |  ▢    |
-└─────────────────────────────────────────────┘
-```
-
-The empty square marks the place where the model must supply the answer $y$.
-
-### Why Examples Help
-
-Each demonstration biases the hidden representation toward functions that map inputs to outputs in the observed manner. A helpful metaphor is a musician asked to improvise: hearing a quick riff in the target style nudges her performance far more than abstract instructions alone.
-
-## Prompt Patterns and Styles
-
-### Zero-Shot Instructions
-
-A crisp task description plus a clear output placeholder often suffices for routine translations or classifications. Because no examples are provided, the prompt relies on knowledge distilled during pre-training.
-
-### One-Shot Guidance
-
-A single example teaches the format. Picture a child shown one “2+2=4” card before solving “3+3=?”. The brain instantly grasps the pattern; the language model exhibits similar generalization.
-
-### Few-Shot Scaffolding
-
-Multiple demonstrations let the prompt cover edge cases and rare vocab. Empirically, performance rises roughly as $\mathcal{O}(1-\exp(-K))$ until saturation, echoing classic learning-curve theory.
-
-## Chain-of-Thought Reasoning
-
-Long prompts can also request that the model *explain its work*. Suppose the question involves arithmetic:
-
-> “Sam buys two packs of balls; each pack has three balls. He already had three. How many now?”
-
-Including the phrase *“Let’s think step by step”* encourages the network to emit intermediate statements such as
-
-1. “Each pack contains 3 balls.”
-2. “Two packs therefore add 6 balls.”
-3. “Total is 3 + 6 = 9.”
-
-Mathematically, we factor the joint probability over latent reasoning tokens $r_{1{:}m}$:
+For an autoregressive language model:
 
 $$
-p_\theta(y\mid x) = \sum_{r_{1{:}m}} p_\theta(y\mid r_{1{:}m},x)\,p_\theta(r_{1{:}m}\mid x).
+p_\theta(x_{t+1} \mid x_{1:t})
 $$
 
-By asking for the chain itself we force the model to sample a high-probability trajectory through the latent space rather than marginalizing it away.
+Changing the prompt changes the context the model conditions on; it does not
+perform a gradient update.
 
-```
-Question ──► [ think ]──►  r₁, r₂, … r_m  ──► Answer
-                ↑                           ↓
-        ASCII rail tracks mark the reasoning path
+This is the basic setting for zero-shot, one-shot, and few-shot prompting.
+
+## Zero-, One-, and Few-Shot Prompting
+
+### Zero-shot
+
+Give the task and constraints without demonstrations.
+
+```text
+Classify the support ticket as billing, technical, or account.
+Return only the category.
+
+Ticket:
+I was charged twice for the same invoice.
 ```
 
-##  Least-to-Most Decomposition
+### One-shot
 
-Certain prompts instruct the model to solve a hierarchy of increasingly difficult sub-questions, reusing each answer to tackle the next. The structure resembles dynamic programming where early, cheap computations cache information for later expensive steps. If $s_i$ is the state after subproblem $i$, the policy is
+Add one example, often to demonstrate format.
 
-$$
-s_{i+1} = f_\theta(s_i,\,\text{subtask}_{i+1}),
-$$
+```text
+Classify the ticket.
 
-with $s_0$ derived from the original question. Evidence suggests this staged strategy reduces hallucinations because the network can condition on concrete partial results instead of juggling everything in hidden activations.
+Example:
+Input: I forgot my password.
+Output: account
 
-## Practical Crafting Tips
+Input: I was charged twice for the same invoice.
+Output:
+```
 
-* Reserve special delimiters such as `"""` or XML tags to fence off user instructions from model completions; clear boundaries lower the risk of bleed-through.
-* Keep demonstrations stylistically homogenous; abrupt style shifts confuse token-level statistics.
-* Place the most relevant example closest to the query token since attention decays roughly as $1/\sqrt{d_k}$ with distance when scaled dot-product is used.
-* Monitor latency: longer prompts inflate the quadratic cost $O(n^2)$ of self-attention.
+### Few-shot
 
-## Common Pitfalls to Dodge1
+Add several examples when the task has subtle boundaries, unusual labels, or
+formatting conventions.
 
-Large shots can overfit the local pattern, causing rigid parroting that ignores nuanced instructions. Conversely, overly generic prompts may trigger the model’s default biases, reviving stereotypes or irrelevant trivia. Striking a balance is part art, part iterative testing.
+More examples are **not automatically better**. Demonstrations consume context
+and can introduce bias, contradictions, or accidental patterns. The right
+number and ordering should be tested on representative cases.
 
-## Wrapping Up
+## Why Examples Help
 
-Prompt engineering turns raw language models into adaptable tools by manipulating **context** rather than **weights**. Whether you rely on zero-shot efficiency, few-shot clarity, chain-of-thought transparency, or least-to-most rigor, the core principle is the same: craft the textual prefix so that the conditional probability mass flows toward desired outcomes. Like composing a good question to a seasoned expert, the better the prompt, the richer—and safer—the answer you will receive.
+Examples can communicate things that are awkward to specify in prose:
+
+- label boundaries
+- tone
+- output structure
+- edge-case behavior
+- how much detail is expected
+
+They work best when they are representative and internally consistent.
+
+Avoid inferring a universal mathematical learning curve from the number of
+examples. Few-shot performance is task- and model-dependent.
+
+## Structure Before Clever Phrasing
+
+A reliable prompt usually separates four concerns:
+
+```text
+Task:
+[what to do]
+
+Context:
+[the information to use]
+
+Constraints:
+[what must or must not happen]
+
+Output:
+[the required shape]
+```
+
+Clear Markdown headings, XML-like tags, or other delimiters can make boundaries
+easier for a model to interpret.
+
+They are **not a security boundary**. Untrusted text inside delimiters can still
+contain adversarial instructions, so prompt injection must be addressed with
+tool permissions, data-flow controls, validation, and application-level
+guardrails.
+
+## Output Contracts
+
+If another system will consume the response, specify the contract explicitly.
+
+```text
+Return JSON only.
+
+Schema:
+{
+  "priority": "low | medium | high",
+  "reason": "short string",
+  "needs_human_review": true | false
+}
+```
+
+Then validate the result in code. Do not rely on prompt wording as a substitute
+for parsing and validation.
+
+## Decomposition
+
+For complex work, break one vague request into observable stages.
+
+Instead of:
+
+```text
+Analyze this incident and fix everything.
+```
+
+prefer:
+
+```text
+1. Extract confirmed facts from the incident log.
+2. List unresolved questions.
+3. Identify the smallest plausible root-cause hypotheses.
+4. Propose tests that distinguish those hypotheses.
+5. Recommend a fix only after the evidence supports one.
+```
+
+This makes failures easier to inspect and lets tools or humans validate
+intermediate artifacts.
+
+## Reasoning and Explanations
+
+Prompts can ask for a concise rationale, a derivation, a checklist, or a
+verification step when those outputs are useful to the user.
+
+Do not assume that a generated explanation is a faithful transcript of a
+model's internal reasoning. Treat it as another output to evaluate.
+
+For many tasks, a better pattern is:
+
+```text
+Return:
+1. the answer
+2. the key assumptions
+3. the evidence or calculation needed to verify it
+```
+
+For arithmetic, code, or data work, external calculation and tests are usually
+more reliable than asking for longer prose reasoning.
+
+## Context Quality
+
+More context can help, but irrelevant context can also distract the model.
+
+Prefer context that is:
+
+- necessary for the task
+- authoritative
+- clearly labeled
+- free of duplicated or conflicting instructions
+- small enough that important details remain easy to locate
+
+For retrieval workflows, measure whether the correct evidence was retrieved
+before blaming the generation prompt.
+
+## Position and Long Context
+
+Models can be sensitive to where information appears in a long prompt, but
+there is no universal rule that attention simply decays with token distance.
+
+Important requirements should be easy to find, and long-context behavior should
+be tested on the target model and workload.
+
+Standard dense self-attention has quadratic compute and memory cost in sequence
+length, although many modern systems use optimizations or different attention
+patterns.
+
+## Prompt Development Workflow
+
+1. Define the task and a small evaluation set.
+2. Write the simplest prompt that could work.
+3. Run it on typical and difficult examples.
+4. Classify failures: missing context, ambiguous instruction, format failure,
+   factual error, tool failure, or model limitation.
+5. Change one thing at a time.
+6. Re-run the same examples to detect regressions.
+7. Keep the prompt only if the measured result improves.
+
+This is more reliable than repeatedly adding instructions until the prompt looks
+impressive.
+
+## Common Failure Modes
+
+### Vague success criteria
+
+```text
+Make this better.
+```
+
+Better:
+
+```text
+Rewrite this for a non-technical audience.
+Keep all factual claims.
+Use at most 150 words.
+```
+
+### Conflicting instructions
+
+A prompt that simultaneously requests "be exhaustive" and "answer in one
+sentence" forces the model to guess which constraint matters more.
+
+### Overfitted examples
+
+A few demonstrations can accidentally teach irrelevant wording or ordering.
+Vary examples and test held-out cases.
+
+### Unsupported current facts
+
+If the task depends on current prices, product behavior, people, laws, or
+versions, retrieve or provide current sources instead of expecting prompt
+engineering to repair stale model knowledge.
+
+### Treating format as correctness
+
+Perfect JSON can still contain a wrong answer. Validate both structure and
+substance.
+
+## A Reusable Template
+
+```text
+Objective:
+[what outcome is needed]
+
+Inputs:
+[authoritative context]
+
+Constraints:
+- [constraint]
+- [constraint]
+
+When information is missing:
+[state whether to ask, abstain, or make an explicitly labeled assumption]
+
+Output:
+[format/schema]
+
+Quality checks:
+- [observable requirement]
+- [observable requirement]
+```
+
+## Key Takeaways
+
+- Prompt engineering is interface design, not incantation.
+- Examples are useful when they clarify behavior, but more is not always better.
+- Generated explanations are outputs, not guaranteed access to internal
+  reasoning.
+- Delimiters improve structure but do not solve prompt injection.
+- Complex tasks benefit from decomposition and observable checks.
+- Evaluate prompts on representative cases and keep regression tests.
+
+## References
+
+- Brown et al. (2020), *Language Models are Few-Shot Learners*:
+  https://arxiv.org/abs/2005.14165
+- Wei et al. (2022), *Chain-of-Thought Prompting Elicits Reasoning in Large
+  Language Models*: https://arxiv.org/abs/2201.11903
+- Zhou et al. (2022), *Least-to-Most Prompting Enables Complex Reasoning in
+  Large Language Models*: https://arxiv.org/abs/2205.10625

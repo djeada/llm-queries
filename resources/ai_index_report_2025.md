@@ -1,5 +1,8 @@
 # Stanford HAI AI Index Report 2025
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 Comprehensive 456-page analysis by Stanford University’s Human-Centered AI Institute
 Link: [AI Index Report 2025](https://hai-production.s3.amazonaws.com/files/hai_ai_index_report_2025.pdf)
 

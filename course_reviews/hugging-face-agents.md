@@ -1,5 +1,8 @@
 # Hugging Face Agents Course
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A practical course on building AI agents using the Hugging Face ecosystem, covering tool use, planning, and multi-agent systems.
 
 ## Course Link

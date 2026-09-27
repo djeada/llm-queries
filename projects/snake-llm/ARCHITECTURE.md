@@ -1,5 +1,8 @@
 # Snake LLM Controller Architecture
 
+> **Status:** experimental
+
+
 This Snake tool keeps the existing canvas game UI and adds an optional local LLM controller behind the scenes. Human play still works without Ollama or the proxy server.
 
 ## Runtime Components
@@ -13,7 +16,7 @@ flowchart LR
     Validator["Local safety layer\nlegal moves + fallback"]
     Proxy["snake_llm_proxy.js\nlocalhost:8787"]
     Ollama["Ollama\nlocalhost:11434"]
-    Model["qwen2.5:1.5b\nor SNAKE_LLM_MODEL"]
+    Model["qwen3:0.6b\nor SNAKE_LLM_MODEL"]
 
     Browser --> UI
     UI --> Game
@@ -159,7 +162,7 @@ The proxy uses:
 
 - `SNAKE_LLM_PORT`, default `8787`
 - `OLLAMA_URL`, default `http://localhost:11434/api/chat`
-- `SNAKE_LLM_MODEL`, default `qwen2.5:1.5b`
+- `SNAKE_LLM_MODEL`, default `qwen3:0.6b`
 - `SNAKE_LLM_TIMEOUT_MS`, default `8000`
 
 ## Local Setup
@@ -167,7 +170,7 @@ The proxy uses:
 Install the default model:
 
 ```bash
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:0.6b
 ```
 
 Start the proxy from this directory:
@@ -206,4 +209,4 @@ snake_llm_proxy.js  Local HTTP proxy from browser to Ollama
 - The LLM is advisory. It never bypasses local collision and legal-move validation.
 - The fallback runs every tick, including while the previous LLM request is still pending.
 - The proxy adds `candidateMoves` so lightweight models do less coordinate reasoning.
-- `qwen2.5:1.5b` is the current default because it returned useful JSON decisions in testing.
+- `qwen3:0.6b` is the current default because it returned useful JSON decisions in testing.

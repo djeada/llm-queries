@@ -2,13 +2,13 @@ SHELL := /bin/bash
 
 -include .env
 
-MODEL ?= qwen2.5:1.5b
+MODEL ?= qwen3:0.6b
 PORT ?= 8000
 PROXY_PORT ?= 8787
 OLLAMA_URL ?= http://localhost:11434/api/chat
 TIMEOUT_MS ?= 8000
 
-.PHONY: help install-model models set-model proxy serve run restart test stop status
+.PHONY: help install-model models set-model proxy serve run restart test check stop status
 
 help:
 	@echo "Snake LLM targets:"
@@ -20,6 +20,7 @@ help:
 	@echo "  make run             Start proxy and web server in the background"
 	@echo "  make restart         Stop and start with the current model/settings"
 	@echo "  make test            Send a sample decision request to the proxy"
+	@echo "  make check           Run dependency-free project smoke tests"
 	@echo "  make status          Show background processes started by make run"
 	@echo "  make stop            Stop background proxy/web server started by make run"
 	@echo ""
@@ -35,7 +36,7 @@ models:
 
 set-model:
 	@if [[ -z "$(MODEL)" ]]; then \
-		echo "Usage: make set-model MODEL=qwen2.5:1.5b"; \
+		echo "Usage: make set-model MODEL=qwen3:0.6b"; \
 		exit 1; \
 	fi
 	@{ \
@@ -87,6 +88,11 @@ test:
 		-H 'Content-Type: application/json' \
 		--data '{"gridSize":20,"head":{"x":10,"y":10},"snake":[{"x":10,"y":10}],"direction":"right","food":{"x":14,"y":10},"obstacles":[],"score":0,"level":1,"legalMoves":["up","down","right"]}' \
 		&& echo
+
+check:
+	node --check app.js
+	node --check snake_llm_proxy.js
+	node test_proxy.js
 
 status:
 	@if [[ -f .run/proxy.pid ]] && kill -0 "$$(cat .run/proxy.pid)" 2>/dev/null; then \

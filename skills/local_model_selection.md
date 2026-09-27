@@ -1,103 +1,193 @@
 # Local Model Selection
 
-Use this prompt to choose between local models, hosted APIs, or a hybrid setup.
-It is designed for practical constraints: hardware, privacy, latency, quality,
-cost, offline use, and maintenance effort.
+Use this workflow to decide whether a task should run locally, through a hosted
+API, or through a hybrid setup. It deliberately avoids naming a "best" current
+model; the output is a shortlist and a benchmark plan tied to the actual task.
 
-## Best For
+## Best for
 
-- Deciding whether to run a model locally.
-- Selecting model size and quantization class for available hardware.
-- Comparing local inference against API use.
-- Planning private, offline, or low-cost LLM workflows.
-- Defining a test before committing to a model.
+- deciding whether local inference is worth operating
+- choosing a model-size and quantization range for available hardware
+- comparing local and hosted inference on the same task
+- documenting a reproducible model decision
+- avoiding benchmark-driven selection that ignores latency or memory
 
-## Required Input
+## Required input
 
-- Task and quality requirements.
-- Hardware: CPU, RAM, GPU, VRAM, storage, OS.
-- Privacy, offline, latency, and cost constraints.
-- Expected usage volume.
-- Candidate models or tools, if already known.
+- representative task examples
+- minimum acceptable output quality
+- CPU, RAM, GPU, VRAM, storage, and OS
+- privacy and offline requirements
+- latency / throughput target
+- expected request or token volume
+- budget and maintenance tolerance
+- candidate runtimes or models, if already known
+
+## Decision procedure
+
+### 1. Turn requirements into gates
+
+Separate hard requirements from preferences.
+
+Examples of hard gates:
+
+- data must not leave the machine
+- must work offline
+- p95 latency must stay below a stated threshold
+- context must fit a stated workload
+- output must satisfy a schema
+- model plus runtime must fit available memory
+
+Anything that fails a hard gate is not a candidate, regardless of benchmark
+score.
+
+### 2. Define the workload before the model
+
+Create a small evaluation set from real work. A useful starting point is 10–30
+examples covering:
+
+- typical requests
+- difficult but valid requests
+- long-context cases
+- malformed or ambiguous input
+- cases where abstention is preferable to guessing
+
+Record expected observable behavior rather than hidden reasoning.
+
+### 3. Estimate the hardware envelope
+
+Use parameter count and quantization only as a lower-bound sizing heuristic:
+
+```text
+weight_bytes ≈ parameter_count × bits_per_weight / 8
+```
+
+Real memory use also includes runtime overhead, KV cache, context length,
+architecture-specific buffers, batching, and CPU/GPU offload.
+
+Do not reject or approve a model from parameter count alone. Measure it.
+
+### 4. Build a small candidate set
+
+Shortlist by capability class, not popularity:
+
+- general instruction following
+- coding / repository work
+- structured output
+- long-context synthesis
+- multilingual work
+- multimodal work
+- embeddings / retrieval
+
+For current model names, tags, licenses, context limits, and tool support, verify
+the runtime registry and primary model documentation at evaluation time.
+
+### 5. Run the same evaluation for every candidate
+
+Record at least:
+
+```text
+model identifier:
+runtime + version:
+quantization:
+context setting:
+hardware:
+evaluation-set commit:
+quality score:
+task success rate:
+schema / format failure rate:
+time to first token:
+generation throughput:
+peak RAM:
+peak VRAM:
+errors / retries:
+```
+
+Do not compare latency or memory numbers collected under different context,
+quantization, or hardware settings as though they were equivalent.
+
+### 6. Decide on the Pareto frontier
+
+A candidate is interesting when another candidate does not clearly beat it on
+all dimensions that matter.
+
+Typical tradeoffs:
+
+- quality vs latency
+- quality vs memory
+- privacy vs operational burden
+- API cost vs local hardware cost
+- context length vs throughput
+- tool reliability vs raw model quality
+
+The final choice should explain which tradeoff is being accepted.
 
 ## Prompt
 
 ```text
-Act as a practical LLM deployment advisor.
+Act as an LLM deployment evaluator.
 
-Help me choose a model and deployment approach for this task. Prioritize fit to
-requirements over benchmark hype.
+I need to choose among local inference, a hosted API, or a hybrid setup.
 
 Task:
 """
-[WHAT THE MODEL MUST DO]
+[WHAT THE SYSTEM MUST DO]
 """
 
-Quality requirements:
+Representative examples:
 """
-[ACCURACY, REASONING, CODING, WRITING, MULTILINGUAL, CONTEXT LENGTH, TOOL USE, ETC.]
-"""
-
-Hardware and environment:
-"""
-[CPU, RAM, GPU, VRAM, STORAGE, OS, OLLAMA/LLAMA.CPP/OTHER TOOLS]
+[PASTE REAL TASK EXAMPLES]
 """
 
-Constraints:
-- Privacy: [LOW / MEDIUM / HIGH]
-- Offline required: [YES/NO]
-- Latency target: [TARGET]
-- Budget: [BUDGET]
-- Expected usage: [REQUESTS PER DAY OR TOKENS]
-- Maintenance tolerance: [LOW / MEDIUM / HIGH]
+Hard requirements:
+"""
+[PRIVACY, OFFLINE, QUALITY FLOOR, CONTEXT, LATENCY, FORMAT, ETC.]
+"""
 
-Candidate models or services:
+Hardware:
+"""
+[CPU, RAM, GPU, VRAM, STORAGE, OS]
+"""
+
+Operating constraints:
+- expected volume: [REQUESTS/TOKENS]
+- budget: [LIMIT]
+- maintenance tolerance: [LOW/MEDIUM/HIGH]
+- allowed runtimes/services: [OPTIONAL]
+
+Candidate models/services:
 """
 [OPTIONAL SHORTLIST]
 """
 
 Return:
-1. Recommended approach: local, API, or hybrid.
-2. Model class to test first, including size and quantization guidance.
-3. Why this fits the task and constraints.
-4. What not to use and why.
-5. A small benchmark plan using my real task examples.
-6. Deployment risks and mitigations.
-7. Questions that require current model documentation or live verification.
+1. Hard requirement gates and how each candidate should be tested against them.
+2. A small candidate set or model classes worth testing first.
+3. A benchmark plan using the representative examples.
+4. Measurements to capture for quality, latency, memory, reliability, and cost.
+5. A comparison table template; do not fill unknown values with guesses.
+6. Risks, confounders, and current facts that require primary-source verification.
+7. A decision rule for choosing among the measured results.
 
 Rules:
-- Do not claim a model is currently best unless current sources are provided.
-- Prefer testing on real examples over relying on generic benchmarks.
-- Be explicit about hardware uncertainty.
-- Separate must-have requirements from nice-to-have requirements.
+- Do not declare a current "best model" from memory.
+- Treat parameter-count memory estimates as lower bounds, not guarantees.
+- Keep model quality and runtime quality separate.
+- Compare candidates under equivalent settings when possible.
+- Prefer measured task success over generic leaderboard scores.
 ```
 
-## Follow-Up: Benchmark Results
+## Result review
 
-```text
-Analyze these model benchmark results.
+A defensible model-selection result should make it possible for another person
+to answer:
 
-Task examples, outputs, latency, and resource usage:
-"""
-[PASTE RESULTS]
-"""
+- What exact workload was tested?
+- What exact model/runtime/configuration was tested?
+- Which hard requirements were applied?
+- Which outputs counted as success?
+- What did latency and memory measurements include?
+- Which current facts were verified from primary sources?
+- Why was the selected tradeoff acceptable?
 
-Constraints:
-"""
-[QUALITY THRESHOLD, LATENCY TARGET, PRIVACY NEEDS, COST LIMIT]
-"""
-
-Return:
-1. Which model is best for this specific task.
-2. Tradeoffs by quality, speed, cost, and operational complexity.
-3. Failure cases each model still has.
-4. Recommendation for production, prototype, or rejection.
-5. Next test to run before deciding.
-```
-
-## Review Checklist
-
-- Recommendation is tied to the task and hardware.
-- Current-product claims are marked for verification.
-- The benchmark plan uses real user examples.
-- The decision includes quality, latency, privacy, and maintenance tradeoffs.
+If those questions cannot be answered, the model choice is not reproducible.

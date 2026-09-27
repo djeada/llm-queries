@@ -386,13 +386,16 @@ For each token, the model creates three vectors:
 * Key: (k)
 * Value: (v)
 
-The attention score between a query and a key is often computed using a dot product:
+In scaled dot-product attention, the score between a query and key is divided by
+the square root of the key dimension:
 
-$$
-\text{score}(q, k) = q \cdot k
-$$
+$
+\text{score}(q, k) = \frac{q \cdot k}{\sqrt{d_k}}
+$
 
-Then the scores are passed through a softmax function to get attention weights:
+The scaling keeps dot products from growing too large as the vector dimension
+increases. The scores are then passed through a softmax function to get
+attention weights:
 
 $$
 \text{softmax}(s_i) = \frac{e^{s_i}}{\sum_j e^{s_j}}

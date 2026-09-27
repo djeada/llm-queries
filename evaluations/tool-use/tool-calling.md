@@ -1,3 +1,10 @@
+# Tool-Calling Capability Checks
+
+> **Status:** experimental
+
+
+A compact set of observable tasks for exercising tool selection, current-data lookup, connected apps, artifacts, and automation.
+
 ### 1. Current information / news search
 
 > “Search the web and summarize the latest major developments in AI regulation in the EU. Use at least 3 reliable sources and include links.”

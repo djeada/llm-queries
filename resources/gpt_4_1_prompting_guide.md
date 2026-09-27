@@ -1,5 +1,8 @@
 # GPT-4.1 Prompting Guide
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 OpenAI Cookbook example, Apr 14, 2025
 Source: [GPT-4.1 Prompting Guide](https://cookbook.openai.com/examples/gpt4-1_prompting_guide)
 

@@ -1,240 +1,322 @@
 # Token Embeddings
 
-Token embeddings are the foundation of how neural language models process text. They transform discrete symbols (words, subwords, characters) into continuous vector representations that neural networks can manipulate.
+Token embeddings convert discrete token IDs into vectors that a neural network
+can process.
 
-## Why Embeddings?
+They are one stage in a language model's representation pipeline. The raw
+lookup vector for a token is not the same thing as the token's final,
+context-dependent representation after transformer layers.
 
-Neural networks operate on numbers, not text. Embeddings solve the representation problem:
+## From Text to Token IDs
 
-**The challenge**: How do you represent "cat" in a way that captures:
-- Its similarity to "dog" (both are pets)
-- Its difference from "car" (different category)
-- Its relationship to "kitten" (same species, different age)
+A tokenizer maps text to a sequence of token IDs.
 
-**The solution**: Map each token to a point in high-dimensional space where distance reflects semantic relationships.
-
-## From Tokens to Vectors
-
-### Tokenization First
-
-Before embedding, text is split into tokens:
-
-```
-"The cat sat on the mat"
-    ↓ tokenization
-["The", " cat", " sat", " on", " the", " mat"]
-    ↓ token IDs
-[464, 3797, 3332, 319, 262, 2603]
+```text
+"The cat sat."
+     ↓ tokenizer
+[token_17, token_204, token_991, token_4]
+     ↓ IDs
+[17, 204, 991, 4]
 ```
 
-Modern models use subword tokenization (BPE, SentencePiece) to handle rare words:
+The exact token boundaries and IDs depend on the tokenizer.
 
-```
-"unbelievably" → ["un", "believ", "ably"]
-```
+Common tokenizer families include byte-pair encoding and unigram /
+SentencePiece-style tokenization. Different models can tokenize the same text
+differently.
 
-### The Embedding Matrix
+## The Embedding Lookup
 
-The embedding layer is a learned lookup table:
+Let the vocabulary size be $V$ and model width be $d$.
+
+The learned token-embedding matrix can be written as:
 
 $$
-E = W_e[token\_id]
+W_E \in \mathbb{R}^{V \times d}
 $$
 
-Where:
-- $W_e$ is the embedding matrix with shape `(vocab_size, embedding_dim)`
-- Typical dimensions: 768 (BERT), 4096 (GPT-3), 12288 (GPT-4)
-
-```
-Vocabulary: [cat, dog, car, ...]  (50,000+ entries)
-                ↓
-Embedding Matrix: 50,000 × 768
-                ↓
-"cat" → [0.12, -0.34, 0.56, ..., 0.89]  (768 numbers)
-```
-
-## Static vs. Contextual Embeddings
-
-### Static Embeddings (Word2Vec, GloVe)
-
-Each word has one fixed vector, regardless of context:
-
-```
-"I went to the bank to deposit money"
-"I sat on the river bank"
-         ↓
-"bank" → same vector in both sentences ❌
-```
-
-### Contextual Embeddings (Transformers)
-
-The same token gets different representations based on surrounding words:
-
-```
-"I went to the bank to deposit money"
-"bank" → [0.12, -0.34, ...] (financial meaning)
-
-"I sat on the river bank"
-"bank" → [0.45, 0.23, ...]  (geographical meaning)
-```
-
-This is achieved by processing all tokens together through attention layers.
-
-## How Embeddings Capture Meaning
-
-### Semantic Similarity
-
-Similar concepts cluster together in embedding space:
-
-```
-                    "royalty"
-                       ↑
-"king" ←-------- "queen" --------→ "prince"
-   ↓                                   ↓
-"man" ←------ distance --------→ "woman"
-```
-
-### Analogies as Vector Arithmetic
-
-The famous Word2Vec result:
+For token ID $i$, the initial embedding is the corresponding row:
 
 $$
-\vec{king} - \vec{man} + \vec{woman} \approx \vec{queen}
+e_i = W_E[i]
 $$
 
-This works because the embedding space encodes relationships consistently.
+This is effectively a learned lookup table.
 
-### Visualization
-
-Embeddings can be projected to 2D/3D for visualization using t-SNE or UMAP:
-
-```
-         ↑
-     "cat" • • "dog"
-           •
-         "pet"
-         
-    "car" • • "truck"
-           •
-       "vehicle"
-         ↓
+```text
+token ID
+   │
+   ▼
+┌────────────────────────────┐
+│ token embedding matrix W_E │
+└────────────────────────────┘
+   │
+   ▼
+d-dimensional vector
 ```
 
-## The Embedding Process in Transformers
+The embedding dimension is an architectural choice. It should not be inferred
+from a product name unless the architecture is publicly documented.
 
-### Input Processing
+## Input Embeddings vs Contextual Representations
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  Input Text: "The cat sat"                               │
-└──────────────────────────┬──────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  Tokenizer: [464, 3797, 3332]                           │
-└──────────────────────────┬──────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  Token Embeddings: Look up each ID in W_e               │
-│  → [[0.1, -0.2, ...], [0.3, 0.1, ...], [0.2, -0.1, ...]]│
-└──────────────────────────┬──────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  Position Embeddings: Add position information          │
-│  → Token embedding + Position embedding                 │
-└──────────────────────────┬──────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  Transformer Layers: Contextualize through attention    │
-└─────────────────────────────────────────────────────────┘
+This distinction is important.
+
+### Input embedding
+
+Before the transformer processes context, a token ID maps to an initial vector.
+
+The same token ID receives the same lookup vector from $W_E$.
+
+### Contextual representation
+
+After attention and feed-forward layers, the representation depends on the
+surrounding sequence.
+
+For example, the token corresponding to "bank" can participate in different
+contextual states in:
+
+```text
+I deposited money at the bank.
+We sat on the river bank.
 ```
 
-### Position Embeddings
+The contextual difference is produced by the network processing the sequence,
+not by changing the underlying token ID.
 
-Since attention is permutation-invariant, position must be injected:
+## Position Information
 
-**Sinusoidal (original Transformer)**:
-$$
-PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d})
-$$
-$$
-PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d})
-$$
+Attention alone does not encode token order, so transformer architectures add or
+incorporate positional information.
 
-**Learned** (BERT, GPT): Train position embeddings like token embeddings
+Common approaches include:
 
-**Rotary (RoPE)**: Encode position in the attention mechanism itself
+- learned absolute position embeddings
+- sinusoidal position encodings
+- rotary position embeddings (RoPE)
+- relative-position biases or related mechanisms
 
-## Embedding Models for Applications
+The exact mechanism is architecture-specific.
 
-### Sentence Embeddings
+It is therefore safer to say:
 
-For search and similarity, you often want to embed entire sentences:
-
-| Model | Dimensions | Use Case |
-|-------|------------|----------|
-| text-embedding-3-small | 1536 | OpenAI, balanced |
-| text-embedding-3-large | 3072 | OpenAI, high quality |
-| all-MiniLM-L6-v2 | 384 | Open source, fast |
-| e5-large-v2 | 1024 | Open source, high quality |
-| bge-large-en-v1.5 | 1024 | Open source, multilingual |
-
-### Computing Similarity
-
-Common metrics for comparing embeddings:
-
-**Cosine similarity** (most common):
-$$
-\text{sim}(a, b) = \frac{a \cdot b}{\|a\| \|b\|}
-$$
-
-**Dot product** (when embeddings are normalized):
-$$
-\text{sim}(a, b) = a \cdot b
-$$
-
-## Practical Considerations
-
-### Dimension vs. Quality Trade-offs
-
-| Dimension | Memory | Speed | Quality |
-|-----------|--------|-------|---------|
-| 384 | Low | Fast | Good |
-| 768 | Medium | Medium | Better |
-| 1536+ | High | Slower | Best |
-
-### Embedding Caching
-
-Embeddings are deterministic—cache them:
-
-```python
-# Pseudo-code
-cache = {}
-def get_embedding(text):
-    if text not in cache:
-        cache[text] = model.embed(text)
-    return cache[text]
+```text
+token representation = token information + architecture-specific position information
 ```
 
-### Batch Processing
+than to assume every transformer literally adds a learned position vector.
 
-Embed multiple texts at once for efficiency:
+## Do Embeddings "Contain Meaning"?
 
-```python
-# Slow: one at a time
-embeddings = [model.embed(text) for text in texts]
+Learned vector spaces often organize useful linguistic and semantic
+relationships, but the statement needs precision.
 
-# Fast: batched
-embeddings = model.embed(texts)  # All at once
+For older static word embeddings such as Word2Vec, one word type is assigned one
+vector, and geometric relationships can directly encode useful regularities.
+
+For transformer language models:
+
+- the input embedding is only an initial representation
+- meaning is heavily shaped by later contextual processing
+- geometric distance in the raw token-embedding matrix is not automatically a
+  calibrated semantic-similarity metric
+
+For semantic search, use an embedding model specifically trained or evaluated
+for representing sentences/documents for similarity or retrieval.
+
+## Static Word Embeddings
+
+Classic systems such as Word2Vec and GloVe assign one learned vector per word.
+
+That means the vector for "bank" is the same before context is considered.
+
+A famous observation from Word2Vec-style spaces is that some relationships can
+appear approximately linear, for example:
+
+$$
+v(\text{king}) - v(\text{man}) + v(\text{woman})
+\approx v(\text{queen})
+$$
+
+This is an empirical property of some trained spaces, not a law that all
+embedding models must satisfy.
+
+## Sentence and Document Embeddings
+
+Retrieval systems usually need one vector for a larger piece of text.
+
+A text-embedding model may map:
+
+```text
+"How do I reset my password?"
 ```
+
+to:
+
+$$
+z \in \mathbb{R}^{d}
+$$
+
+The model is typically trained so that texts with useful semantic relationships
+are close under a chosen similarity measure.
+
+Different embedding models can use different vector dimensions. Higher
+dimension by itself does **not** imply higher quality.
+
+## Similarity Measures
+
+### Cosine similarity
+
+$$
+\operatorname{cos}(a,b)
+=
+\frac{a \cdot b}{\|a\|\|b\|}
+$$
+
+Cosine similarity compares direction while normalizing vector magnitude.
+
+### Dot product
+
+$$
+a \cdot b
+$$
+
+Dot product is often used when the embedding model and index are designed for
+it. If vectors are unit-normalized, dot product and cosine similarity are
+equivalent.
+
+### Distance
+
+Some systems use Euclidean or other distances.
+
+Use the metric recommended for the embedding model and evaluate it on the actual
+retrieval task.
+
+## Embeddings in Retrieval
+
+A simple semantic-retrieval pipeline looks like:
+
+```text
+documents
+   │
+   ├─ chunk / prepare text
+   │
+   ├─ embed
+   ▼
+vector index
+
+query
+   │
+   ├─ embed with compatible model
+   ▼
+nearest-neighbor search
+   │
+   ▼
+candidate documents
+   │
+   ▼
+optional reranking / filtering
+```
+
+The quality of the system depends on more than the embedding model:
+
+- document chunking
+- query formulation
+- index metric
+- metadata filtering
+- domain mismatch
+- reranking
+- evaluation data
+
+## Dimension, Memory, and Index Size
+
+If one embedding contains $d$ floating-point values, raw storage grows roughly
+linearly with $d$ and the number of vectors.
+
+For $N$ vectors stored as 32-bit floats:
+
+$$
+\text{bytes} \approx N \times d \times 4
+$$
+
+This is only the raw vector storage. Real indexes also have metadata and
+index-structure overhead.
+
+Dimension therefore affects memory and search cost, but it is not a quality
+score.
+
+## Caching
+
+If the same embedding model, model version, preprocessing, and input text are
+used repeatedly, caching can avoid redundant work.
+
+A robust cache key should include more than the text:
+
+```text
+(model identifier, model version, preprocessing version, input text)
+```
+
+This avoids silently reusing old vectors after changing the embedding model or
+normalization pipeline.
+
+## Batch Processing
+
+Many embedding runtimes can process multiple texts per request or batch.
+
+Batching can improve throughput, but the ideal batch size depends on:
+
+- runtime
+- hardware
+- sequence lengths
+- memory limits
+- latency requirements
+
+Measure it instead of assuming that the largest batch is best.
+
+## How to Evaluate an Embedding Model
+
+Do not select an embedding model from vector dimension or a generic leaderboard
+alone.
+
+Build a task-specific evaluation set:
+
+1. collect representative queries
+2. label relevant documents or pairs
+3. run retrieval with each candidate
+4. measure metrics such as recall@k, precision@k, MRR, or nDCG as appropriate
+5. inspect important failure cases
+6. record latency, index size, and operational constraints
+
+For RAG, retrieval quality should be measured separately from generation
+quality.
+
+## Common Misconceptions
+
+### "The nearest token vectors must have similar meanings"
+
+Not necessarily. Raw language-model token embeddings are not guaranteed to be a
+semantic-search space.
+
+### "More dimensions means better embeddings"
+
+No. Dimension is an architecture and storage tradeoff. Quality is empirical.
+
+### "The same word has one embedding in a transformer"
+
+Its initial token lookup is fixed for the token ID, but later hidden states are
+context-dependent.
+
+### "Embeddings are always deterministic"
+
+Do not assume this as a universal API guarantee. Treat determinism as something
+to verify for the specific model/runtime and version.
 
 ## Key Takeaways
 
-1. Embeddings convert discrete tokens to continuous vectors
-2. Modern embeddings are contextual—same word, different meanings
-3. Semantic similarity maps to vector distance
-4. Choose embedding models based on your quality/speed trade-offs
-5. Cache and batch embeddings for efficiency
+- Token IDs are mapped to learned input vectors.
+- Transformer layers turn those inputs into contextual representations.
+- Position handling is architecture-specific.
+- Semantic-search embeddings should be selected for the retrieval task.
+- Vector dimension affects storage and compute, not guaranteed quality.
+- Evaluate embeddings with labeled retrieval examples and record the exact
+  model/configuration used.

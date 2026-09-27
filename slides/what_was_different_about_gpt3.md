@@ -1,124 +1,148 @@
 # What Was Different About GPT-3?
 
-When OpenAI introduced GPT-3 in mid-2020, most observers focused on its eye-popping 175 billion parameters—a leap of two orders of magnitude over GPT-2. Size alone, however, is only half the story. The project also refined data curation, training strategies, and evaluation methods in ways that turned a bigger network into a more broadly capable one. This overview explains the key departures that made GPT-3 feel qualitatively different rather than merely larger.
+> **Status:** historical · **Fact-checked:** 2026-09-27  
+> Primary source: Brown et al., *Language Models are Few-Shot Learners* (2020):  
+> https://arxiv.org/abs/2005.14165
 
-## Scaling With Discipline
+GPT-3 mattered less because it introduced a radically new transformer and more
+because it showed how far a mostly familiar autoregressive architecture could
+be pushed through scale, data, and in-context evaluation.
 
-### Why 175 Billion?
+This note describes the 2020 GPT-3 paper, not current OpenAI models.
 
-Empirical *scaling laws* suggested that loss falls predictably as model size $N$, dataset tokens $D$, and compute $C$ increase following power-law curves of the form
+## Scale
 
-$$
-\mathcal{L}(N, D) \approx a\,N^{-\alpha} + b\,D^{-\beta} + \varepsilon
-$$
+The largest GPT-3 model had:
 
-with exponents $\alpha,\beta \approx 0.07\!-\!0.095$. Engineers targeted a regime where returns were still significant and hardware could keep up. Doubling parameters without matching data would cause overfitting, so the Common Crawl corpus was aggressively filtered to roughly 500 billion tokens, complemented by books, Wikipedia, and code.
+| Property | GPT-3 175B |
+| --- | ---: |
+| Parameters | 175B |
+| Transformer layers | 96 |
+| Model width | 12,288 |
+| Attention heads | 96 |
+| Head dimension | 128 |
+| Context window | 2,048 tokens |
 
-### Memory Tricks
+The paper trained eight model sizes from 125M to 175B parameters so the authors
+could examine how language-model loss and downstream task performance changed
+with scale.
 
-Training required sharding both weights and activations across hundreds of GPUs. Techniques such as model parallelism, gradient checkpointing, and mixed-precision arithmetic cut memory footprints enough to sustain long sequences of 2 048 tokens at batch sizes that kept the GPUs busy.
+All of the reported GPT-3 models were trained for 300 billion tokens.
 
-```
-+---------------- Model Parallel Slice 1 -----------------+
-|  Layer 1   Layer 2   ...   Layer 96   Layer 97   Layer 98|
-+---------------------------------------------------------+
-                ░ Activations off-loaded ░
-```
+## Architecture: mostly GPT-2, not a new foundation
 
-The sketch hints at how layers were split across devices while stale activations were recomputed on the fly, trading compute for RAM.
+The GPT-3 paper explicitly says it used the same model and architecture as
+GPT-2, including GPT-2's modified initialization, pre-normalization, and
+reversible tokenization.
 
-## Objective: Still Next-Token, Yet Subtly Modernized
+The important architectural exception was attention: GPT-3 alternated dense
+attention with locally banded sparse-attention layers.
 
-GPT-3 kept the autoregressive loss
+That distinction matters. GPT-3 should not be described as introducing a new
+tokenizer family or a new positional-encoding scheme.
 
-$$
-\mathcal{L}
-= -\sum_{t=1}^{T} \log p_\theta\!\bigl(x_t \mid x_{<\,t}\bigr)
-$$
+### Tokenization
 
-but two tweaks mattered. First, Byte-Pair Encoding was replaced with SentencePiece to harmonize Unicode handling across many languages. Second, *adaptive* tokenization let the model reserve extra capacity for rare long words without exploding the vocabulary to unwieldy size.
+GPT-3 reused GPT-2's reversible byte-level BPE tokenizer. The paper later notes
+that reusing this English-oriented tokenizer may have hurt some non-English
+translation directions.
 
-Sliding-window sampling remained the backbone. Imagine the legendary Asimov sentence:
+An earlier version of this repository incorrectly claimed GPT-3 switched from
+BPE to SentencePiece and used "adaptive tokenization." Those claims were removed
+during the 2026-09-27 factual audit because they are not supported by the GPT-3
+paper.
 
-```
-Second law of robotics: a robot must obey the orders ...
-```
+## Training data
 
-During training, the window crawls one token at a time:
+The authors started from very large web corpora but did not simply train on raw
+Common Crawl.
 
-| Step | Context                           | Label   |
-| ---- | --------------------------------- | ------- |
-| 1    | `Second law of robotics:`         | `a`     |
-| 2    | `Second law of robotics: a`       | `robot` |
-| 3    | `Second law of robotics: a robot` | `must`  |
+For Common Crawl they describe three important steps:
 
-Although the mechanic is identical to GPT-2, the longer window means GPT-3 sees richer contexts, allowing it to link *robot* to *obey* in a single shot instead of across batches.
+1. filter documents based on similarity to higher-quality reference corpora
+2. perform fuzzy document-level deduplication
+3. check benchmark overlap to reduce contamination
 
-## Few-Shot, One-Shot, Zero-Shot—The In-Context Revolution
+The final mixture also included an expanded WebText dataset, two internet-based
+book corpora, and English-language Wikipedia.
 
-Earlier language models were usually fine-tuned on each downstream task. GPT-3 popularized *prompt engineering* by showing that simple textual instructions in the input could steer behavior without weight updates.
+The paper deliberately sampled higher-quality datasets more frequently than raw
+dataset size alone would imply.
 
-### Mechanism in Equations
+## The important behavioral shift: in-context learning
 
-Treat the prompt $P$ plus $k$ demonstrations $D_1,\dots,D_k$ as part of the context:
+GPT-3's headline evaluation setup was not task-specific fine-tuning.
 
-$$
-p_\theta\!\bigl(y \mid x, P, D_{1:k}\bigr) = p_\theta\!\bigl(y \mid x^{\prime}\bigr), \quad
-x^{\prime} = [P;D_{1:k};x]
-$$
+The paper compared three inference-time settings:
 
-No gradient step occurs; the network’s forward pass alone adapts by conditioning on the examples. Scaling increased the *effective capacity* of this “internal meta-learner,” letting GPT-3 infer formats and constraints on the fly.
+- **zero-shot** — natural-language task description, no demonstrations
+- **one-shot** — one demonstration in context
+- **few-shot** — several demonstrations in context
 
-### A Quick Analogy
+No gradient update occurs in these settings. The demonstrations are simply part
+of the model's input context.
 
-Reading a few solved math problems before tackling a new one primes human recall. Similarly, GPT-3 digests miniature datasets embedded in the prompt, then mimics the observed mapping. The larger the model, the more patterns it can juggle simultaneously, making shot-based learning plausible.
+This made a useful practical point: a sufficiently large pretrained language
+model could often adapt its behavior from text instructions and examples alone,
+without creating a new fine-tuned model for every task.
 
-## Architectural Nuances Beyond Sheer Width
+## What scaling improved
 
-* The residual branch used *Pre-Norm* layering (LayerNorm before the sub-layer) to stabilize very deep stacks.
-* A slightly wider *feed-forward* dimension (4 × vs. 4 096 in GPT-2) preserved channel capacity at scale.
-* *Rotary positional embeddings* did **not** appear until GPT-NeoX and GPT-J; GPT-3 stuck with sinusoidal timing but lengthened maximum positions and adjusted initialization to keep logits in range.
+The paper reports that increasing model size generally improved zero-, one-, and
+few-shot performance across a wide range of language tasks.
 
-These may seem minor, yet each combats exploding or vanishing gradients that plague huge transformers.
+Notable examples included:
 
-## Data Quality Over Quantity
+- question answering
+- translation
+- cloze / completion tasks
+- word unscrambling
+- novel-word use
+- some arithmetic tasks
+- synthetic and natural-language reasoning-style tasks
 
-Filtering heuristics eliminated boilerplate, duplicated web pages, and toxic language. A *quality score* from a smaller reference model rejected outliers whose perplexity was extreme. Unlike GPT-2, which accepted raw Common Crawl, GPT-3’s data pipeline trimmed around 30 % of crawl tokens, replacing them with cleaner book passages and academic articles. Consequently, perplexity on held-out text fell despite broader domain coverage.
+Few-shot performance was often strongest, but GPT-3 was not uniformly
+state-of-the-art and some tasks remained weak.
 
-## Emergent Behaviors and Surprises
+## What the paper did *not* prove
 
-At parameter counts above roughly 10 billion, curves that tracked code synthesis, arithmetic, and analogy tasks bent sharply downward, a phenomenon dubbed *emergence*. Performance on three-digit multiplication, for instance, crossed the random baseline only after that threshold, hinting at new internal representations not present in smaller siblings.
+GPT-3's results should not be summarized as "scale automatically creates general
+reasoning."
 
-```
-Error Rate
-100% |\
-     | \  ← small models
-     |  \      ∴ no emergence
-50%  |   \
-     |    \  ← phase transition
-     |     \
- 0%  +------+------------->
-         Parameters
-```
+The authors document important limitations:
 
-The slope illustrates how qualitative jumps can hide behind quantitative growth.
+- performance still varied greatly by task
+- some tasks remained far behind fine-tuned systems
+- the 2,048-token context window constrained long inputs
+- generated text could lose coherence or repeat itself over longer passages
+- benchmark contamination was a serious methodological concern
+- large-scale pretraining carried substantial compute cost
+- model behavior could reproduce harmful social biases
 
-## Limitations That Size Couldn’t Hide
+The paper devotes an entire section to benchmark memorization and contamination
+because large web-scale training corpora make clean evaluation difficult.
 
-* **Context length** stayed at 2 048 tokens, so lengthy legal or scientific documents still needed chunking.
-* **Compute footprint** for inference reached dozens of milliseconds per token on high-end GPUs, limiting real-time applications.
-* **Bias and toxicity** reduction improved, yet the model still mirrored problematic correlations when prompted carelessly. Mitigation demanded post-training filters and prompt design rather than architectural fixes.
+## Why GPT-3 was historically important
 
-## Downstream Impact
+GPT-3 provided strong evidence for three ideas that shaped later LLM work:
 
-GPT-3’s release galvanized research in:
+1. **Scaling could materially improve task-agnostic behavior.**
+2. **Natural-language instructions and demonstrations could act as an
+   inference-time interface.**
+3. **Evaluation methodology becomes harder as training corpora grow**, because
+   benchmark overlap and memorization are increasingly plausible.
 
-* Instruction tuning (e.g., InstructGPT, RLHF) to align raw models with human intent.
-* Retrieval-augmented generation to graft external memories onto fixed-length contexts.
-* Parameter-efficient transfer (LoRA, adapters) that lets practitioners personalize gigantic backbones without retraining them end-to-end.
+Later work built on these ideas with instruction tuning, human-feedback
+training, retrieval, tool use, longer contexts, and more deliberate evaluation.
 
-The common thread is leveraging GPT-3’s versatile foundation while curbing cost and drift.
+## Source notes
 
-## Closing Thoughts
+The core architecture, model-size, tokenizer, context-window, and training-token
+claims above come from Sections 2.1–2.3 of the original GPT-3 paper.
 
-What truly set GPT-3 apart was the synergy among disciplined scaling, meticulous data cleaning, and the rediscovery of in-context learning. Those elements combined to unlock capabilities that felt less like “better autocomplete” and more like a nascent reasoning engine. In practice, GPT-3 taught the field that sometimes the simplest objective—next-word prediction—paired with enough text and silicon can yield surprising generality, changing both research trajectories and industry roadmaps overnight.
+Useful primary sources:
+
+- OpenAI publication page: https://openai.com/index/language-models-are-few-shot-learners/
+- Paper: https://arxiv.org/abs/2005.14165
+- GPT-2 paper, for the inherited tokenizer/architecture details:
+  https://cdn.openai.com/better-language-models/language-models.pdf

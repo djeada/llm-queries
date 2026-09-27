@@ -1,3 +1,10 @@
+# Blender MCP Layered Scene Test
+
+> **Status:** experimental
+
+
+This evaluation checks whether an MCP-connected Blender workflow can build a complex scene incrementally without losing composition or introducing obvious collisions.
+
 For a fantasy scene, it's often better to give Blender MCP a **sequence of tasks** rather than one giant prompt. Build the world in layers.
 
 ### 1. Terrain & Layout

@@ -1,372 +1,135 @@
-# Simplify Vocabulary  
-Guide your LLM to replace or remove over-polished words and phrases so the text reads more naturally and human-like.
+# Simplify Vocabulary
+
+Use these prompts to make prose easier to read without applying a global word
+blacklist.
+
+A word is not "too advanced" in isolation. Whether it should be simplified
+depends on audience, context, precision, and tone.
+
+## Best for
+
+- plain-language editing
+- documentation for non-specialists
+- reducing unnecessary jargon
+- adapting expert writing to a broader audience
+- making dense prose more direct while preserving technical accuracy
 
 ## Expected output
 
-- Plain-language substitutions for flagged phrases
-- Meaning preserved without adding new claims
-- Output matches the original structure unless instructed otherwise
+- clearer wording appropriate for the target audience
+- technical terms preserved when they are necessary
+- meaning, uncertainty, and factual claims preserved
+- optional explanations for terms that should not be replaced
 
-## Base Cleanup Prompt  
+## Required input
 
-**Prompt:**  
+- source text
+- target audience
+- desired reading level or tone
+- terms that must remain exact
 
-```text
-Edit the following text to remove all occurrences of overly formal or rare words and phrases listed below. Replace them with simpler, more conversational alternatives or remove them entirely. Do not change the meaning.  
-
-Words and phrases to remove: however, By following, crucial, critical, employ, ensure, ensures, of course, essential, pivotal, key, apologies, signifies, established, navigate, performs better, improving the, paramount, Ultimately, esteemed, myriad, tapestry, meticulous, intricate, facilitating, commendable, let’s embark on a journey, in the ever-evolving, in the fast-paced, it’s not just, robust, seamless, multi-faceted, complex, ample.  
-```
-
-**Before:**  
+## Base Prompt
 
 ```text
-However, by following a meticulous process, you can employ a multi-faceted approach that ensures robust results in the ever-evolving market.
+Rewrite the text in clearer, more direct language for the audience below.
+
+Audience: [AUDIENCE]
+Target level: [PLAIN LANGUAGE / GENERAL PROFESSIONAL / TECHNICAL BEGINNER /
+INTERMEDIATE / OTHER]
+
+Terms that must remain exact:
+"""
+[OPTIONAL TERMS]
+"""
+
+Rules:
+1. Preserve meaning, facts, uncertainty, names, numbers, and constraints.
+2. Replace unnecessarily formal or abstract wording when a simpler expression
+   is equally precise.
+3. Keep technical terms when replacing them would reduce accuracy.
+4. Define an unfamiliar technical term briefly when the audience may need it.
+5. Prefer concrete verbs and nouns over nominalizations and vague abstractions.
+6. Do not remove transitions merely because they are formal.
+7. Do not invent examples, evidence, or claims.
+8. Keep the original structure unless changing it clearly improves readability.
+
+Return only the rewritten text.
+
+Text:
+"""
+[PASTE TEXT]
+"""
 ```
 
-**After (model with prompt):**  
+## Explain Before Rewriting
+
+Use this when the document contains specialist terminology and you do not want
+the model to simplify away important distinctions.
 
 ```text
-By using a simple process, you can take an approach that delivers solid results in today’s market.
+Identify vocabulary in the passage that may be difficult for [AUDIENCE].
+
+For each item, classify it as:
+- KEEP — precise term that should remain
+- DEFINE — keep the term but explain it
+- SIMPLIFY — a simpler phrase is equally accurate
+
+Give a short reason and suggested wording.
+
+Do not rewrite the passage yet.
+
+Passage:
+"""
+[PASTE TEXT]
+"""
 ```
 
-## Complete List
+## Technical Documentation Variant
 
-- However  
-- By Following  
-- Crucial  
-- Critical  
-- Employ  
-- Ensure / Ensures  
-- Of Course  
-- Essential  
-- Pivotal  
-- Key  
-- Apologies  
-- Signifies  
-- Established  
-- Navigate  
-- Performs Better  
-- Improving The  
-- Paramount  
-- Ultimately  
-- Esteemed  
-- Myriad  
-- Tapestry  
-- Meticulous  
-- Intricate  
-- Facilitating  
-- Commendable  
-- Let’s Embark on a Journey  
-- In the Ever-Evolving  
-- In the Fast-Paced  
-- It’s Not Just  
-- Robust  
-- Seamless  
-- Multi-Faceted  
-- Complex  
-- Ample
-- Moreover  
-- Furthermore  
-- Subsequently  
-- Notwithstanding  
-- Consequently  
-- Conversely  
-- Ergo  
-- Thus  
-- Henceforth  
-- Thereupon  
-- Accordingly  
-- Albeit  
-- Behold  
-- Cognizant  
-- Diligent  
-- Exemplary  
-- Flourishing  
-- Harmonious  
-- Idiosyncratic  
-- Juxtapose  
-- Lucid  
-- Magnitude  
-- Nurture  
-- Obligate  
-- Pragmatic  
-- Quintessential  
-- Resilient  
-- Salient  
-- Tangible  
-- Ubiquitous  
-- Venerate  
-- Widespread  
-- Yielding  
-- Zenith  
-- Alacrity  
-- Benevolent  
-- Confluence  
-- Discerning  
-- Encompass  
-- Facet  
-- Galvanize  
-- Holistic  
-- Imperative  
-- Juxtaposition  
-- Keenly  
-- Lucidity  
-- Manifest  
-- Nomenclature  
-- Opulent  
-- Pervasive  
-- Quintessence  
-- Reverberate  
-- Synergize  
-- Transcend  
-- Unprecedented  
-- Veracity  
-- Whimsical  
-- Xenial  
-- Yearning  
-- Zealous  
-- Ameliorate  
-- Bedrock  
-- Conducive  
-- Disparate  
-- Esoteric  
-- Fortuitous  
-- Gravitate  
-- Hierarchy  
-- Inception  
-- Jubilant  
-- Kinetic  
-- Luminous  
-- Metamorphose  
-- Nexus  
-- Optimize  
-- Paradigm  
-- Refine  
-- Stimulus  
-- Taper  
-- Unveil  
-- Validate  
-- Warrant  
-- Accelerate  
-- Bolster  
-- Catalyze  
-- Disseminate  
-- Enumerate  
-- Facilitate  
-- Garner  
-- Harness  
-- Illuminate  
-- Integrate  
-- Leverage  
-- Mobilize  
-- Navigate  
-- Orchestrate  
-- Propagate  
-- Quantify  
-- Reinforce  
-- Spearhead  
-- Thrive  
-- Unify  
-- Vitalize  
-- Withstand  
-- Yield
-- In the interim  
-- To elucidate  
-- Foremost  
-- In retrospect  
-- For instance  
-- By and large  
-- At the forefront  
-- Within the paradigm  
-- To illustrate  
-- In conjunction with  
-- At the nexus  
-- In essence  
-- In the wake of  
-- On the contrary  
-- To that effect  
-- All-encompassing  
-- In the grand scheme  
-- As such  
-- To underscore  
-- In tandem  
-- Notably  
-- From inception  
-- To encapsulate  
-- In perpetuity  
-- With regard to  
-- In pursuit of  
-- Without reservation  
-- Akin to  
-- To date  
-- Ahead of the curve  
-- Cutting-edge  
-- Underpinning  
-- Paramountcy  
-- Impetus  
-- To mitigate  
-- In light of  
-- At your disposal  
-- Under the auspices  
-- Quintessentially  
-- To propel  
-- In symmetry with  
-- In parallel  
-- In high regard  
-- Under the umbrella  
-- At the vanguard  
-- With finesse  
-- To envisage  
-- Beyond the scope  
-- Amidst  
-- For the record  
-- To galvanize  
-- Bespoke  
-- In an effort to  
-- Without exception  
-- In no uncertain terms  
-- On the heels of  
-- Profoundly  
-- In due course  
-- To optimize  
-- At the intersection  
-- Upon reflection  
-- With precision  
-- In synergy  
-- Holistically  
-- To leverage  
-- Under scrutiny  
-- With unwavering  
-- In a nutshell  
-- To rejuvenate  
-- In affinity  
-- Dispassionately  
-- Without precedent  
-- With empathy  
-- Across the board  
-- In conjunction  
-- To synchronize  
-- With thoroughness  
-- In calibration  
-- To orchestrate  
-- Through the lens  
-- In resonance  
-- Under the microscope  
-- To crystallize  
-- By extension  
-- For the foreseeable  
-- At the core  
-- From a vantage  
-- To revolutionize  
-- In fortitude  
-- At scale  
-- With conviction  
-- In extenso  
-- Through meticulous  
-- In perpetuation  
-- To fortify  
-- Under the canopy  
-- By the same token  
-- At breakneck  
-- With alacrity  
-- As a testament  
-- Vis-à-vis  
-- Avant-garde  
-- Bona fide  
-- Carve out  
-- Deep dive  
-- Epitome  
-- Fallacy  
-- Garnering momentum  
-- High-octane  
-- Imbue  
-- Jargon  
-- Keystone  
-- Latterly  
-- Myriad facets  
-- No less than  
-- Offshoot  
-- Pinnacle  
-- Quid pro quo  
-- Recapitulate  
-- State-of-the-art  
-- Therein  
-- Usher in  
-- Vestige  
-- Wrought  
-- Yield to  
-- Zeitgeist  
-- Address  
-- Bridge  
-- Capitalize on  
-- Delve into  
-- Elicit  
-- Frame of reference  
-- Groundbreaking  
-- Hitherto  
-- Inter alia  
-- Juxtaposed with  
-- Kick-start  
-- Legitimise  
-- Milestone  
-- Navigate the complexities  
-- Outweigh  
-- Pragmatism  
-- Quench  
-- Robustness  
-- Stem from  
-- Transitory  
-- Unravel  
-- Vicarious  
-- With impunity  
-- Yield fruit  
-- Zephyr  
-- Ascertain  
-- Bolstered by  
-- Circumvent  
-- Dovetail  
-- Embolden  
-- Grapple with  
-- Herald  
-- In due diligence  
-- Jettison  
-- Kindle  
-- Latitude  
-- Mitigate risks  
-- Nullify  
-- Offset  
-- Propitious  
-- Resonate  
-- Spur on  
-- Tether  
-- Unveil the potential  
-- Validate  
-- Weigh in  
-- X-factor  
-- Zenith of  
-- Amplify  
-- Corroborate  
-- Dissect  
-- Emerge  
-- Feasible  
-- Harness the power  
-- Illuminate the path  
-- In the vanguard  
-- Kindle curiosity  
-- Leverage synergies  
-- Muster  
-- Traverse  
-- Unprecedented scale  
-- Vindicate  
-- Augment  
-- Bolster confidence  
-- Construe  
-- Disentangle  
-- Envision  
-- Foster cohesion  
-- Galvanizing force  
-- Hone  
-- Integrate seamlessly  
-- Juxtaposition of  
-- Kindle enthusiasm  
-- Optimize throughput
+```text
+Edit this technical documentation for clarity.
+
+Audience: [AUDIENCE]
+
+Requirements:
+- Keep API names, command names, identifiers, protocol terms, and defined domain
+  terminology unchanged.
+- Simplify surrounding prose.
+- Break long sentences when that improves comprehension.
+- Replace vague verbs such as "utilize" only when the replacement is equally
+  precise.
+- Preserve MUST/SHOULD/MAY or other normative language exactly.
+- Do not change code blocks.
+
+Documentation:
+"""
+[PASTE DOCUMENTATION]
+"""
+```
+
+## Before / After Example
+
+**Before**
+
+```text
+The implementation facilitates the utilization of a configurable mechanism for
+the optimization of request throughput.
+```
+
+**After**
+
+```text
+The implementation lets you configure how requests are batched to improve
+throughput.
+```
+
+The change is useful because it replaces abstract nouns with an explicit action;
+it is not based on banning words such as "implementation" or "optimization."
+
+## Review checklist
+
+- Simpler wording did not change the technical meaning.
+- Necessary domain terms remain intact.
+- The rewrite matches the audience rather than an arbitrary banned-word list.
+- Normative or legal wording was not weakened.
+- No facts or examples were invented.
