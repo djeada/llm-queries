@@ -71,6 +71,13 @@
       "review_days": 180,
       "last_verified": null
     },
+    "evaluations/game-dev/blender-godot-tiny-rpg.md": {
+      "kind": "evaluation",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
     "evaluations/mcp/blender-fantasy-scene.md": {
       "kind": "evaluation",
       "freshness": "version-sensitive",
@@ -132,6 +139,13 @@
       "freshness": "evergreen",
       "status": "active",
       "review_days": 365,
+      "last_verified": null
+    },
+    "prompts/game_dev/blender_godot_tiny_rpg.md": {
+      "kind": "prompt",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
       "last_verified": null
     },
     "prompts/job_search/interview_questions.md": {
