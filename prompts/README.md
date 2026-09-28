@@ -8,6 +8,7 @@ state inputs, constraints, and expected outputs clearly enough to evaluate.
 | Category | Purpose |
 | --- | --- |
 | [Blender](blender/) | Small scene-generation and simulation tests |
+| [Game development](game_dev/) | Cross-tool asset and playable-game workflows |
 | [Job search](job_search/) | Resume and interview tasks |
 | [Math](math/) | Mathematical and LaTeX cleanup |
 | [Social media](social_media/) | Social copy and captions |
@@ -42,6 +43,10 @@ For the complete generated file list, use the
 ### Blender and simulation
 
 - [Fluid physics tests](blender/fluid_physics.md)
+
+### Game development
+
+- [Blender → Godot tiny RPG workflow](game_dev/blender_godot_tiny_rpg.md)
 
 ## Prompt design rules
 
