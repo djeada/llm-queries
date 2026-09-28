@@ -16,7 +16,8 @@ This directory is separate from `prompts/` and `local_setup_guides/`:
 - `specs/` — machine-readable JSONL evaluation cases
 - `fixtures/` — deterministic response fixtures used to test the evaluator
 - `tool-use/` — manual / agentic tool-use protocols
-- `mcp/` — tests for MCP-connected applications such as Blender or ParaView
+- `mcp/` — focused tests for MCP-connected applications such as Blender or ParaView
+- `game-dev/` — cross-tool game-development pipeline evaluations
 - `everyday/` — broader practical-task suites and source material for future
   executable cases
 
@@ -118,6 +119,9 @@ New evaluations should state:
 
 Do not score hidden reasoning. Score outputs, tool calls, artifacts, state
 changes, or other observable behavior.
+
+For an end-to-end tool workflow example, see the
+[Blender → Godot tiny RPG evaluation](game-dev/blender-godot-tiny-rpg.md).
 
 ## Result hygiene
 
