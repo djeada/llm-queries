@@ -5,9 +5,10 @@ Generated from the repository tree and content-registry.json.
 Run python3 scripts/repo_check.py --write-generated after adding, moving,
 removing, or reclassifying content.
 
-## Prompts (11)
+## Prompts (12)
 
 - [prompts/blender/fluid_physics.md](prompts/blender/fluid_physics.md) — active; evergreen
+- [prompts/game_dev/blender_godot_tiny_rpg.md](prompts/game_dev/blender_godot_tiny_rpg.md) — experimental; version-sensitive
 - [prompts/job_search/interview_questions.md](prompts/job_search/interview_questions.md) — active; evergreen
 - [prompts/job_search/resume.md](prompts/job_search/resume.md) — active; evergreen
 - [prompts/math/sanitize_latex.md](prompts/math/sanitize_latex.md) — active; evergreen
@@ -28,9 +29,10 @@ removing, or reclassifying content.
 - [skills/prompt_debugging.md](skills/prompt_debugging.md) — active; evergreen
 - [skills/rag_quality_audit.md](skills/rag_quality_audit.md) — active; evergreen
 
-## Evaluations (4)
+## Evaluations (5)
 
 - [evaluations/everyday/everyday-tasks.md](evaluations/everyday/everyday-tasks.md) — experimental; version-sensitive
+- [evaluations/game-dev/blender-godot-tiny-rpg.md](evaluations/game-dev/blender-godot-tiny-rpg.md) — experimental; version-sensitive
 - [evaluations/mcp/blender-fantasy-scene.md](evaluations/mcp/blender-fantasy-scene.md) — experimental; version-sensitive
 - [evaluations/mcp/paraview-cfd-velocity-field.md](evaluations/mcp/paraview-cfd-velocity-field.md) — experimental; version-sensitive
 - [evaluations/tool-use/tool-calling.md](evaluations/tool-use/tool-calling.md) — experimental; version-sensitive
