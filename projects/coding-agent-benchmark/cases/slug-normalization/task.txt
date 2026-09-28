@@ -1,0 +1,23 @@
+Issue: slugify breaks accents and repeated separators
+
+Fix slugify() in slugify.py.
+
+The function must return a stable ASCII slug:
+
+- trim surrounding whitespace
+- lowercase text
+- normalize Unicode so accented Latin letters become their ASCII base where possible
+- treat whitespace and underscores as word separators
+- remove other punctuation and symbols
+- collapse repeated separators to one hyphen
+- remove leading and trailing hyphens
+- return "item" if nothing remains
+
+Examples:
+
+- "Hello World" -> "hello-world"
+- "  Café déjà_vu!  " -> "cafe-deja-vu"
+- "one---two" -> "one-two"
+- "___" -> "item"
+
+Keep the public tests passing. Use the standard library only and avoid unrelated changes.

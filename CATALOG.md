@@ -48,8 +48,9 @@ removing, or reclassifying content.
 - [docs/content-lifecycle.md](docs/content-lifecycle.md) — active; evergreen
 - [docs/glossary.md](docs/glossary.md) — active; evergreen
 
-## Projects (2)
+## Projects (3)
 
+- [projects/coding-agent-benchmark/README.md](projects/coding-agent-benchmark/README.md) — experimental; version-sensitive
 - [projects/snake-llm/ARCHITECTURE.md](projects/snake-llm/ARCHITECTURE.md) — experimental; version-sensitive
 - [projects/snake-llm/README.md](projects/snake-llm/README.md) — experimental; version-sensitive
 

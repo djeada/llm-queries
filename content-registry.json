@@ -120,6 +120,13 @@
       "review_days": null,
       "last_verified": null
     },
+    "projects/coding-agent-benchmark/README.md": {
+      "kind": "project-doc",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 180,
+      "last_verified": null
+    },
     "projects/snake-llm/ARCHITECTURE.md": {
       "kind": "project-doc",
       "freshness": "version-sensitive",
