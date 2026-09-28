@@ -47,3 +47,13 @@ jobs:
       - name: Run Snake project checks
         working-directory: projects/snake-llm
         run: make check
+
+  coding-agent-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Run coding agent benchmark self-test
+        working-directory: projects/coding-agent-benchmark
+        run: make check

@@ -20,6 +20,7 @@ into one undifferentiated Markdown collection.
 | Debug or design an LLM workflow | [Skills](skills/README.md) |
 | Run a repeatable capability test | [Evaluations](evaluations/README.md) |
 | Run models or coding agents locally | [Local setup guides](local_setup_guides/README.md) |
+| Run a coding-agent repository benchmark | [Coding agent benchmark](projects/coding-agent-benchmark/README.md) |
 | Browse all content | [Content catalog](CATALOG.md) |
 | See what needs maintenance | [Content health](CONTENT_HEALTH.md) |
 | Understand the repo design | [Architecture](docs/architecture.md) |
@@ -148,6 +149,16 @@ make check-evals
 Future additions should prefer measurable evaluations with fixtures and pass
 criteria over unstructured prompt dumps. See [`evaluations/README.md`](evaluations/README.md)
 and [`ROADMAP.md`](ROADMAP.md).
+
+## Runnable projects
+
+The repository also contains small environments where agent behavior can be
+executed rather than only described.
+
+- [Coding Agent Benchmark](projects/coding-agent-benchmark/README.md) — seeded
+  repository tasks with external evaluators and self-tested golden solutions.
+- [Snake LLM](projects/snake-llm/README.md) — a small local-model-driven game
+  experiment with proxy smoke tests.
 
 ## Contributing
 

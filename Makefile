@@ -38,6 +38,7 @@ check-evals:
 
 check-projects:
 	$(MAKE) -C projects/snake-llm check
+	$(MAKE) -C projects/coding-agent-benchmark check
 
 check-links:
 	python3 scripts/check_external_links.py
