@@ -6,12 +6,12 @@ material is current.
 
 ## Summary
 
-- Registered content files: **48**
+- Registered content files: **50**
 - Active: **28**
-- Experimental: **6**
+- Experimental: **8**
 - Needs review: **0**
 - Historical / archived: **14**
-- Version-sensitive: **8**
+- Version-sensitive: **10**
 
 ## Active version-sensitive content
 
@@ -27,11 +27,13 @@ _None._
 ## Experimental content
 
 - [evaluations/everyday/everyday-tasks.md](evaluations/everyday/everyday-tasks.md)
+- [evaluations/game-dev/blender-godot-tiny-rpg.md](evaluations/game-dev/blender-godot-tiny-rpg.md)
 - [evaluations/mcp/blender-fantasy-scene.md](evaluations/mcp/blender-fantasy-scene.md)
 - [evaluations/mcp/paraview-cfd-velocity-field.md](evaluations/mcp/paraview-cfd-velocity-field.md)
 - [evaluations/tool-use/tool-calling.md](evaluations/tool-use/tool-calling.md)
 - [projects/snake-llm/ARCHITECTURE.md](projects/snake-llm/ARCHITECTURE.md)
 - [projects/snake-llm/README.md](projects/snake-llm/README.md)
+- [prompts/game_dev/blender_godot_tiny_rpg.md](prompts/game_dev/blender_godot_tiny_rpg.md)
 
 ## Historical / dated material
 
