@@ -1,5 +1,8 @@
 # Testing LLM Models on Everyday Tasks
 
+> **Status:** experimental
+
+
 ## Purpose
 
 The goal is to evaluate how useful an LLM is for real tasks people perform in work, school, and personal life.

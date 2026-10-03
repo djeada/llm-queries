@@ -1,216 +1,158 @@
 # Contributing to llm-queries
 
-Thank you for your interest in improving this repository! This guide will help you make effective contributions that align with the project's goals.
+The repository is a knowledge library, not a single application. Contributions
+should keep content easy to discover, easy to validate, and explicit about how
+quickly it can become stale.
 
-## Our Vision
+## Before you start
 
-This repository aims to be a practical, well-organized resource for anyone working with LLMs—from beginners exploring prompt engineering to practitioners deploying production systems. We prioritize:
+Choose the right area:
 
-- **Clarity** over comprehensiveness
-- **Practical examples** over abstract theory
-- **Tested prompts** over untested ideas
-- **Good organization** over rapid growth
+- `prompts/` — reusable prompt templates
+- `skills/` — repeatable LLM workflow playbooks
+- `evaluations/` — observable benchmark and tool/MCP test suites
+- `local_setup_guides/` — version-sensitive setup instructions
+- `resources/` — summaries of external sources
+- `course_reviews/` — dated course notes and reviews
+- `slides/` — teaching material
+- `news/` — dated development notes
+- `projects/` — runnable experiments
+- `snapshots/` — superseded or intentionally historical guidance
 
-## Ways to Contribute
+Read [the content lifecycle](docs/content-lifecycle.md) before adding current
+model, product, API, or tooling claims.
 
-### 🔧 Quick Fixes
+## Local validation
 
-- Fix typos, broken links, or formatting issues
-- Correct factual errors with citations
-- Improve unclear explanations
-
-### 📝 Content Additions
-
-- Add new prompt templates with working examples
-- Write or expand course review summaries
-- Create local setup guides for new tools or models
-- Add entries to the glossary
-
-### 🏗️ Structural Improvements
-
-- Improve navigation and cross-linking
-- Standardize file formats and structure
-- Enhance README files in each directory
-
-## Getting Started
-
-### 1. Fork and Clone
+The repository maintenance scripts use only the Python standard library. Run:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/llm-queries.git
-cd llm-queries
-git checkout -b your-feature-name
+make check
 ```
 
-### 2. Find Something to Work On
+This validates content, executable eval fixtures, and runnable project smoke
+tests.
 
-- Check [open issues](https://github.com/djeada/llm-queries/issues) for ideas
-- Look for files with "Status: pending" markers
-- Review the `todo.md` files in each directory
+The content checker verifies:
 
-### 3. Make Your Changes
+- local Markdown links resolve to files or directories in the repository
+- every content file is represented in `content-registry.json`
+- registry metadata is valid and active current guides expose matching verification dates
+- `CATALOG.md` and `CONTENT_HEALTH.md` match the registry
 
-Follow the content standards below, then commit:
+After adding, moving, deleting, or reclassifying content:
 
 ```bash
-git add .
-git commit -m "Add: descriptive commit message"
-git push origin your-feature-name
+make generate
+make check
 ```
 
-### 4. Open a Pull Request
+CI runs the same validation on pull requests and on `main`.
 
-Include:
-- What you changed and why
-- Any testing you performed (e.g., which models you tested prompts with)
-- Screenshots if relevant (especially for formatting changes)
+## File names
 
-## Repository Structure
+Use lowercase kebab-case for new files when practical:
 
-```
-llm-queries/
-├── prompts/                 # Prompt templates organized by category
-│   ├── job_search/          # Career-related prompts
-│   ├── text/                # Writing and formatting prompts
-│   ├── math/                # Mathematical notation prompts
-│   └── social_media/        # Social content prompts
-├── skills/                  # Practical LLM workflow skill prompts
-├── local_setup_guides/      # Self-hosted LLM tutorials
-├── resources/               # External reference summaries
-├── course_reviews/          # Course notes and reviews
-├── slides/                  # Teaching and presentation content
-├── INDEX.md                 # Complete file listing
-├── GLOSSARY.md              # Terminology definitions
-└── CHANGELOG.md             # Version history
+```text
+good: prompt-debugging.md
+good: local-models-intro.md
+avoid: My New Prompt.md
 ```
 
-## Content Standards
+The repository contains legacy underscore-style names. They do not need to be
+renamed solely for style because unnecessary renames break links and history.
+When a file is already widely linked, stability is more important than cosmetic
+consistency.
 
-### File Naming
+## Markdown structure
 
-- Use **kebab-case** for all file names: `my-new-prompt.md`
-- Keep names **descriptive but concise**: `improve-article.md` not `a-prompt-for-improving-articles-and-making-them-better.md`
-- Use **ASCII characters only**: no accents, special characters, or spaces
+Use one `#` title per document and a shallow heading hierarchy.
 
-### Markdown Structure
-
-Every content file should follow this structure:
+For reusable prompts, prefer:
 
 ```markdown
-# Title
+# Prompt name
 
-Brief description of what this file contains and who it's for.
+Brief purpose and when to use it.
 
-## Expected Output (for prompts)
+## Best for
 
-- What the user should expect to receive
-- Format specifications
-- Any constraints
+- Use case
 
-## Main Content
+## Required input
 
-The actual content, organized with clear headings.
+- Required context
 
-## Examples (when applicable)
+## Expected output
 
-Before/after examples or usage demonstrations.
-```
-
-### Heading Hierarchy
-
-- `#` — Document title (one per file)
-- `##` — Major sections
-- `###` — Subsections
-- `####` — Rarely needed; consider restructuring if you need this level
-
-### Prompt Files
-
-Each prompt file should include:
-
-1. **Title** — Clear, action-oriented name
-2. **Description** — What the prompt does and when to use it
-3. **Expected Output** — What format and content to expect
-4. **The Prompt** — In a code block with `text` language tag
-5. **Example** — Before/after demonstration
-6. **Notes** — Model compatibility, limitations, variations
-
-Example structure:
-
-```markdown
-# Improve Article
-
-Revise and expand draft content with concrete examples and clearer language.
-
-## Expected Output
-
-- Expanded paragraphs with examples
-- Corrected errors
-- Clearer, more direct prose
+- What a good response should contain
 
 ## Prompt
 
 \`\`\`text
-Revise the following text by:
-1. Expanding each paragraph with concrete examples.
-2. Correcting any errors.
-3. Enhancing clarity.
+Prompt text...
 \`\`\`
-
-## Example
-
-**Before:**
-> Caching improves performance.
-
-**After:**
-> Caching speeds up websites by storing frequently used data...
 
 ## Notes
 
-- Tested with: GPT-4, Claude 3
-- Works best with technical content
+Limitations, variations, and any real test information.
 ```
 
-### Citations and Sources
+Do not claim a prompt is "tested" unless the model/tool and test date are
+recorded.
 
-- Link to sources for factual claims
-- Cite benchmark results with links to papers or reports
-- When summarizing external content, link to the original
+## Freshness rules
 
-### Writing Style
+### Evergreen material
 
-- **Be direct** — Avoid filler words and unnecessary hedging
-- **Be specific** — Concrete examples over abstract descriptions
-- **Be practical** — Focus on "how to use" over "how it works" (unless in slides/)
-- **Be inclusive** — Write for readers with varying experience levels
+Avoid unnecessary product/model names. Prefer concepts, constraints, and
+evaluation criteria that survive model churn.
 
-## Quality Checklist
+### Version-sensitive material
 
-Before submitting, verify:
+When adding or materially updating version-sensitive instructions, include a
+real verification note near the top:
 
-- [ ] File name follows kebab-case convention
-- [ ] Document has a clear `#` title
-- [ ] Prompts include expected output and examples
-- [ ] Links are valid and point to the right places
-- [ ] No trailing whitespace or inconsistent formatting
-- [ ] Content is original or properly attributed
-- [ ] Changes are tested where applicable
+> **Freshness:** version-sensitive · **Last verified:** YYYY-MM-DD
 
-## Review Process
+Only update the date after actually checking the instructions.
 
-1. Maintainers will review your PR within a few days
-2. Feedback may be requested before merging
-3. Once approved, your contribution will be merged and attributed
+### Dated snapshots
 
-## Questions?
+Keep dates, versions, and original context visible. Add a newer companion note
+instead of rewriting a historical snapshot as if it were current.
 
-- Open an issue for discussion before starting large changes
-- Tag maintainers if you need guidance on approach
-- Check existing issues and PRs for similar work
+## Sources
 
-## Recognition
+- Prefer primary documentation for current product/API claims.
+- Link factual claims to the source when the claim is not common knowledge.
+- Keep summaries original; do not paste long passages from sources.
+- Separate your interpretation from what the source explicitly says.
 
-Contributors are listed in the repository's contributor graph. Significant contributions may be called out in the CHANGELOG.
+## Projects
 
----
+A runnable project should be self-contained under `projects/<name>/` and have
+its own README with:
 
-Thank you for helping make llm-queries better! 🙏
+- status and purpose
+- setup/run instructions
+- dependencies
+- known limitations
+- where LLM/model assumptions enter the design
+
+Do not add repository-root application dependencies for a single project.
+
+## Pull request checklist
+
+Before opening a PR:
+
+- [ ] The file belongs in the chosen directory.
+- [ ] Version-sensitive claims have a real verification date when applicable.
+- [ ] New facts are sourced appropriately.
+- [ ] `make check` passes.
+- [ ] `content-registry.json` was updated when content was added, moved, or reclassified.
+- [ ] Generated files were refreshed with `make generate`.
+- [ ] Historical/source-specific material has a visible status banner and source URL.
+- [ ] New executable evals include observable checks rather than hidden-reasoning criteria.
+- [ ] The PR explains whether the change is evergreen, version-sensitive, a
+      dated snapshot, a project, or repository maintenance.

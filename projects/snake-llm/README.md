@@ -1,5 +1,8 @@
 # Snake LLM Standalone
 
+> **Status:** experimental; proxy checks run in CI.  
+> **Model note:** the default `qwen3:0.6b` tag was confirmed in the Ollama registry on 2026-09-27. End-to-end Ollama inference is not exercised in repository CI.
+
 This directory is a self-contained copy of the Snake game with the optional local Ollama controller. It does not depend on the personal website repo.
 
 ## Requirements
@@ -57,7 +60,7 @@ make models
 Manual equivalent:
 
 ```bash
-ollama pull qwen2.5:1.5b
+ollama pull qwen3:0.6b
 node snake_llm_proxy.js
 ```
 
@@ -75,6 +78,16 @@ http://localhost:8000
 ```
 
 Start the game, then switch `Controller` to `Local LLM`.
+
+## Local checks
+
+Run syntax, pure-function, and local HTTP tests without Ollama:
+
+```bash
+make check
+```
+
+These checks verify the proxy contract and fallback behavior. They do not score model quality.
 
 ## Test The Proxy Directly
 
@@ -108,6 +121,7 @@ style.css           Game and control styling
 app.js              Snake game plus LLM controller
 snake_llm_proxy.js  Local proxy from browser to Ollama
 ARCHITECTURE.md     Detailed architecture diagrams
+test_proxy.js       Dependency-free proxy tests
 ```
 
 ## Configuration
@@ -116,5 +130,5 @@ The proxy supports:
 
 - `SNAKE_LLM_PORT`, default `8787`
 - `OLLAMA_URL`, default `http://localhost:11434/api/chat`
-- `SNAKE_LLM_MODEL`, default `qwen2.5:1.5b`
+- `SNAKE_LLM_MODEL`, default `qwen3:0.6b`
 - `SNAKE_LLM_TIMEOUT_MS`, default `8000`

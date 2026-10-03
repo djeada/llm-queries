@@ -1,0 +1,15 @@
+Issue: TTLCache mishandles expiry boundaries and refreshes
+
+Fix TTLCache in cache.py.
+
+Required behavior:
+
+- set(key, value) stores or replaces the value and starts a fresh TTL
+- get(key) returns the live value
+- an entry is expired when age is greater than or equal to ttl_seconds
+- reading an expired entry returns None and removes it
+- len(cache) counts only currently live entries and removes expired entries while counting
+- updating an existing key replaces both its value and timestamp
+- the injected clock callable must remain supported for deterministic tests
+
+Keep the public tests passing. Use the standard library only and avoid unrelated changes.

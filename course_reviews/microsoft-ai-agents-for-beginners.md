@@ -1,5 +1,8 @@
 # Microsoft AI Agents for Beginners
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A beginner-friendly course introducing AI agent concepts and implementation using Microsoft's Azure and semantic kernel frameworks.
 
 ## Course Link

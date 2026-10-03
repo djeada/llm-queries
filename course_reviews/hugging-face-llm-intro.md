@@ -1,5 +1,8 @@
 # Hugging Face LLM Introduction
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A beginner-friendly course covering large language models, from theory to practical implementation using the Hugging Face ecosystem.
 
 ## Course Link

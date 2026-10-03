@@ -1,5 +1,8 @@
 # A Practical Guide to Building Agents
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 OpenAI Business Guide (PDF)
 Link: [A Practical Guide to Building Agents](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf)
 

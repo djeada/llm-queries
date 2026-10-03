@@ -1,5 +1,7 @@
 # Qwen3.8-Flash-Next on an 8 GB NVIDIA GPU
 
+> **Freshness:** version-sensitive · **Last verified:** 2026-10-03
+
 Run Qwen3.8-Flash-Next locally with llama.cpp, CPU expert offloading, and disk-backed model loading. This guide records a working RTX 5060 setup and includes the scripts needed to reproduce it on Linux.
 
 ## Tested Setup and Results

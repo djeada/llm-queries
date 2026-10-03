@@ -1,5 +1,8 @@
 # Prompt Engineering Whitepaper
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 Google (for Kaggle 5-Day Gen AI Intensive), September 2024
 Link: [Whitepaper on Prompt Engineering](https://www.kaggle.com/whitepaper-prompt-engineering)
 

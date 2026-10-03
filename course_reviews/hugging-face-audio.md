@@ -1,5 +1,8 @@
 # Hugging Face Audio Course
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A comprehensive course on audio processing with transformers, covering speech recognition, text-to-speech, and audio classification.
 
 ## Course Link

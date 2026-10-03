@@ -1,0 +1,26 @@
+Issue: configuration precedence is backwards
+
+Fix load_config() in config.py.
+
+Required precedence, strongest to weakest:
+
+1. CLI values
+2. environment variables
+3. config-file values
+4. built-in defaults
+
+Environment variables:
+
+- APP_HOST
+- APP_PORT
+- APP_DEBUG
+
+APP_PORT must become an integer.
+
+APP_DEBUG accepts case-insensitive true values: 1, true, yes, on. Any other
+provided value is false.
+
+Only keys present in a source should override weaker sources. Do not mutate the
+input dictionaries.
+
+Keep the public tests passing and avoid unrelated changes.

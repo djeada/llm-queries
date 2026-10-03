@@ -1,5 +1,8 @@
 # Anthropic API Fundamentals
 
+> **Status:** historical — source-specific snapshot; not current operational guidance.
+
+
 A hands-on course covering the Claude API, from basic chat completions to advanced features like streaming and tool use.
 
 ## Course Link
