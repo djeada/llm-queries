@@ -18,6 +18,7 @@ Step-by-step instructions for running LLMs on your own hardware. These guides co
 |-------|---------------|-----------------|
 | [Local Models Intro](local_models_intro.md) | Ollama setup, model selection, hardware requirements | 8GB+ RAM |
 | [DeepSeek R1](deepseek_r1.md) | Running DeepSeek reasoning models | 16GB+ RAM |
+| [Qwen3.8-Flash-Next](qwen-flash-next.md) | llama.cpp CUDA setup, verified downloads, CPU offloading, and systemd services | Tested: 8 GB VRAM, 32 GB RAM, 100 GB+ SSD space |
 
 ## Quick Start
 

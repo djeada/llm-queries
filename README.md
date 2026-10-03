@@ -59,7 +59,8 @@ llm-queries/
 │   └── local_model_selection.md
 ├── local_setup_guides/       # 🖥️ Run LLMs on your machine
 │   ├── local_models_intro.md #    Getting started with Ollama
-│   └── deepseek_r1.md        #    DeepSeek R1 setup
+│   ├── deepseek_r1.md        #    DeepSeek R1 setup
+│   └── qwen-flash-next.md    #    Qwen CPU/RAM offloading with llama.cpp
 ├── resources/                # 📚 External guides and references
 │   ├── gpt_4_1_prompting_guide.md
 │   ├── guide_for_coding_ai_agents.md
@@ -123,6 +124,7 @@ prompts/job_search/interview_questions.md → Generate practice Q&A
 ```
 local_setup_guides/local_models_intro.md → Ollama setup and model selection
 local_setup_guides/deepseek_r1.md        → Run DeepSeek reasoning models
+local_setup_guides/qwen-flash-next.md    → Qwen on an 8 GB NVIDIA GPU with llama.cpp
 ```
 
 ### Learning & Teaching

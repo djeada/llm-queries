@@ -69,6 +69,7 @@ Step-by-step instructions for running LLMs on your own hardware.
 | [`local_setup_guides/README.md`](local_setup_guides/README.md) | Guide overview and getting started | Beginner |
 | [`local_setup_guides/local_models_intro.md`](local_setup_guides/local_models_intro.md) | Ollama installation, model selection, and basic usage | Intermediate |
 | [`local_setup_guides/deepseek_r1.md`](local_setup_guides/deepseek_r1.md) | Run DeepSeek R1 reasoning models locally | Intermediate |
+| [`local_setup_guides/qwen-flash-next.md`](local_setup_guides/qwen-flash-next.md) | Reproduce the RTX 5060 llama.cpp setup with verified GGUF downloads and local services | Advanced |
 | [`local_setup_guides/todo.md`](local_setup_guides/todo.md) | Planned guides and future work | — |
 
 ---
