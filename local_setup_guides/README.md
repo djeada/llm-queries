@@ -14,6 +14,8 @@ This directory is intentionally narrow. Benchmark suites and MCP tests live in
 | [Running Models Locally](local_models_intro.md) | Runtime/model selection, sizing, API use, reproducible benchmarking | 2026-09-27 |
 | [Local Models with Coding Agents](local-coding-agents.md) | Ollama `launch` integrations for coding agents | 2026-09-27 |
 
+| [Qwen3.8-Flash-Next](qwen-flash-next.md) | Tested RTX 5060 setup: llama.cpp CUDA, verified downloads, CPU offloading, and systemd services | 2026-10-03 |
+
 ## What belongs here
 
 A local setup guide should contain commands a reader can run today and should

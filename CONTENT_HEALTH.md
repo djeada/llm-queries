@@ -6,12 +6,12 @@ material is current.
 
 ## Summary
 
-- Registered content files: **51**
-- Active: **28**
+- Registered content files: **52**
+- Active: **29**
 - Experimental: **9**
 - Needs review: **0**
 - Historical / archived: **14**
-- Version-sensitive: **11**
+- Version-sensitive: **12**
 
 ## Active version-sensitive content
 
@@ -19,6 +19,7 @@ material is current.
 | --- | --- | ---: | --- |
 | [local_setup_guides/local-coding-agents.md](local_setup_guides/local-coding-agents.md) | 2026-09-27 | 120 days | 2027-01-25 |
 | [local_setup_guides/local_models_intro.md](local_setup_guides/local_models_intro.md) | 2026-09-27 | 120 days | 2027-01-25 |
+| [local_setup_guides/qwen-flash-next.md](local_setup_guides/qwen-flash-next.md) | 2026-10-03 | 120 days | 2027-01-31 |
 
 ## Needs review
 

@@ -37,10 +37,11 @@ removing, or reclassifying content.
 - [evaluations/mcp/paraview-cfd-velocity-field.md](evaluations/mcp/paraview-cfd-velocity-field.md) — experimental; version-sensitive
 - [evaluations/tool-use/tool-calling.md](evaluations/tool-use/tool-calling.md) — experimental; version-sensitive
 
-## Local setup guides (2)
+## Local setup guides (3)
 
 - [local_setup_guides/local-coding-agents.md](local_setup_guides/local-coding-agents.md) — active; version-sensitive
 - [local_setup_guides/local_models_intro.md](local_setup_guides/local_models_intro.md) — active; version-sensitive
+- [local_setup_guides/qwen-flash-next.md](local_setup_guides/qwen-flash-next.md) — active; version-sensitive
 
 ## Documentation (3)
 

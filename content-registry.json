@@ -99,6 +99,13 @@
       "review_days": 180,
       "last_verified": null
     },
+    "local_setup_guides/local-coding-agents.md": {
+      "kind": "guide",
+      "freshness": "version-sensitive",
+      "status": "active",
+      "review_days": 120,
+      "last_verified": "2026-09-27"
+    },
     "local_setup_guides/local_models_intro.md": {
       "kind": "guide",
       "freshness": "version-sensitive",
@@ -106,12 +113,12 @@
       "review_days": 120,
       "last_verified": "2026-09-27"
     },
-    "local_setup_guides/local-coding-agents.md": {
+    "local_setup_guides/qwen-flash-next.md": {
       "kind": "guide",
       "freshness": "version-sensitive",
       "status": "active",
       "review_days": 120,
-      "last_verified": "2026-09-27"
+      "last_verified": "2026-10-03"
     },
     "news/anthropic_c_compiler.md": {
       "kind": "news",
@@ -183,14 +190,14 @@
       "review_days": 365,
       "last_verified": null
     },
-    "prompts/text/format_lists_pl.md": {
+    "prompts/text/format_lists.md": {
       "kind": "prompt",
       "freshness": "evergreen",
       "status": "active",
       "review_days": 365,
       "last_verified": null
     },
-    "prompts/text/format_lists.md": {
+    "prompts/text/format_lists_pl.md": {
       "kind": "prompt",
       "freshness": "evergreen",
       "status": "active",

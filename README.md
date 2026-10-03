@@ -128,8 +128,9 @@ now process-oriented:
 
 - [Running Models Locally](local_setup_guides/local_models_intro.md)
 - [Local Models with Coding Agents](local_setup_guides/local-coding-agents.md)
+- [Qwen3.8-Flash-Next on an 8 GB GPU](local_setup_guides/qwen-flash-next.md)
 
-Both are tracked as version-sensitive and carry real verification dates.
+These guides are tracked as version-sensitive and carry real verification dates.
 
 Older DeepSeek-R1-specific local-running notes were moved to
 [`snapshots/local-models/deepseek-r1-2025.md`](snapshots/local-models/deepseek-r1-2025.md)
