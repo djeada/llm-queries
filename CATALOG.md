@@ -20,10 +20,11 @@ removing, or reclassifying content.
 - [prompts/text/llm_giveaway_phrases.md](prompts/text/llm_giveaway_phrases.md) — active; evergreen
 - [prompts/text/simplify_vocabulary.md](prompts/text/simplify_vocabulary.md) — active; evergreen
 
-## Skills (6)
+## Skills (7)
 
 - [skills/agent_tool_design.md](skills/agent_tool_design.md) — active; evergreen
 - [skills/context_engineering.md](skills/context_engineering.md) — active; evergreen
+- [skills/image_to_3d_asset_pipeline.md](skills/image_to_3d_asset_pipeline.md) — active; version-sensitive
 - [skills/llm_evaluation.md](skills/llm_evaluation.md) — active; evergreen
 - [skills/local_model_selection.md](skills/local_model_selection.md) — active; evergreen
 - [skills/prompt_debugging.md](skills/prompt_debugging.md) — active; evergreen
