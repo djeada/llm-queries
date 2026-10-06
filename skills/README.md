@@ -33,7 +33,6 @@ Poor candidates:
 | ------ | --------- |
 | [prompt_debugging.md](prompt_debugging.md) | Diagnose and rewrite prompts that produce weak, vague, or unreliable outputs |
 | [context_engineering.md](context_engineering.md) | Decide what context to include, structure, compress, or retrieve |
-| [image_to_3d_asset_pipeline.md](image_to_3d_asset_pipeline.md) | Build image-to-3D workflows while keeping shape, texturing, and rigging distinct |
 | [llm_evaluation.md](llm_evaluation.md) | Build task-specific rubrics, test cases, and regression checks |
 | [rag_quality_audit.md](rag_quality_audit.md) | Audit retrieval, grounding, citations, and answer quality in RAG systems |
 | [agent_tool_design.md](agent_tool_design.md) | Design tool interfaces, guardrails, and agent execution workflows |
@@ -52,8 +51,6 @@ Poor candidates:
    multi-step execution.
 6. Use `local_model_selection.md` when privacy, cost, offline use, or hardware
    constraints affect model choice.
-7. Use `image_to_3d_asset_pipeline.md` when a workflow crosses image
-   generation, 3D shape generation, texturing, rigging, and animation.
 
 ## Quality Checklist
 

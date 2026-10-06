@@ -7,8 +7,8 @@ material is current.
 ## Summary
 
 - Registered content files: **53**
-- Active: **30**
-- Experimental: **9**
+- Active: **29**
+- Experimental: **10**
 - Needs review: **0**
 - Historical / archived: **14**
 - Version-sensitive: **13**
@@ -20,7 +20,6 @@ material is current.
 | [local_setup_guides/local-coding-agents.md](local_setup_guides/local-coding-agents.md) | 2026-09-27 | 120 days | 2027-01-25 |
 | [local_setup_guides/local_models_intro.md](local_setup_guides/local_models_intro.md) | 2026-09-27 | 120 days | 2027-01-25 |
 | [local_setup_guides/qwen-flash-next.md](local_setup_guides/qwen-flash-next.md) | 2026-10-03 | 120 days | 2027-01-31 |
-| [skills/image_to_3d_asset_pipeline.md](skills/image_to_3d_asset_pipeline.md) | 2026-10-06 | 120 days | 2027-02-03 |
 
 ## Needs review
 
@@ -33,6 +32,7 @@ _None._
 - [evaluations/mcp/blender-fantasy-scene.md](evaluations/mcp/blender-fantasy-scene.md)
 - [evaluations/mcp/paraview-cfd-velocity-field.md](evaluations/mcp/paraview-cfd-velocity-field.md)
 - [evaluations/tool-use/tool-calling.md](evaluations/tool-use/tool-calling.md)
+- [local_setup_guides/image-to-3d-assets.md](local_setup_guides/image-to-3d-assets.md)
 - [projects/coding-agent-benchmark/README.md](projects/coding-agent-benchmark/README.md)
 - [projects/snake-llm/ARCHITECTURE.md](projects/snake-llm/ARCHITECTURE.md)
 - [projects/snake-llm/README.md](projects/snake-llm/README.md)

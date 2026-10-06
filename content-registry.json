@@ -99,6 +99,13 @@
       "review_days": 180,
       "last_verified": null
     },
+    "local_setup_guides/image-to-3d-assets.md": {
+      "kind": "guide",
+      "freshness": "version-sensitive",
+      "status": "experimental",
+      "review_days": 120,
+      "last_verified": "2026-10-06"
+    },
     "local_setup_guides/local-coding-agents.md": {
       "kind": "guide",
       "freshness": "version-sensitive",
@@ -280,13 +287,6 @@
       "status": "active",
       "review_days": 365,
       "last_verified": null
-    },
-    "skills/image_to_3d_asset_pipeline.md": {
-      "kind": "skill",
-      "freshness": "version-sensitive",
-      "status": "active",
-      "review_days": 120,
-      "last_verified": "2026-10-06"
     },
     "skills/llm_evaluation.md": {
       "kind": "skill",
