@@ -6,12 +6,12 @@ material is current.
 
 ## Summary
 
-- Registered content files: **52**
+- Registered content files: **53**
 - Active: **29**
-- Experimental: **9**
+- Experimental: **10**
 - Needs review: **0**
 - Historical / archived: **14**
-- Version-sensitive: **12**
+- Version-sensitive: **13**
 
 ## Active version-sensitive content
 
@@ -32,6 +32,7 @@ _None._
 - [evaluations/mcp/blender-fantasy-scene.md](evaluations/mcp/blender-fantasy-scene.md)
 - [evaluations/mcp/paraview-cfd-velocity-field.md](evaluations/mcp/paraview-cfd-velocity-field.md)
 - [evaluations/tool-use/tool-calling.md](evaluations/tool-use/tool-calling.md)
+- [local_setup_guides/image-to-3d-assets.md](local_setup_guides/image-to-3d-assets.md)
 - [projects/coding-agent-benchmark/README.md](projects/coding-agent-benchmark/README.md)
 - [projects/snake-llm/ARCHITECTURE.md](projects/snake-llm/ARCHITECTURE.md)
 - [projects/snake-llm/README.md](projects/snake-llm/README.md)

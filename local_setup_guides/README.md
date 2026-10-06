@@ -1,7 +1,7 @@
 # Local Setup Guides
 
 Current, reproducible setup instructions for local model runtimes and local
-coding-agent workflows.
+coding-agent workflows, plus experimental multimodal asset workflows.
 
 This directory is intentionally narrow. Benchmark suites and MCP tests live in
 [`evaluations/`](../evaluations/); old version-specific setup notes live in
@@ -15,6 +15,12 @@ This directory is intentionally narrow. Benchmark suites and MCP tests live in
 | [Local Models with Coding Agents](local-coding-agents.md) | Ollama `launch` integrations for coding agents | 2026-09-27 |
 
 | [Qwen3.8-Flash-Next](qwen-flash-next.md) | Tested RTX 5060 setup: llama.cpp CUDA, verified downloads, CPU offloading, and systemd services | 2026-10-03 |
+
+## Experimental guides
+
+| Guide | Purpose | Source verification |
+| --- | --- | --- |
+| [Image-to-3D assets](image-to-3d-assets.md) | TripoSR baseline, optional FLUX/Qwen/Hunyuan/MIA setup, and controlled asset experiments; full GPU pipeline not yet tested | 2026-10-06 |
 
 ## What belongs here
 
