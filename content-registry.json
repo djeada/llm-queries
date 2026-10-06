@@ -281,6 +281,13 @@
       "review_days": 365,
       "last_verified": null
     },
+    "skills/image_to_3d_asset_pipeline.md": {
+      "kind": "skill",
+      "freshness": "version-sensitive",
+      "status": "active",
+      "review_days": 120,
+      "last_verified": "2026-10-06"
+    },
     "skills/llm_evaluation.md": {
       "kind": "skill",
       "freshness": "evergreen",
