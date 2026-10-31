@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -17,15 +18,18 @@ class ReportError(ValueError):
 def load_report(path: Path) -> dict[str, Any]:
     try:
         report = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise ReportError(f"{path}: could not read report: {exc}") from exc
 
-    if report.get("schema_version") not in {1, 2}:
+    if not isinstance(report, dict):
+        raise ReportError(f"{path}: report must be an object")
+    version = report.get("schema_version")
+    if type(version) is not int or version not in {1, 2}:
         raise ReportError(
             f"{path}: unsupported schema_version {report.get('schema_version')!r}"
         )
-    if not isinstance(report.get("results"), list):
-        raise ReportError(f"{path}: missing results list")
+    if not isinstance(report.get("results"), list) or not report["results"]:
+        raise ReportError(f"{path}: results must be a non-empty list")
     if not isinstance(report.get("summary"), dict):
         raise ReportError(f"{path}: missing summary")
     return report
@@ -34,11 +38,18 @@ def load_report(path: Path) -> dict[str, Any]:
 def by_id(report: dict[str, Any]) -> dict[str, dict[str, Any]]:
     rows: dict[str, dict[str, Any]] = {}
     for row in report["results"]:
+        if not isinstance(row, dict):
+            raise ReportError("result row must be an object")
         case_id = row.get("id")
-        if not isinstance(case_id, str):
-            raise ReportError("result row missing string id")
+        if not isinstance(case_id, str) or not case_id.strip():
+            raise ReportError("result row missing non-empty string id")
         if case_id in rows:
             raise ReportError(f"duplicate result id {case_id!r}")
+        if not isinstance(row.get("passed"), bool):
+            raise ReportError(f"{case_id}: passed must be a boolean")
+        value = row.get("score")
+        if type(value) not in (int, float) or not 0.0 <= value <= 1.0:
+            raise ReportError(f"{case_id}: score must be a finite number between 0 and 1")
         rows[case_id] = row
     return rows
 
@@ -49,8 +60,18 @@ def label(report: dict[str, Any], fallback: str) -> str:
 
 
 def score(row: dict[str, Any]) -> float:
-    value = row.get("score", 0.0)
-    return float(value) if isinstance(value, (int, float)) else 0.0
+    return float(row["score"])
+
+
+def summary(rows: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Derive displayed metrics from the validated rows being compared."""
+    passed = sum(row["passed"] for row in rows.values())
+    return {
+        "cases": len(rows),
+        "passed": passed,
+        "pass_rate": passed / len(rows),
+        "average_check_score": sum(score(row) for row in rows.values()) / len(rows),
+    }
 
 
 def main() -> int:
@@ -60,7 +81,7 @@ def main() -> int:
     parser.add_argument(
         "--require-same-spec",
         action="store_true",
-        help="Fail if spec SHA differs (schema v2 reports).",
+        help="Require valid, matching spec SHA-256 hashes and identical case IDs.",
     )
     args = parser.parse_args()
 
@@ -69,22 +90,28 @@ def main() -> int:
         candidate = load_report(args.candidate)
         left = by_id(baseline)
         right = by_id(candidate)
+        left_ids = set(left)
+        right_ids = set(right)
+        missing = sorted(left_ids - right_ids)
+        added = sorted(right_ids - left_ids)
+
+        if args.require_same_spec:
+            for name, report in (("baseline", baseline), ("candidate", candidate)):
+                digest = report.get("spec_sha256")
+                if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
+                    raise ReportError(f"{name}: --require-same-spec needs a valid spec_sha256")
+            if baseline["spec_sha256"].lower() != candidate["spec_sha256"].lower():
+                raise ReportError("spec hashes differ")
+            if missing or added:
+                raise ReportError(
+                    f"case IDs differ: missing from candidate {missing}; "
+                    f"new in candidate {added}"
+                )
     except ReportError as exc:
         print(f"report comparison failed: {exc}", file=sys.stderr)
         return 2
 
-    if args.require_same_spec:
-        left_hash = baseline.get("spec_sha256")
-        right_hash = candidate.get("spec_sha256")
-        if left_hash and right_hash and left_hash != right_hash:
-            print("report comparison failed: spec hashes differ", file=sys.stderr)
-            return 2
-
-    left_ids = set(left)
-    right_ids = set(right)
     common = sorted(left_ids & right_ids)
-    missing = sorted(left_ids - right_ids)
-    added = sorted(right_ids - left_ids)
 
     regressions = []
     improvements = []
@@ -93,8 +120,8 @@ def main() -> int:
     for case_id in common:
         before = left[case_id]
         after = right[case_id]
-        before_pass = bool(before.get("passed"))
-        after_pass = bool(after.get("passed"))
+        before_pass = before["passed"]
+        after_pass = after["passed"]
 
         if before_pass and not after_pass:
             regressions.append(case_id)
@@ -107,8 +134,8 @@ def main() -> int:
 
     left_label = label(baseline, args.baseline.stem)
     right_label = label(candidate, args.candidate.stem)
-    left_summary = baseline["summary"]
-    right_summary = candidate["summary"]
+    left_summary = summary(left)
+    right_summary = summary(right)
 
     print(f"# Eval comparison: {left_label} -> {right_label}")
     print()
@@ -178,7 +205,7 @@ def main() -> int:
         for case_id in added:
             print(f"- {case_id}")
 
-    return 1 if regressions else 0
+    return 1 if regressions or missing else 0
 
 
 if __name__ == "__main__":

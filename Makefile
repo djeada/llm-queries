@@ -18,22 +18,23 @@ check-content:
 	python3 scripts/repo_check.py
 
 check-evals:
+	python3 -m unittest discover -s tests -v
 	python3 scripts/run_evals.py evaluations/specs/core.jsonl
-	@tmp_dir="$(mktemp -d)"; trap 'rm -rf "$tmp_dir"' EXIT; \
+	@set -eu; tmp_dir=$$(mktemp -d); trap 'rm -rf "$$tmp_dir"' EXIT; \
 	python3 scripts/run_evals.py evaluations/specs/core.jsonl \
 		--responses evaluations/fixtures/core-passing-responses.jsonl \
 		--label baseline \
 		--meta runtime=fixture \
-		--output "$tmp_dir/baseline.json" \
+		--output "$$tmp_dir/baseline.json" \
 		--min-pass-rate 1; \
 	python3 scripts/run_evals.py evaluations/specs/core.jsonl \
 		--responses evaluations/fixtures/core-passing-responses.jsonl \
 		--label candidate \
 		--meta runtime=fixture \
-		--output "$tmp_dir/candidate.json" \
+		--output "$$tmp_dir/candidate.json" \
 		--min-pass-rate 1; \
 	python3 scripts/compare_eval_reports.py \
-		"$tmp_dir/baseline.json" "$tmp_dir/candidate.json" \
+		"$$tmp_dir/baseline.json" "$$tmp_dir/candidate.json" \
 		--require-same-spec
 
 check-projects:

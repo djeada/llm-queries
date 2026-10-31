@@ -68,8 +68,19 @@ python3 scripts/compare_eval_reports.py \
 ```
 
 The comparator reports case-level regressions, improvements, and score changes.
-It exits nonzero when a case that passed in the baseline fails in the candidate.
-Use `--require-same-spec` when you want a strict apples-to-apples comparison.
+It validates result rows and calculates displayed summaries from those rows.
+It exits with status 1 when a previously passing case fails or any baseline case
+is missing from the candidate. New candidate cases are reported but are allowed
+unless strict comparison is requested.
+
+`--require-same-spec` requires a valid SHA-256 digest in both reports, matching
+digests, and identical case IDs. Missing hashes (including schema v1 reports),
+different specs, changed case sets in strict mode, and malformed reports exit
+with status 2. Schema v1 reports remain comparable without the strict flag.
+
+Run `make check-evals` for offline regression tests of these failure paths and
+the Makefile gate, followed by two fixture runs that must each pass every case.
+Temporary reports are removed on both success and failure.
 
 ## JSONL case contract
 
